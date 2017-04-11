@@ -1,0 +1,2917 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using Oracle.DataAccess.Client;
+using Oracle.DataAccess.Types;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
+using System.Collections;
+using Microsoft.Win32;
+using System.Text.RegularExpressions;
+using System.Diagnostics;
+using System.IO;
+
+namespace RT {
+	public partial class frmMain : Form {
+		const string NEW_TEST_NODE_KEY = "New Test";
+		const string NEW_SCENARIO_NODE_KEY = "New Scenario Group";
+		const string NEW_UDC_NODE_KEY = "New UDC";
+
+		Color PARAMETER_COLOR = Color.FromArgb(192, 224, 255);
+		Color RETURN_VALUE_COLOR = Color.FromArgb(224, 255, 224);
+		
+		// Form-tracking variables
+		private test currTest;
+		private scenarioGroup currScenarioGroup;
+		private udc currUDC;
+
+		private RT.fieldChangeTracker testInfoTracker = new RT.fieldChangeTracker();
+		private RT.fieldChangeTracker scenarioGroupInfoTracker = new RT.fieldChangeTracker();
+		private RT.fieldChangeTracker UDCInfoTracker = new RT.fieldChangeTracker();
+
+		private string udcKeysDeleted = String.Empty;
+
+		// Constructor
+		public frmMain() {
+			InitializeComponent();
+		}
+
+		private void indicateWeNeedToSave(Boolean needsSaving) {
+			this.Text = this.Text.TrimEnd('*');
+
+			if (currTest != null
+				 && (testInfoTracker.needsSaving || scenarioGroupInfoTracker.needsSaving || UDCInfoTracker.needsSaving))
+				this.Text += "*";
+		}
+
+		// Destructor
+		~frmMain() {
+			Program.conRepos.Close();
+			Program.conTargetDB.Close();
+		}
+
+		private void getDBConnectionInfo() {
+			if (Properties.Settings.Default.repos_dbDatabase == String.Empty || Properties.Settings.Default.repos_dbPassword == String.Empty) {
+				frmPreferences myForm = new frmPreferences();
+
+				myForm.ShowDialog();
+			}
+
+			Program.openDBConnections();
+		}
+
+		private void frmMain_Load(object sender, EventArgs e) {
+			getDBConnectionInfo();
+
+			lblRunProgress.Text = String.Empty;
+
+			if (Program.conRepos.State == ConnectionState.Open && Program.conTargetDB.State == ConnectionState.Open) {
+				// Load the possible UDC types
+				cmbUDCType.DataSource = udc.getUDCTypes(Program.conRepos);
+
+				// Load the current tests
+				reloadFolderList();
+
+				reloadSchemaList();
+			}
+			
+			loadAppTitle();
+
+			rtfTestDeclares.SelectionTabs = new int[] { 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180 };
+
+			rtfDebug.SelectionTabs = new int[] { 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180 };
+			rtfPLSQLBLock.SelectionTabs = new int[] { 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180 };
+
+			rtfScenarioGroupStartupBlock.SelectionTabs = new int[] { 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180 };
+			rtfScenarioStartupBlock.SelectionTabs = new int[] { 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180 };
+			rtfPostParamAssignment.SelectionTabs = new int[] { 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180 };
+			rtfPreUDCPLSQL.SelectionTabs = new int[] { 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180 };
+			rtfScenarioTeardownBlock.SelectionTabs = new int[] { 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180 };
+			rtfScenarioGroupTeardownBlock.SelectionTabs = new int[] { 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180 };
+
+			rtfUDCPLSQLBlock.SelectionTabs = new int[] { 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180 };
+
+			chkOnlyShowFailingScenarios.Checked = Properties.Settings.Default.run_onlyShowFailedScenarios;
+			
+			// ****************************
+			// Now that the form is entirely loaded, begin allow changes to be tracked for save prompts.
+			// ****************************
+
+			// Register the test controls with the field tracker, so we can
+			// prompt the user to save before accidently losing any changes.
+			testInfoTracker.onNeedsSavingFlagChanged += indicateWeNeedToSave;
+			scenarioGroupInfoTracker.onNeedsSavingFlagChanged += indicateWeNeedToSave;
+			UDCInfoTracker.onNeedsSavingFlagChanged += indicateWeNeedToSave;
+
+			// Test Info tab controls
+			testInfoTracker.registerField(txtTestName);
+			testInfoTracker.registerField(txtTestDescription);
+			testInfoTracker.registerField(txtUnitName);
+			testInfoTracker.registerField(txtOverload);
+			testInfoTracker.registerField(cmbUnitType);
+			testInfoTracker.registerField(grdTestArguments);
+
+			// Declarations tab controls
+			testInfoTracker.registerField(rtfTestDeclares);
+
+			// Scenario Group tab controls
+			scenarioGroupInfoTracker.registerField(txtScenarioName);
+			scenarioGroupInfoTracker.registerField(txtScenarioDescription);
+
+			scenarioGroupInfoTracker.registerField(rtfScenarioGroupStartupBlock);
+			scenarioGroupInfoTracker.registerField(rtfScenarioStartupBlock);
+			scenarioGroupInfoTracker.registerField(rtfPostParamAssignment);
+			scenarioGroupInfoTracker.registerField(rtfPreUDCPLSQL);
+			scenarioGroupInfoTracker.registerField(rtfScenarioTeardownBlock);
+			scenarioGroupInfoTracker.registerField(chkRollbackAfterEachScenario);
+			scenarioGroupInfoTracker.registerField(rtfScenarioGroupTeardownBlock);
+
+			// Scenarios tab controls
+			//scenarioGroupInfoTracker.registerField(grdScenarios); This is instead done in the gridview's cell changed event, to ignore the run status columns....
+
+			// PL/SQL Block tab controls
+			testInfoTracker.registerField(rtfPLSQLBLock);
+
+			// User-Defined Checks
+			UDCInfoTracker.registerField(txtUDCName);
+			UDCInfoTracker.registerField(cmbUDCType);
+			UDCInfoTracker.registerField(txtUDCSortOrder);
+			UDCInfoTracker.registerField(txtUDCDescription);
+			UDCInfoTracker.registerField(rtfUDCPLSQLCondition);
+			UDCInfoTracker.registerField(rtfUDCPLSQLBlock);
+			UDCInfoTracker.registerField(grdRowValidation);
+		}
+
+		private void loadAppTitle() {
+			this.Text =
+				Application.ProductName +
+				" - Target: " + Properties.Settings.Default.target_dbDatabase +
+				" - Version: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+			if (currTest != null)
+				this.Text += " - " + currTest.name;
+
+			if (currScenarioGroup != null)
+				this.Text += " - " + currScenarioGroup.name;
+		}
+
+
+
+		#region Schema Tree View
+
+		protected void reloadSchemaList() {
+			/* Load the testable target units from the target database, and
+			   load the list of existing tests from the repository database. */
+			tvSchemaObjects.Nodes.Clear();
+
+			TreeNode tnDatabase = tvSchemaObjects.Nodes.Add("Database");
+			tnDatabase.ImageKey = "Database";
+			tnDatabase.SelectedImageKey = "Database";
+			tnDatabase.Tag = "DBLevelTestsFolder";
+
+			loadChildItems(tnDatabase.Nodes, "Database", -1);
+
+			return;
+		}
+
+		protected void loadChildItems(TreeNodeCollection childNodes, string parentType, int parentKey, string schema = "", string objectType = "", string objectName = "") {
+			switch (parentType) {
+				case "Database":
+					OracleCommand cmdGetUsers = new OracleCommand(@"
+						SELECT all_users.username AS owner
+						  FROM sys.all_users
+						 WHERE EXISTS (SELECT 1
+						                 FROM sys.all_objects
+						                WHERE all_objects.owner = all_users.username)
+						 ORDER BY all_users.username",
+						Program.conTargetDB);
+
+					OracleDataReader drUsers = cmdGetUsers.ExecuteReader();
+					
+					while (drUsers.Read()) {
+						childNodes.Add(createNewOwnerNode(drUsers));
+					}
+
+					drUsers.Close();
+					drUsers.Dispose();
+
+					cmdGetUsers.Dispose();
+
+					break;
+
+				case "SchemaLevelObject":
+					if (objectType == "PACKAGE" || objectType == "TYPE") {
+						OracleCommand cmdGetMethods = new OracleCommand(@"
+							SELECT all_procedures.owner, all_procedures.object_name, all_procedures.procedure_name,
+									 NVL(all_procedures.overload, 0) AS overload, all_procedures.object_type
+							  FROM sys.all_procedures
+							 WHERE all_procedures.owner = :p_Owner
+								AND all_procedures.object_name = :p_ObjectName
+								AND all_procedures.object_type = :p_ObjectType
+								AND all_procedures.subprogram_id != 0
+							 ORDER BY all_procedures.object_name, all_procedures.procedure_name, TO_NUMBER(all_procedures.overload) NULLS FIRST",
+							Program.conTargetDB);
+
+						cmdGetMethods.BindByName = true;
+						cmdGetMethods.Parameters.Add("p_Owner", schema);
+						cmdGetMethods.Parameters.Add("p_ObjectName", objectName);
+						cmdGetMethods.Parameters.Add("p_ObjectType", objectType);
+
+						OracleDataReader drMethods = cmdGetMethods.ExecuteReader();
+
+						while (drMethods.Read()) {
+							childNodes.Add(createNewMethodNode(drMethods));
+						}
+
+						drMethods.Close();
+						drMethods.Dispose();
+
+						cmdGetMethods.Dispose();
+					}
+					break;
+
+				case "FunctionsFolder":
+					goto case "TypesFolder";
+				case "PackagesFolder":
+					goto case "TypesFolder";
+				case "ProceduresFolder":
+					goto case "TypesFolder";
+				case "TriggersFolder":
+					goto case "TypesFolder";
+				case "TypesFolder":
+					// Clear out any dummy nodes that might be in the collection already
+					childNodes.Clear();
+		
+					// Find the child nodes....
+					OracleCommand cmdGetObjects = new OracleCommand();
+					cmdGetObjects.Connection = Program.conTargetDB;
+
+					if (objectType == "TYPE") {
+						cmdGetObjects.CommandText = @"
+							SELECT all_types.owner, all_types.type_name AS object_name, 'TYPE' AS object_type
+							  FROM sys.all_types
+							 WHERE all_types.owner = :p_Owner
+								AND all_types.typecode = 'OBJECT'
+							 ORDER BY all_types.type_name";
+					} else {
+						cmdGetObjects.CommandText = @"
+							SELECT all_objects.owner, all_objects.object_name, all_objects.object_type
+							  FROM sys.all_objects
+							 WHERE all_objects.owner = :p_Owner
+								AND all_objects.object_type = :p_ObjectType
+							 ORDER BY all_objects.object_name";
+
+						cmdGetObjects.Parameters.Add("p_ObjectType", objectType);
+					}
+
+					cmdGetObjects.BindByName = true;
+					cmdGetObjects.Parameters.Add("p_Owner", schema);
+
+					OracleDataReader drObjects = cmdGetObjects.ExecuteReader();
+
+					while (drObjects.Read()) {
+						childNodes.Add(createNewObjectNode(drObjects));
+					}
+
+					drObjects.Close();
+					drObjects.Dispose();
+
+					cmdGetObjects.Dispose();
+
+					break;
+
+				case "Folder":
+					DataTable dtChildItems = folders.getChildItems(Program.conRepos, parentKey);
+					TreeNode tnChildFolder;
+					TreeNode tnTest;
+
+					for (int i = 0; i < dtChildItems.Rows.Count; i++) {
+						if (dtChildItems.Rows[i]["child_folder_key"].ToString() != String.Empty) {
+							// Child folder
+							tnChildFolder = childNodes.Add(dtChildItems.Rows[i]["child_folder_key"].ToString(), dtChildItems.Rows[i]["folder_name"].ToString());
+							tnChildFolder.Tag = "Folder";
+							tnChildFolder.ImageIndex = 5;
+							tnChildFolder.SelectedImageIndex = 11;
+						} else {
+							// Test
+							tnTest = childNodes.Add(dtChildItems.Rows[i]["test_key"].ToString(), dtChildItems.Rows[i]["test_name"].ToString());
+							tnTest.Tag = "Test";
+							tnTest.ImageKey = "Test - Not Run";
+							tnTest.SelectedImageKey = "Test - Not Run";
+						}
+					}
+
+					break;
+
+				case "Test":
+					DataTable dtChildScenarioGroups = api.getScenarioGroups(Program.conRepos, parentKey);
+					TreeNode tnChildScenarioGroup;
+
+					for (int i = 0; i < dtChildScenarioGroups.Rows.Count; i++) {
+						tnChildScenarioGroup = childNodes.Add(dtChildScenarioGroups.Rows[i]["scenario_group_key"].ToString(), dtChildScenarioGroups.Rows[i]["name"].ToString());
+						tnChildScenarioGroup.Tag = "Scenario Group";
+						tnChildScenarioGroup.ImageKey = "Scenario Group - Not Run";
+						tnChildScenarioGroup.SelectedImageKey = "Scenario Group - Not Run";
+					}
+
+					break;
+
+				case "Scenario Group":
+					DataTable dtChildUDCs = api.getUDCs(Program.conRepos, parentKey);
+					TreeNode tnChildUDC;
+
+					for (int i = 0; i < dtChildUDCs.Rows.Count; i++) {
+						tnChildUDC = childNodes.Add(dtChildUDCs.Rows[i]["check_key"].ToString(), dtChildUDCs.Rows[i]["name"].ToString());
+						tnChildUDC.Tag = "UDC";
+						tnChildUDC.ImageKey = "UDC - Not Run";
+						tnChildUDC.SelectedImageKey = "UDC - Not Run";
+					}
+					break;
+			}
+		}
+
+		// Creates a new schema node for the tree view
+		private TreeNode createNewOwnerNode(OracleDataReader drMethods) {
+			TreeNode tncSchema = new TreeNode(drMethods["owner"].ToString(), 12, 12);
+
+			tncSchema.Name = drMethods["owner"].ToString();
+			tncSchema.Tag = "Schema";
+
+			// See if the schema has schema-level tests
+			TreeNode tnSchemaLevelTestsFolder = new TreeNode("Schema-Level Tests");
+			tnSchemaLevelTestsFolder.ImageKey = "Folder";
+			tnSchemaLevelTestsFolder.SelectedImageKey = "FolderOpen";
+			tnSchemaLevelTestsFolder.Name = drMethods["owner"].ToString();
+			tnSchemaLevelTestsFolder.Tag = "SchemaLevelTestsFolder";
+
+			DataTable dtAssociatedTests = api.getTests(Program.conRepos, schema: drMethods["owner"].ToString(), objectType: "SCHEMA");
+
+			if (dtAssociatedTests.Rows.Count > 0) {
+				for (int i = 0; i < dtAssociatedTests.Rows.Count; i++) {
+					TreeNode tnTest = new TreeNode(dtAssociatedTests.Rows[i]["name"].ToString());
+					tnTest.Name = dtAssociatedTests.Rows[i]["test_key"].ToString();
+
+					tnTest.Tag = "Test";
+					tnTest.ImageKey = "Test - Not Run";
+					tnTest.SelectedImageKey = "Test - Not Run";
+
+					//if (drMethods["procedure_name"].ToString() != String.Empty) {
+					//	giveAppropriateIcon("FUNCTION", tncObject, hasTests: true);
+					//} else {
+					//giveAppropriateIcon(drMethods["object_type"].ToString(), tncObject, hasTests: true);
+					//}
+
+					tnSchemaLevelTestsFolder.Nodes.Add(tnTest);
+					tnTest = null;
+				}
+			}
+
+			tncSchema.Nodes.Add(tnSchemaLevelTestsFolder);
+
+			tncSchema.Nodes.Add(createNewTypeFolderNode("FUNCTION"));
+			tncSchema.Nodes.Add(createNewTypeFolderNode("PACKAGE"));
+			tncSchema.Nodes.Add(createNewTypeFolderNode("PROCEDURE"));
+			tncSchema.Nodes.Add(createNewTypeFolderNode("TRIGGER"));
+			tncSchema.Nodes.Add(createNewTypeFolderNode("TYPE"));
+
+			return tncSchema;
+		}
+		
+		// Creates a new node for a schema-level object (package, function, procedure, trigger, etc.)
+		private TreeNode createNewObjectNode(OracleDataReader drMethods) {
+			TreeNode tncObject = new TreeNode(drMethods["object_name"].ToString());
+
+			giveAppropriateIcon(drMethods["object_type"].ToString(), tncObject);
+
+			tncObject.Name = drMethods["owner"].ToString() + "." + drMethods["object_name"].ToString();
+			tncObject.Tag = "SchemaLevelObject";
+
+			// Packages have a sub-folder to hold PackageLevelTestsFolder....
+			TreeNode targetNode;
+			
+			switch (drMethods["object_type"].ToString()) {
+				case "PACKAGE":
+					TreeNode tnPackageLevelTestsFolder = new TreeNode("PackageLevelTestsFolder");
+
+					tnPackageLevelTestsFolder.Name = tncObject.Name; // Give the same name as the parent object, so you can run the folder and all its tests.
+					tnPackageLevelTestsFolder.ImageKey = "Folder";
+					tnPackageLevelTestsFolder.SelectedImageKey = "FolderOpen";
+					tnPackageLevelTestsFolder.Tag = "PackageLevelTestsFolder";
+
+					tncObject.Nodes.Add(tnPackageLevelTestsFolder);
+					targetNode = tnPackageLevelTestsFolder;
+					break;
+
+				case "TYPE":					
+					TreeNode tnTypeLevelTestsFolder = new TreeNode("TypeLevelTestsFolder");
+
+					tnTypeLevelTestsFolder.Name = tncObject.Name; // Give the same name as the parent object, so you can run the folder and all its tests.
+					tnTypeLevelTestsFolder.ImageKey = "Folder";
+					tnTypeLevelTestsFolder.SelectedImageKey = "FolderOpen";
+					tnTypeLevelTestsFolder.Tag = "TypeLevelTestsFolder";
+
+					tncObject.Nodes.Add(tnTypeLevelTestsFolder);
+					targetNode = tnTypeLevelTestsFolder;
+					break;
+
+				default:
+					targetNode = tncObject;
+					break;
+			}
+
+			// See if the schema-level object has tests associated with it....
+			DataTable dtAssociatedTests = api.getTests(Program.conRepos, schema: drMethods["owner"].ToString(), name: drMethods["object_name"].ToString(), objectType: drMethods["object_type"].ToString());
+			if (dtAssociatedTests.Rows.Count > 0) {
+				for (int i = 0; i < dtAssociatedTests.Rows.Count; i++) {
+					TreeNode tnTest = new TreeNode(dtAssociatedTests.Rows[i]["name"].ToString());
+					tnTest.Name = dtAssociatedTests.Rows[i]["test_key"].ToString();
+
+					tnTest.Tag = "Test";
+					tnTest.ImageKey = "Test - Not Run";
+					tnTest.SelectedImageKey = "Test - Not Run";
+
+					//if (drMethods["procedure_name"].ToString() != String.Empty) {
+					//	giveAppropriateIcon("FUNCTION", tncObject, hasTests: true);
+					//} else {
+						giveAppropriateIcon(drMethods["object_type"].ToString(), tncObject, hasTests: true);
+					//}
+
+					targetNode.Nodes.Add(tnTest);
+					tnTest = null;
+				}
+			}
+
+			return tncObject;
+		}
+
+		// Creates a new node for a method within a package or type
+		private TreeNode createNewMethodNode(OracleDataReader drMethods) {
+			TreeNode tnMethod = new TreeNode(drMethods["procedure_name"].ToString().ToLower());
+
+			// Sub-programs (i.e. methods) do not have a type listed in the data dictionary,
+			// so we'll just call them functions, for now.
+			giveAppropriateIcon("FUNCTION", tnMethod);
+
+			if (drMethods["procedure_name"].ToString() != String.Empty) {
+				if (drMethods["overload"].ToString() != "0") {
+					tnMethod.Text += " (" + drMethods["overload"].ToString() + ")";
+				}
+
+				tnMethod.Name = drMethods["owner"].ToString() + "." + drMethods["object_name"].ToString();
+				tnMethod.Name += "." + drMethods["procedure_name"].ToString();
+				tnMethod.Name += "/" + drMethods["overload"].ToString();
+
+				tnMethod.Tag = drMethods["object_type"].ToString();
+
+				// See if the thing has tests
+				DataTable dtAssociatedTests = api.getTests(Program.conRepos, schema: drMethods["owner"].ToString(), name: drMethods["object_name"].ToString(), method: drMethods["procedure_name"].ToString(), objectType: drMethods["object_type"].ToString());
+
+				if (dtAssociatedTests.Rows.Count > 0) {
+					for (int i = 0; i < dtAssociatedTests.Rows.Count; i++) {
+						TreeNode tnTest = new TreeNode(dtAssociatedTests.Rows[i]["name"].ToString());
+						tnTest.Name = dtAssociatedTests.Rows[i]["test_key"].ToString();
+
+						tnTest.Tag = "Test";
+						tnTest.ImageKey = "Test - Not Run";
+						tnTest.SelectedImageKey = "Test - Not Run";
+
+						if (drMethods["procedure_name"].ToString() != String.Empty) {
+							giveAppropriateIcon("FUNCTION", tnMethod, hasTests: true);
+						} else {
+							giveAppropriateIcon(drMethods["object_type"].ToString(), tnMethod, hasTests: true);
+						}
+
+						tnMethod.Nodes.Add(tnTest);
+						tnTest = null;
+					}
+				}
+			}
+
+			return tnMethod;
+		}
+
+		private static void giveAppropriateIcon(String objectType, TreeNode node, Boolean hasTests = false) {
+			switch (objectType) {
+				case "FUNCTION":
+					if (hasTests) {
+						node.ImageIndex = 9;
+						node.SelectedImageIndex = 9;
+					} else {
+						node.ImageIndex = 10;
+						node.SelectedImageIndex = 10;
+					}
+					break;
+				case "PACKAGE":
+					node.ImageIndex = 8;
+					node.SelectedImageIndex = 8;
+					break;
+				case "PROCEDURE":
+					node.ImageIndex = 17;
+					node.SelectedImageIndex = 17;
+					break;
+				case "TRIGGER":
+					node.ImageIndex = 18;
+					node.SelectedImageIndex = 18;
+					break;
+				case "TYPE":
+					node.ImageIndex = 19;
+					node.SelectedImageIndex = 19;
+					break;
+			}
+		}
+		
+		// Creates a new types folder to go inside a schema folder
+		private static TreeNode createNewTypeFolderNode(string objectType) {
+			TreeNode tnType = new TreeNode();
+
+			switch (objectType) {
+				case "FUNCTION":
+					tnType.Text = "Functions";
+					tnType.Tag = "FunctionsFolder";
+					break;
+				case "PACKAGE":
+					tnType.Text = "Packages";
+					tnType.Tag = "PackagesFolder";
+					break;
+				case "PROCEDURE":
+					tnType.Text = "Procedures";
+					tnType.Tag = "ProceduresFolder";
+					break;
+				case "TRIGGER":
+					tnType.Text = "Triggers";
+					tnType.Tag = "TriggersFolder";
+					break;
+				case "TYPE":
+					tnType.Text = "Object Types";
+					tnType.Tag = "TypesFolder";
+					break;
+			}
+
+			giveAppropriateIcon(objectType, tnType);
+
+			tnType.Nodes.Add(new TreeNode("Loading..."));
+
+			tnType.Name = objectType;
+
+			return tnType;
+		}
+		
+		private void nodeSelected(TreeNode node) {
+			if (node != null && node.Tag != null) {
+				switch (node.Tag.ToString()) {
+					case "Database":
+						// Nothing to do, yet....
+						break;
+
+					case "Schema":
+						if (node.Checked == false) {
+							loadChildItems(node.Nodes, "Schema", -1);
+							node.Checked = true;
+						}
+						break;
+
+					case "SchemaLevelTestsFolder":
+						if (node.Checked == false) {
+							loadChildItems(node.Nodes, "SchemaLevelTestsFolder", -1);
+							node.Checked = true;
+						}
+						break;
+
+					case "FunctionsFolder":
+						goto case "TypesFolder";
+					case "PackagesFolder":
+						goto case "TypesFolder";
+					case "ProceduresFolder":
+						goto case "TypesFolder";
+					case "TriggersFolder":
+						goto case "TypesFolder";
+					case "TypesFolder":
+						if (node.Checked == false) {
+							loadChildItems(node.Nodes, node.Tag.ToString(), -1, schema: node.Parent.Name, objectType: node.Name);
+							node.Checked = true;
+						}
+						break;
+
+					case "SchemaLevelObject":
+						if (node.Checked == false) {
+							loadChildItems(node.Nodes, "SchemaLevelObject", -1, schema: node.Parent.Parent.Name, objectType: node.Parent.Name, objectName: node.Text);
+							node.Checked = true;
+						}
+						break;
+
+					case "Folder":
+						if (node.Checked == false) {
+							loadChildItems(node.Nodes, "Folder", Int32.Parse(node.Name));
+							node.Checked = true;
+						}
+						break;
+
+					case "Test":
+						if (node.Name != NEW_TEST_NODE_KEY) {
+							currTest = new test(Program.conRepos, Int32.Parse(node.Name));
+							loadTest();
+
+							if (node.Checked == false) {
+								loadChildItems(node.Nodes, "Test", currTest.testKey);
+								node.Checked = true;
+							}
+						}
+
+						tabGroup.SelectedTab = tabTestInfo;
+						break;
+
+					case "Scenario Group":
+						if (node.Name != NEW_SCENARIO_NODE_KEY) {
+							currScenarioGroup = new scenarioGroup(Program.conRepos, Int32.Parse(node.Name));
+							loadScenarioGroup(true);
+
+							if (node.Checked == false) {
+								loadChildItems(node.Nodes, "Scenario Group", currScenarioGroup.scenarioGroupKey);
+								node.Checked = true;
+							}
+						}
+						break;
+
+					case "UDC":
+						if (node.Name != NEW_UDC_NODE_KEY) {
+							currUDC = new udc(Program.conRepos, Int32.Parse(node.Name));
+							loadUDC(true);
+						}
+
+						tabGroup.SelectedTab = tabUserDefinedChecks;
+						break;
+				}
+			}
+		}
+
+		private void renameNode(TreeNode tnNode, string newName) {
+			switch (tnNode.Tag.ToString()) {
+				case "Folder":
+					if (newName != null) {
+						folders.change(Program.conRepos, Int32.Parse(tnNode.Name), newName);
+					}
+					break;
+
+				case "Test":
+					if (newName != null) {
+						currTest.name = newName;
+						txtTestName.Text = currTest.name;
+
+						if (currTest.testKey != -1) {
+							saveTest();
+						}
+					}
+					break;
+
+				case "Scenario Group":
+					if (newName != null) {
+						currScenarioGroup.name = newName;
+						txtScenarioName.Text = currScenarioGroup.name;
+
+						if (currScenarioGroup.scenarioGroupKey != -1 && currScenarioGroup.scenarioGroupKey != -2) {
+							currScenarioGroup.save();
+						}
+					}
+					break;
+			}
+		}
+		
+		private TreeNode findNode(string type, string key) {
+			TreeNode[] arrFoundNodes;
+
+			if (tabNavigation.SelectedTab == tabPLSQLMethods)
+				arrFoundNodes = tvSchemaObjects.Nodes.Find(key: key, searchAllChildren: true);
+			else
+				arrFoundNodes = tvTests.Nodes.Find(key: key, searchAllChildren: true);
+
+			for (int i = 0; i < arrFoundNodes.Count(); i++) {
+				if (type == arrFoundNodes[i].Tag.ToString())
+					return arrFoundNodes[i];
+			}
+
+			return null;
+		}
+
+		private void tvTestUnits_AfterSelect(object sender, TreeViewEventArgs e) {
+			nodeSelected(e.Node);
+		}
+		
+		private void tvTestUnits_AfterLabelEdit(object sender, NodeLabelEditEventArgs e) {
+			renameNode(e.Node, e.Label);
+
+			tvTests.LabelEdit = false;
+		}
+
+		protected void reloadFolderList() {
+			tvTests.Nodes.Clear();
+
+			loadChildItems(tvTests.Nodes, "Folder", -1);
+		}
+		
+		private void tvTests_BeforeSelect(object sender, TreeViewCancelEventArgs e) {
+			promptToSaveAnyChanges();
+		}
+
+		private void tvSchemaObjects_BeforeSelect(object sender, TreeViewCancelEventArgs e) {
+			promptToSaveAnyChanges();
+		}
+
+		private void promptToSaveAnyChanges() {
+			if (currTest != null && 
+				((testInfoTracker.enabled && testInfoTracker.needsSaving) 
+			    || (scenarioGroupInfoTracker.enabled && scenarioGroupInfoTracker.needsSaving)
+			    || (UDCInfoTracker.enabled && UDCInfoTracker.needsSaving))) {
+				if (MessageBox.Show("Do you want to save your changes?", "Save?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes) {
+					saveEverything();
+				}
+			}
+		}
+		#endregion
+
+		#region Create
+		private void createFolder() {
+			int newFolderKey = folders.add(Program.conRepos, tvTests.SelectedNode == null ? -1 : Int32.Parse(tvTests.SelectedNode.Name), "New Folder");
+
+			TreeNode tnNewFolder = new TreeNode("New Folder", 5, 11);
+			tnNewFolder.Name = newFolderKey.ToString();
+			tnNewFolder.Tag = "Folder";
+
+			if (tvTests.SelectedNode == null) {
+				tvTests.Nodes.Add(tnNewFolder);
+			} else {
+				tvTests.SelectedNode.Nodes.Add(tnNewFolder);
+			}
+
+			tnNewFolder.EnsureVisible();
+			tvTests.SelectedNode = tnNewFolder;
+			//tnNewFolder.BeginEdit();
+		}
+
+		private void createTest() {
+			testInfoTracker.enabled = false;
+
+			currTest = new test(Program.conRepos);
+
+			if (tabNavigation.SelectedTab == tabPLSQLMethods) {				
+				TreeNode tnTest = tvSchemaObjects.SelectedNode.Nodes.Add(NEW_TEST_NODE_KEY, "New Test");
+
+				// Determine the target type
+				switch (tvSchemaObjects.SelectedNode.Tag.ToString()) {
+					case "Schema":
+						currTest.unitType = "SCHEMA";
+						break;
+					case "SchemaLevelTestsFolder":
+						currTest.unitType = "SCHEMA";
+						break;
+					case "SchemaLevelObject":
+						currTest.unitType = tvSchemaObjects.SelectedNode.Parent.Name;
+						break;
+					case "FunctionsFolder":
+						currTest.unitType = "FUNCTION";
+						break;
+					case "PackagesFolder":
+						currTest.unitType = "PACKAGE";
+						break;
+					case "PackageLevelTestsFolder":
+						currTest.unitType = "PACKAGE";
+						break;
+					case "ProceduresFolder":
+						currTest.unitType = "PROCEDURE";
+						break;
+					case "TriggersFolder":
+						currTest.unitType = "TRIGGER";
+						break;
+					case "TypesFolder":
+						currTest.unitType = "TYPE";
+						break;
+					case "TypeLevelTestsFolder":
+						currTest.unitType = "TYPE";
+						break;
+					default:
+						currTest.unitType = tvSchemaObjects.SelectedNode.Tag.ToString();
+						break;
+				}
+
+				currTest.name = tnTest.Text;
+
+				tnTest.Tag = "Test";
+				tnTest.ImageKey = "Test - Not Run";
+				tnTest.SelectedImageKey = "Test - Not Run";
+
+				tnTest.EnsureVisible();
+				tvSchemaObjects.SelectedNode = tnTest;				
+			} else {
+				TreeNode tnTest;
+
+				if (tvTests.SelectedNode == null)
+					tnTest = tvTests.Nodes.Add(NEW_TEST_NODE_KEY, "New Test");
+				else
+					tnTest = tvTests.SelectedNode.Nodes.Add(NEW_TEST_NODE_KEY, "New Test");
+
+				currTest.name = tnTest.Text;
+
+				tnTest.Tag = "Test";
+				tnTest.ImageKey = "Test - Not Run";
+				tnTest.SelectedImageKey = "Test - Not Run";
+
+				tnTest.EnsureVisible();
+				tvTests.SelectedNode = tnTest;
+			}
+
+			loadTest();
+
+			txtTestName.Focus();
+
+			tabGroup.SelectedTab = tabTestInfo;
+			
+			testInfoTracker.enabled = true;
+			testInfoTracker.needsSaving = true;
+		}
+
+		private void createScenarioGroup() {
+			scenarioGroupInfoTracker.enabled = false;
+
+			currScenarioGroup = new scenarioGroup(Program.conRepos);
+			currScenarioGroup.testKey = currTest.testKey;
+
+			if (tabNavigation.SelectedTab == tabPLSQLMethods) {
+				TreeNode tnScenarioGroup = tvSchemaObjects.SelectedNode.Nodes.Add(NEW_SCENARIO_NODE_KEY, "General Tests");
+				tvSchemaObjects.SelectedNode.Expand();
+				currScenarioGroup.name = tnScenarioGroup.Text;
+
+				tnScenarioGroup.Tag = "Scenario Group";
+				tnScenarioGroup.ImageKey = "Scenario Group - Not Run";
+				tnScenarioGroup.SelectedImageKey = "Scenario Group - Not Run";
+
+				tnScenarioGroup.EnsureVisible();
+				tvSchemaObjects.SelectedNode = tnScenarioGroup;
+			} else {
+				TreeNode tnScenarioGroup = tvTests.SelectedNode.Nodes.Add(NEW_SCENARIO_NODE_KEY, "General Tests");
+				tvTests.SelectedNode.Expand();
+				currScenarioGroup.name = tnScenarioGroup.Text;
+
+				tnScenarioGroup.Tag = "Scenario Group";
+				tnScenarioGroup.ImageKey = "Scenario Group - Not Run";
+				tnScenarioGroup.SelectedImageKey = "Scenario Group - Not Run";
+
+				tnScenarioGroup.EnsureVisible();
+				tvTests.SelectedNode = tnScenarioGroup;
+			}
+
+			loadScenarioGroup(false);
+
+			tabGroup.SelectedTab = tabScenarioInfo;
+
+			txtScenarioName.Focus();
+
+			scenarioGroupInfoTracker.enabled = true;
+			scenarioGroupInfoTracker.needsSaving = true;
+		}
+
+		private void createUDC() {
+			UDCInfoTracker.enabled = false;
+
+			TreeNode tnUDC;
+
+			currUDC = new udc(Program.conRepos);
+			currUDC.scenarioGroupKey = currScenarioGroup.scenarioGroupKey;
+
+			if (tabNavigation.SelectedTab == tabTests) {
+				tnUDC = tvTests.SelectedNode.Nodes.Add(NEW_UDC_NODE_KEY, "New User-Defined Check", "UDC - Not Run", "UDC - Not Run");
+				tvTests.SelectedNode.Expand();
+
+				tvTests.SelectedNode = tnUDC;
+			} else {
+				tnUDC = tvSchemaObjects.SelectedNode.Nodes.Add(NEW_UDC_NODE_KEY, "New User-Defined Check", "UDC - Not Run", "UDC - Not Run");
+				tvSchemaObjects.SelectedNode.Expand();
+
+				tvSchemaObjects.SelectedNode = tnUDC;
+			}
+
+			currUDC.name = tnUDC.Text;
+
+			tnUDC.Tag = "UDC";
+			tnUDC.EnsureVisible();
+
+			loadUDC(false);
+
+			UDCInfoTracker.enabled = true;
+			UDCInfoTracker.needsSaving = true;
+		}
+		#endregion
+
+		#region Load/Save
+		protected void loadTest() {
+			// Only if we're changing test keys, should we overlay what's in the interface
+			// with what's in the database.
+			if (lblTestKey.Text != currTest.testKey.ToString() || currTest.testKey.ToString() == "-1") {
+				txtTestName.Text = currTest.name;
+				txtTestDescription.Text = currTest.description;
+
+				txtUnitName.Text = String.Empty;
+				if (currTest.unitSchema != String.Empty)
+					txtUnitName.Text += currTest.unitSchema + ".";
+
+				if (currTest.unitName != String.Empty)
+					txtUnitName.Text += currTest.unitName + ".";
+
+				if (currTest.unitMethod != String.Empty)
+					txtUnitName.Text += currTest.unitMethod;
+
+				txtUnitName.Text = txtUnitName.Text.TrimEnd(new char[] { '.' });
+
+				txtOverload.Text = currTest.overload.ToString();
+
+				cmbUnitType.SelectedItem = currTest.unitType;
+
+				rtfTestDeclares.Text = currTest.plSQLDeclare;
+				highlightPLSQL(rtfTestDeclares);
+
+				rtfPLSQLBLock.Text = currTest.plSQLBlock;
+				highlightPLSQL(rtfPLSQLBLock);
+
+				lblTestKey.Text = currTest.testKey.ToString();
+				lblCreationDate.Text = currTest.creationDate.ToShortDateString();
+
+				grdTestArguments.DataSource = currTest.getArguments();
+
+				if (currScenarioGroup != null && currScenarioGroup.testKey != currTest.testKey) {
+					// If a scenario group is up, but doesn't belong to this test key, clear the scenario group
+					currScenarioGroup = null;
+					loadScenarioGroup(false);
+				}
+
+				loadAppTitle();
+			}
+			
+			testInfoTracker.needsSaving = false;
+		}
+
+		// Loads the interface fields with the values into the current scenario group object
+		protected void loadScenarioGroup(bool directCall) {
+			scenarioGroupInfoTracker.enabled = false;
+
+			TabPage currTab = tabGroup.SelectedTab;
+
+			lblRunProgress.Text = String.Empty;
+			pbRunProgress.Value = 0;
+			pbRunProgress.Style = ProgressBarStyle.Blocks;
+
+			if (currScenarioGroup == null) {
+				lblScenarioGroupKey.Text = String.Empty;
+				txtScenarioName.Text = String.Empty;
+
+				txtScenarioDescription.Text = String.Empty;
+
+				rtfScenarioGroupStartupBlock.Text = String.Empty;
+				rtfScenarioStartupBlock.Text = String.Empty;
+				rtfPostParamAssignment.Text = String.Empty;
+				rtfPreUDCPLSQL.Text = String.Empty;
+				rtfScenarioTeardownBlock.Text = String.Empty;
+				rtfScenarioGroupTeardownBlock.Text = String.Empty;
+
+				chkRollbackAfterEachScenario.Checked = true;
+
+				grdScenarios.DataSource = null;
+				grdScenarios.Columns.Clear();
+
+				currUDC = null;
+				loadUDC(false);
+			} else {
+				DataTable dtScenarios = currScenarioGroup.getScenarios();
+
+				// If the user directly told us to change scenario groups....
+				if (directCall) {
+					if (currTest == null || currTest.testKey != currScenarioGroup.testKey) {
+						// If the user starts off by clicking a scenario group in the tree,
+						// we also need to load the current test that this group belongs to.
+						currTest = new test(Program.conRepos, currScenarioGroup.testKey);
+						loadTest();
+					}
+
+					if (lblScenarioGroupKey.Text != currScenarioGroup.scenarioGroupKey.ToString()) {
+						// We're changing scenario groups and/or test keys - clear any UDC that may have been up
+						currUDC = null;
+						loadUDC(false);
+					}
+				}
+
+				lblScenarioGroupKey.Text = currScenarioGroup.scenarioGroupKey.ToString();
+				txtScenarioName.Text = currScenarioGroup.name;
+
+				txtScenarioDescription.Text = currScenarioGroup.description;
+
+				rtfScenarioGroupStartupBlock.Text = currScenarioGroup.scenarioGroupStartup;
+				highlightPLSQL(rtfScenarioGroupStartupBlock);
+
+				rtfScenarioStartupBlock.Text = currScenarioGroup.scenarioStartup;
+				highlightPLSQL(rtfScenarioStartupBlock);
+
+				rtfPostParamAssignment.Text = currScenarioGroup.postParamAssignment;
+				highlightPLSQL(rtfPostParamAssignment);
+
+				rtfPreUDCPLSQL.Text = currScenarioGroup.preUDC;
+				highlightPLSQL(rtfPreUDCPLSQL);
+
+				rtfScenarioTeardownBlock.Text = currScenarioGroup.scenarioTeardown;
+				highlightPLSQL(rtfScenarioTeardownBlock);
+
+				rtfScenarioGroupTeardownBlock.Text = currScenarioGroup.scenarioGroupTeardown;
+				highlightPLSQL(rtfScenarioGroupTeardownBlock);
+
+				chkRollbackAfterEachScenario.Checked = currScenarioGroup.rollbackAfterEveryScenario;
+
+				grdScenarios.DataSource = null;
+				grdScenarios.Columns.Clear();
+
+				//tabGroup.Visible = false;
+				tabGroup.SelectedTab = tabParameters; // Work around a bug that causes the columns not to be ordered properly, if the tab doesn't have focus.
+
+				grdScenarios.Columns.Add("Key", "Key");
+				grdScenarios.Columns["Key"].DataPropertyName = "Key";
+				grdScenarios.Columns["Key"].ReadOnly = true;
+				grdScenarios.Columns["Key"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+				grdScenarios.Columns["Key"].DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(239, 239, 239);
+
+				// Find the names of the unit's parameters and add them as columns, along with their parameter types (value, exp, etc.)
+				string paramName;
+				int paramIndex = 0;
+
+				grdScenarios.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+				for (int j = 0; j < dtScenarios.Columns.Count; j++) {
+					if (dtScenarios.Columns[j].Caption == "In Parameter"
+						|| dtScenarios.Columns[j].Caption == "In/Out Parameter"
+						|| dtScenarios.Columns[j].Caption == "Out Parameter"
+						|| dtScenarios.Columns[j].Caption == "Return") {
+						paramName = dtScenarios.Columns[j].ColumnName;
+
+						grdScenarios.Columns.Add(paramName, paramName);
+						grdScenarios.Columns[paramName].Tag = dtScenarios.Columns[j].Caption;
+						grdScenarios.Columns[paramName].DataPropertyName = paramName;
+						grdScenarios.Columns[paramName].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+						grdScenarios.Columns[paramName].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
+						if (dtScenarios.Columns[j].Caption == "In Parameter"
+						   || dtScenarios.Columns[j].Caption == "In/Out Parameter"
+						   || dtScenarios.Columns[j].Caption == "Out Parameter"
+						   || dtScenarios.Columns[j].Caption == "Return") {
+							DataGridViewComboBoxColumn paramType = new DataGridViewComboBoxColumn();
+
+							paramType.DataPropertyName = "pt" + paramIndex.ToString();
+							paramType.Name = "pt" + paramIndex.ToString();
+							paramType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+							paramType.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+							paramType.Tag = "Parameter Type";
+							paramType.ToolTipText = paramIndex.ToString();
+							paramType.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+
+							if (dtScenarios.Columns[j].Caption == "In Parameter"
+							    || dtScenarios.Columns[j].Caption == "In/Out Parameter") {
+								paramType.Items.AddRange(new object[] {
+									"value",
+									"exp",
+									"defaulted"});
+
+								paramType.DefaultCellStyle.BackColor = PARAMETER_COLOR;
+								grdScenarios.Columns[paramName].DefaultCellStyle.BackColor = PARAMETER_COLOR;
+							} else if (dtScenarios.Columns[j].Caption == "Out Parameter" || dtScenarios.Columns[j].Caption == "Return") {
+								paramType.Items.AddRange(new object[] {
+									"value",
+									"exp",
+									"don't test",
+									"is null",
+									"not null" });
+
+								paramType.DefaultCellStyle.BackColor = RETURN_VALUE_COLOR;
+								grdScenarios.Columns[paramName].DefaultCellStyle.BackColor = RETURN_VALUE_COLOR;
+							}
+
+							grdScenarios.Columns.Add(paramType);
+						}
+
+						paramIndex++;
+					}
+				}
+
+				grdScenarios.Columns.Add("Expected Exception", "Expected\nException");
+				grdScenarios.Columns["Expected Exception"].DataPropertyName = "Expected Exception";
+				grdScenarios.Columns["Expected Exception"].DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(255, 192, 192);
+				grdScenarios.Columns["Expected Exception"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+
+				grdScenarios.Columns.Add("Comments", "Comments");
+				grdScenarios.Columns["Comments"].DataPropertyName = "Comments";
+				grdScenarios.Columns["Comments"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+				grdScenarios.Columns["Comments"].DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(239, 239, 239);
+
+				grdScenarios.Columns.Add("Last Run Results", "Last Run Results");
+				grdScenarios.Columns["Last Run Results"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+
+				grdScenarios.Columns.Add("Last Run Error #", "Last Run Error #");
+				grdScenarios.Columns["Last Run Error #"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+				
+				grdScenarios.Columns.Add("Last Run Error Message", "Last Run Error Message");
+				grdScenarios.Columns["Last Run Error Message"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+				grdScenarios.Columns["Last Run Error Message"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
+				for (int i = 0; i < grdScenarios.Columns.Count; i++) {
+					grdScenarios.Columns[i].Width = grdScenarios.Columns[i].GetPreferredWidth(DataGridViewAutoSizeColumnMode.DisplayedCells, true);
+					grdScenarios.Columns[i].HeaderCell.Style.Alignment = DataGridViewContentAlignment.BottomCenter;
+					//grdScenarios.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+				}
+
+				DataTable dtTestArgs = currTest.getArguments();
+
+				// If only the "Add" row is in the scenario gridview, then add one scenario
+				// for the user....
+				if (dtScenarios.Rows.Count == 0) {
+					addRequiredScenarioToGroup(dtTestArgs);
+				} else {
+					// There are scenarios, so bind the gridview
+					grdScenarios.DataSource = dtScenarios;
+				}
+
+				sortScenarioColumns();
+				hideParameterTypeColumns();
+
+				tabGroup.Visible = true;
+
+				setScenarioRowDefaults(dtTestArgs, grdScenarios.Rows[grdScenarios.NewRowIndex]);
+
+				// The last thing we need to do is move off of the tabParameters tab,
+				// because it's not rendered correctly if it's not "visible".
+				if (currTab != tabScenarioInfo && currTab != tabParameters)
+					tabGroup.SelectedTab = tabScenarioInfo;
+				else
+					tabGroup.SelectedTab = currTab;
+			}
+
+			loadAppTitle();
+
+			scenarioGroupInfoTracker.enabled = true;
+			scenarioGroupInfoTracker.needsSaving = false;
+		}
+
+		private void loadUDC(bool directCall) {
+			UDCInfoTracker.enabled = false;
+
+			if (currUDC == null) {
+				cmbUDCType.SelectedIndex = 0;
+				rtfUDCPLSQLBlock.Text = String.Empty;
+				rtfUDCPLSQLCondition.Text = String.Empty;
+				txtUDCSortOrder.Text = "0";
+				txtUDCName.Text = String.Empty;
+				txtUDCDescription.Text = String.Empty;
+				lblUDCCheckKey.Text = String.Empty;
+
+				grdRowValidation.DataSource = null;
+
+			} else if (currUDC.checkKey.ToString() == lblUDCCheckKey.Text) {
+				// We already have this UDC up - don't overlay it with what's in the DB
+			} else {
+				udcKeysDeleted = string.Empty;
+
+				cmbUDCType.SelectedValue = ((int)currUDC.checkType).ToString();
+
+				rtfUDCPLSQLBlock.Text = currUDC.plsqlBlock;
+				highlightPLSQL(rtfUDCPLSQLBlock);
+
+				rtfUDCPLSQLCondition.Text = currUDC.plsqlCondition;
+				highlightPLSQL(rtfUDCPLSQLCondition);
+
+				txtUDCSortOrder.Text = currUDC.sortOrder.ToString();
+				txtUDCName.Text = currUDC.name;
+				txtUDCDescription.Text = currUDC.description;
+				lblUDCCheckKey.Text = currUDC.checkKey.ToString();
+
+				grdRowValidation.DataSource = null;
+
+				if (currUDC.checkType == udc.enumCheckTypes.ROW_VALIDATION) {
+					grdRowValidation.Columns.Clear();
+
+					grdRowValidation.Columns.Add("field_name", "Fieldname");
+					grdRowValidation.Columns["field_name"].DataPropertyName = "field_name";
+					grdRowValidation.Columns["field_name"].DefaultCellStyle.BackColor = Color.FromArgb(223, 223, 223);
+
+					DataGridViewComboBoxColumn comparisonType = new DataGridViewComboBoxColumn();
+					comparisonType.DataPropertyName = "comparison_type";
+					comparisonType.HeaderText = "Comparison";
+					comparisonType.Items.AddRange(new object[] {
+						"Don't Test",
+						"Exp",
+						"Input Parameter",
+						"IS NULL",
+						"NOT NULL",
+						"PL/SQL Block",
+						"Value"});
+					comparisonType.Name = "comparison_type";
+					comparisonType.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 192);
+					grdRowValidation.Columns.Add(comparisonType);
+
+					grdRowValidation.Columns.Add("field_value", "Expression");
+					grdRowValidation.Columns["field_value"].DataPropertyName = "field_value";
+					grdRowValidation.Columns["field_value"].DefaultCellStyle.BackColor = PARAMETER_COLOR;
+
+					grdRowValidation.Columns.Add("row_validator_key", "Key");
+					grdRowValidation.Columns["row_validator_key"].DataPropertyName = "row_validator_key";
+					grdRowValidation.Columns["row_validator_key"].DefaultCellStyle.BackColor = Color.FromArgb(239, 239, 239);
+					grdRowValidation.Columns["row_validator_key"].ReadOnly = true;
+
+					grdRowValidation.DataSource = currUDC.fieldValidations;
+				}
+
+				if (directCall) {
+					// Load the scenario group associated with this UDC
+					if (currUDC.scenarioGroupKey.ToString() != lblScenarioGroupKey.Text) {
+						currScenarioGroup = new scenarioGroup(Program.conRepos, currUDC.scenarioGroupKey);
+						loadScenarioGroup(false);
+					}
+
+					// Load the test associated with this UDC
+					if (currTest.testKey != currScenarioGroup.testKey) {
+						currTest = new test(Program.conRepos, currScenarioGroup.testKey);
+						loadTest();
+					}
+				}
+			}
+
+			tabGroup.SelectedTab = tabUserDefinedChecks;
+
+			UDCInfoTracker.enabled = true;
+			UDCInfoTracker.needsSaving = false;
+		}
+
+		private bool scenarioGroupIsValid() {
+			int paramIndex;
+			bool isValid = true;
+			DataGridViewCell currCell = null;
+
+			// Validate the data passed in the scenarios
+			for (int i = 0; i < grdScenarios.Rows.Count; i++) {
+				if (grdScenarios.Rows[i].IsNewRow == false
+					 && (grdScenarios.Rows[i].Tag == null || grdScenarios.Rows[i].Tag.ToString() != "Deleted")) {
+					paramIndex = 0;
+
+					for (int j = 0; j < grdScenarios.Columns.Count; j++) {
+						currCell = grdScenarios.Rows[i].Cells[j];
+
+						if (grdScenarios.Columns[j].Tag != null &&
+							(grdScenarios.Columns[j].Tag.ToString() == "In Parameter"
+							 || grdScenarios.Columns[j].Tag.ToString() == "In/Out Parameter"
+						    || grdScenarios.Columns[j].Tag.ToString() == "Out Parameter"
+							 || grdScenarios.Columns[j].Tag.ToString() == "Return")) {
+
+							// Examine empty cells
+							if (currCell.Value == null || currCell.Value.ToString() == String.Empty) {
+								// Expression parameter types must have something in their parameter cell...
+								if (grdScenarios.Rows[i].Cells["pt" + paramIndex].Value.ToString() == "exp") {
+									if (grdScenarios.Columns[j].Tag.ToString() == "Return") {
+										MessageBox.Show("This scenario's return value needs an expression to test against.");
+
+										isValid = false;
+									}
+
+									break;
+								}
+							} else {
+								// Examine non-empty cells
+								if (grdScenarios.Rows[i].Cells["pt" + paramIndex].Value.ToString() == "defaulted") {
+									// Defaulted parameters must not pass a value
+									if (grdScenarios.Columns[j].Tag.ToString() == "Return")
+										MessageBox.Show("This scenario's return value must be blank if you're defaulting the parameter.");
+									else
+										MessageBox.Show("This scenario's parameter value must be blank if you're defaulting the parameter.");
+
+									isValid = false;
+									break;
+								}
+							}
+
+							paramIndex++;
+						}
+
+						if (isValid == false)
+							break;
+					}
+				}
+			}
+
+			if (isValid == false) {
+				tabGroup.SelectedTab = tabParameters;
+				grdScenarios.Focus();
+				grdScenarios.CurrentCell = currCell;
+			}
+
+			return isValid;
+		}
+
+		private void saveScenarioGroup() {
+			scenarioGroupInfoTracker.enabled = false;
+
+			if (currScenarioGroup != null) {
+				if (currScenarioGroup.scenarioGroupKey == -2) {
+					// This was an automatically-created scenario group, that we don't want
+					// to save to the database in the same save as the test, which save
+					// automatically created this scenario group.
+					currScenarioGroup.scenarioGroupKey = -1;
+				} else {
+					// Validate data....
+					if (scenarioGroupIsValid() == false)
+						return;
+
+					bool isNewScenarioGroup = currScenarioGroup.scenarioGroupKey == -1;
+
+					currScenarioGroup.name = txtScenarioName.Text;
+					currScenarioGroup.description = txtScenarioDescription.Text;
+
+					if (currScenarioGroup.scenarioGroupStartup != rtfScenarioGroupStartupBlock.Text)
+						highlightPLSQL(rtfScenarioGroupStartupBlock);
+					currScenarioGroup.scenarioGroupStartup = rtfScenarioGroupStartupBlock.Text;
+
+					if (currScenarioGroup.scenarioStartup != rtfScenarioStartupBlock.Text)
+						highlightPLSQL(rtfScenarioStartupBlock);
+					currScenarioGroup.scenarioStartup = rtfScenarioStartupBlock.Text;
+
+					if (currScenarioGroup.postParamAssignment != rtfPostParamAssignment.Text)
+						highlightPLSQL(rtfPostParamAssignment);
+					currScenarioGroup.postParamAssignment = rtfPostParamAssignment.Text;
+
+					if (currScenarioGroup.preUDC != rtfPreUDCPLSQL.Text)
+						highlightPLSQL(rtfPreUDCPLSQL);
+					currScenarioGroup.preUDC = rtfPreUDCPLSQL.Text;
+
+					if (currScenarioGroup.scenarioTeardown != rtfScenarioTeardownBlock.Text)
+						highlightPLSQL(rtfScenarioTeardownBlock);
+					currScenarioGroup.scenarioTeardown = rtfScenarioTeardownBlock.Text;
+
+					if (currScenarioGroup.scenarioGroupTeardown != rtfScenarioGroupTeardownBlock.Text)
+						highlightPLSQL(rtfScenarioGroupTeardownBlock);
+					currScenarioGroup.scenarioGroupTeardown = rtfScenarioGroupTeardownBlock.Text;
+
+					currScenarioGroup.rollbackAfterEveryScenario = chkRollbackAfterEachScenario.Checked;
+
+					currScenarioGroup.save();
+					lblScenarioGroupKey.Text = currScenarioGroup.scenarioGroupKey.ToString();
+
+					// Save the scenario group's scenarios
+					OracleCommand cmdAddScenario = new OracleCommand(@"
+						BEGIN
+							:v_NewScenarioKey := rt_reg_test.addScenario(
+								p_ScenarioGroupKey => :p_ScenarioGroupKey,
+								p_ExpectedException => :p_ExpectedException,
+								p_Comments => :p_Comments
+							);
+						END;".Replace(Environment.NewLine, "\n"),
+						Program.conRepos);
+					cmdAddScenario.BindByName = true;
+					cmdAddScenario.Parameters.Add("p_ScenarioGroupKey", lblScenarioGroupKey.Text);
+					cmdAddScenario.Parameters.Add("p_ExpectedException", OracleDbType.Varchar2, 92);
+					cmdAddScenario.Parameters.Add("p_Comments", OracleDbType.Varchar2, 4000);
+					cmdAddScenario.Parameters.Add("v_NewScenarioKey", OracleDbType.Int32).Direction = ParameterDirection.Output;
+
+					OracleCommand cmdUpdateScenario = new OracleCommand(@"
+						BEGIN
+							rt_reg_test.changeScenario(
+								p_ScenarioKey => :p_ScenarioKey,
+								p_ExpectedException => :p_ExpectedException,
+								p_Comments => :p_Comments
+							);
+						END;".Replace(Environment.NewLine, "\n"),
+						Program.conRepos);
+					cmdUpdateScenario.BindByName = true;
+					cmdUpdateScenario.Parameters.Add("p_ScenarioKey", OracleDbType.Int32);
+					cmdUpdateScenario.Parameters.Add("p_ExpectedException", OracleDbType.Varchar2, 92);
+					cmdUpdateScenario.Parameters.Add("p_Comments", OracleDbType.Varchar2, 4000);
+
+					OracleCommand cmdDeleteScenario = new OracleCommand(@"
+						BEGIN
+							rt_reg_test.deleteScenario(
+								p_ScenarioKey => :p_ScenarioKey
+							);
+						END;".Replace(Environment.NewLine, "\n"),
+						Program.conRepos);
+					cmdDeleteScenario.BindByName = true;
+					cmdDeleteScenario.Parameters.Add("p_ScenarioKey", OracleDbType.Int32);
+
+					OracleCommand cmdUpdateParameter = new OracleCommand(@"
+						BEGIN
+							rt_reg_test.updateScenarioParameter(
+								p_ScenarioKey => :p_ScenarioKey,
+								p_ArgumentName => :p_ArgumentName,
+								p_ParameterType => :p_ParameterType,
+								p_Value => :p_Value
+							);
+						END;".Replace(Environment.NewLine, "\n"),
+						Program.conRepos);
+					cmdUpdateParameter.BindByName = true;
+					cmdUpdateParameter.Parameters.Add("p_ScenarioKey", OracleDbType.Int32);
+					cmdUpdateParameter.Parameters.Add("p_ArgumentName", OracleDbType.Varchar2, 30);
+					cmdUpdateParameter.Parameters.Add("p_ParameterType", OracleDbType.Varchar2, 10);
+					cmdUpdateParameter.Parameters.Add("p_Value", OracleDbType.Clob);
+
+					// Walk through the scenarios in the gridview in reverse order, so we can delete
+					// them easily....
+					for (int i = grdScenarios.Rows.Count - 1; i >= 0; i--) {
+						if (grdScenarios.Rows[i].IsNewRow == false) {
+							if (grdScenarios.Rows[i].Tag != null && grdScenarios.Rows[i].Tag.ToString() == "Deleted" && grdScenarios.Rows[i].Cells["Key"].Value != null && grdScenarios.Rows[i].Cells["Key"].Value.ToString() != string.Empty) {
+								cmdDeleteScenario.Parameters["p_ScenarioKey"].Value = Int32.Parse(grdScenarios.Rows[i].Cells["Key"].Value.ToString());
+
+								cmdDeleteScenario.ExecuteNonQuery();
+
+								grdScenarios.Rows.RemoveAt(i);
+
+								// If the user removed the last scenario, add back the default, required scenario
+								if (grdScenarios.Rows.Count == 1) {
+									grdScenarios.DataSource = null;
+								}
+							}
+						}
+					}
+
+					// Now walk through in regular order, adding and changing scenarios
+					bool isNewScenario;
+					bool isChangedScenario;
+					for (int i = 0; i < grdScenarios.Rows.Count; i++) {
+						if (grdScenarios.Rows[i].IsNewRow == false) {
+							isNewScenario = grdScenarios.Rows[i].Cells["Key"].Value.ToString() == String.Empty;
+							isChangedScenario = grdScenarios.Rows[i].Tag != null && grdScenarios.Rows[i].Tag.ToString() == "Changed";
+
+							if (isNewScenario) {
+								// New scenario row - set the scenario properties
+								cmdAddScenario.Parameters["p_ExpectedException"].Value = grdScenarios.Rows[i].Cells["Expected Exception"].Value.ToString();
+								cmdAddScenario.Parameters["p_Comments"].Value = grdScenarios.Rows[i].Cells["Comments"].Value.ToString();
+
+								cmdAddScenario.ExecuteNonQuery();
+
+								grdScenarios.Rows[i].Cells["Key"].Value = cmdAddScenario.Parameters["v_NewScenarioKey"].Value;
+							}
+
+							if (isChangedScenario) {
+								// Changed scenario row - change the existing scenario properties
+								cmdUpdateScenario.Parameters["p_ScenarioKey"].Value = grdScenarios.Rows[i].Cells["Key"].Value.ToString();
+								cmdUpdateScenario.Parameters["p_ExpectedException"].Value = grdScenarios.Rows[i].Cells["Expected Exception"].Value.ToString();
+
+								cmdUpdateScenario.Parameters["p_Comments"].Value = grdScenarios.Rows[i].Cells["Comments"].Value.ToString();
+
+								cmdUpdateScenario.ExecuteNonQuery();
+
+								grdScenarios.Rows[i].Tag = String.Empty;
+							}
+
+							if (isNewScenario || isChangedScenario) {
+								// Update the stored user parameters with the new values
+								int paramIndex = 0;
+								for (int j = 0; j < grdScenarios.Columns.Count; j++) {
+									if (grdScenarios.Columns[j].Tag != null &&
+									   (grdScenarios.Columns[j].Tag.ToString() == "In Parameter"
+										 || grdScenarios.Columns[j].Tag.ToString() == "In/Out Parameter"
+										 || grdScenarios.Columns[j].Tag.ToString() == "Out Parameter"
+										 || grdScenarios.Columns[j].Tag.ToString() == "Return")) {
+										cmdUpdateParameter.Parameters["p_ScenarioKey"].Value = Int32.Parse(grdScenarios.Rows[i].Cells["Key"].Value.ToString());
+										cmdUpdateParameter.Parameters["p_ArgumentName"].Value = grdScenarios.Columns[j].Name;
+										cmdUpdateParameter.Parameters["p_ParameterType"].Value = grdScenarios.Rows[i].Cells["pt" + paramIndex].Value.ToString();
+
+										String value = grdScenarios.Rows[i].Cells[j].Value == null ? String.Empty : grdScenarios.Rows[i].Cells[j].Value.ToString();
+
+										value = value.Replace("\r\n", "\n").Replace("\n", "\r\n");
+										cmdUpdateParameter.Parameters["p_Value"].Value = value;
+
+										cmdUpdateParameter.ExecuteNonQuery();
+
+										paramIndex++;
+									}
+								}
+							}
+						}
+					}
+
+					// Replace the node key placeholder with the new key, now that we have a real one.
+					if (isNewScenarioGroup) {
+						findNode("Scenario Group", NEW_SCENARIO_NODE_KEY).Name = currScenarioGroup.scenarioGroupKey.ToString();
+					}
+
+					// Because we've created a new scenario, some things like the parameter data grid need to be
+					// reloaded out of database, now that they have data. Or,
+					if (isNewScenarioGroup || grdScenarios.Rows.Count == 1) {
+						loadScenarioGroup(false);
+					}
+
+					findNode("Scenario Group", currScenarioGroup.scenarioGroupKey.ToString()).Text = currScenarioGroup.name;
+				}
+			}
+
+			scenarioGroupInfoTracker.enabled = true;
+			scenarioGroupInfoTracker.needsSaving = false;
+		}
+
+		private void saveTest() {
+			testInfoTracker.enabled = false;
+
+			if (currTest != null) {
+				bool isNewTest = currTest.testKey == -1;
+
+				currTest.name = txtTestName.Text;
+				currTest.description = txtTestDescription.Text;
+
+				currTest.unitType = cmbUnitType.SelectedItem.ToString();
+
+				//if (currTest.unitType == "PL/SQL BLOCK") {
+				if (currTest.plSQLBlock != rtfPLSQLBLock.Text)
+					highlightPLSQL(rtfPLSQLBLock);
+				currTest.plSQLBlock = rtfPLSQLBLock.Text.Trim();
+				//} else {
+				//	currTest.plSQLBlock = String.Empty;
+				//}
+
+				string[] arrUnitParts = txtUnitName.Text.Split('.');
+				currTest.unitSchema = arrUnitParts.Count() >= 1 ? arrUnitParts[0] : String.Empty;
+
+				if (arrUnitParts.Count() == 3) {
+					currTest.unitName = arrUnitParts[1];
+					currTest.unitMethod = arrUnitParts[2];
+				} else if (arrUnitParts.Count() == 2) {
+					currTest.unitName = arrUnitParts[1];
+					currTest.unitMethod = String.Empty;
+				}
+				currTest.overload = Int32.Parse(txtOverload.Text);
+
+				if (currTest.plSQLDeclare != rtfTestDeclares.Text)
+					highlightPLSQL(rtfTestDeclares);
+				currTest.plSQLDeclare = rtfTestDeclares.Text;
+
+				if (tabNavigation.SelectedTab == tabTests) {
+					if (tvTests.SelectedNode == null) {
+						currTest.parentFolderKey = -1;
+					} else {
+						if (tvTests.SelectedNode.Parent == null || tvTests.SelectedNode.Parent.Tag.ToString() != "Folder") {
+							currTest.parentFolderKey = -1;
+						} else {
+							currTest.parentFolderKey = Int32.Parse(tvTests.SelectedNode.Parent.Name);
+						}
+					}
+				} else {
+					currTest.parentFolderKey = -1;
+				}
+
+				try {
+					currTest.save(Program.conTargetDB);
+				} catch (OracleException err) {
+					MessageBox.Show(err.Message);
+				}
+
+				lblTestKey.Text = currTest.testKey.ToString();
+
+				if (isNewTest) {
+					// Replace the node key placeholder with the new key, now that we have a real one.
+					findNode("Test", NEW_TEST_NODE_KEY).Name = currTest.testKey.ToString();
+
+					grdTestArguments.DataSource = currTest.getArguments();
+
+					createScenarioGroup();
+
+					// Give the automatically-created scenario group a special key, so that
+					// we won't automatically save him, right after we saved the new test.
+					currScenarioGroup.scenarioGroupKey = -2;
+
+					// See if we have any arguments to this new test, whose types we don't know, and therefore,
+					// need the user to give us.
+					for (int i = 0; i < grdTestArguments.Rows.Count; i++) {
+						if (!grdTestArguments.Rows[i].IsNewRow &&
+							grdTestArguments.Rows[i].Cells["pls_type"].Value.ToString() == "???") {
+
+							tabGroup.SelectedTab = tabTestInfo;
+							grdTestArguments.Focus();
+							grdTestArguments.CurrentCell = grdTestArguments.Rows[i].Cells["pls_type"];
+
+							MessageBox.Show("The target unit has one or more parameters whose type we couldn't figure out, so please tell us what it is.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Question);
+
+							break;
+						}
+					}
+				} else {
+					// Save any changes to the unit's parameters
+					OracleCommand cmdAddTestArgument = new OracleCommand(@"
+						BEGIN
+							rt_reg_test.addTestArgument(
+								p_TestKey      => :p_TestKey,
+								p_ArgumentName => :p_ArgumentName,
+								p_InOut        => :p_InOut,
+								p_Position     => :p_Position,
+								p_PlsType      => :p_PlsType
+							);
+						END;".Replace(Environment.NewLine, "\n"),
+						Program.conRepos);
+					cmdAddTestArgument.BindByName = true;
+					cmdAddTestArgument.Parameters.Add("p_TestKey", currTest.testKey);
+					cmdAddTestArgument.Parameters.Add("p_ArgumentName", OracleDbType.Varchar2, 30);
+					cmdAddTestArgument.Parameters.Add("p_InOut", OracleDbType.Varchar2, 10);
+					cmdAddTestArgument.Parameters.Add("p_Position", OracleDbType.Int32);
+					cmdAddTestArgument.Parameters.Add("p_PlsType", OracleDbType.Varchar2, 92);
+
+					OracleCommand cmdChangeTestArgument = new OracleCommand(@"
+						BEGIN
+							rt_reg_test.changeTestArgument(
+								p_TestKey         => :p_TestKey,
+								p_OldArgumentName => :p_OldArgumentName,
+								p_NewArgumentName => :p_NewArgumentName,
+								p_InOut           => :p_InOut,
+								p_Position        => :p_Position,
+								p_PlsType         => :p_PlsType
+							);
+						END;".Replace(Environment.NewLine, "\n"),
+						Program.conRepos);
+					cmdChangeTestArgument.BindByName = true;
+					cmdChangeTestArgument.Parameters.Add("p_TestKey", currTest.testKey);
+					cmdChangeTestArgument.Parameters.Add("p_OldArgumentName", OracleDbType.Varchar2, 30);
+					cmdChangeTestArgument.Parameters.Add("p_NewArgumentName", OracleDbType.Varchar2, 30);
+					cmdChangeTestArgument.Parameters.Add("p_InOut", OracleDbType.Varchar2, 10);
+					cmdChangeTestArgument.Parameters.Add("p_Position", OracleDbType.Int32);
+					cmdChangeTestArgument.Parameters.Add("p_PlsType", OracleDbType.Varchar2, 92);
+
+					OracleCommand cmdDeleteTestArgument = new OracleCommand(@"
+						BEGIN
+							rt_reg_test.deleteTestArgument(
+								p_TestKey      => :p_TestKey,
+								p_ArgumentName => :p_ArgumentName
+							);
+						END;".Replace(Environment.NewLine, "\n"),
+						Program.conRepos);
+					cmdDeleteTestArgument.BindByName = true;
+					cmdDeleteTestArgument.Parameters.Add("p_TestKey", currTest.testKey);
+					cmdDeleteTestArgument.Parameters.Add("p_ArgumentName", OracleDbType.Varchar2, 30);
+
+					bool isNewArgument;
+					bool isChangedArgument;
+					bool isDeletedArgument;
+					bool argumentsChanged = false;
+					for (int i = 0; i < grdTestArguments.Rows.Count; i++) {
+						if (grdTestArguments.Rows[i].IsNewRow == false) {
+							isNewArgument = grdTestArguments.Rows[i].Tag != null && grdTestArguments.Rows[i].Tag.ToString() == "Added";
+							isChangedArgument = grdTestArguments.Rows[i].Tag != null && grdTestArguments.Rows[i].Tag.ToString() == "Changed";
+							isDeletedArgument = grdTestArguments.Rows[i].Tag != null && grdTestArguments.Rows[i].Tag.ToString() == "Deleted";
+							grdTestArguments.Rows[i].Tag = null;
+
+							argumentsChanged = argumentsChanged || isNewArgument || isChangedArgument || isDeletedArgument;
+
+							if (isNewArgument) {
+								// New argument...
+								cmdAddTestArgument.Parameters["p_ArgumentName"].Value = grdTestArguments.Rows[i].Cells["argument_name"].Value.ToString();
+								cmdAddTestArgument.Parameters["p_InOut"].Value = grdTestArguments.Rows[i].Cells["in_out"].Value.ToString();
+								cmdAddTestArgument.Parameters["p_Position"].Value = grdTestArguments.Rows[i].Cells["position"].Value.ToString();
+								cmdAddTestArgument.Parameters["p_PlsType"].Value = grdTestArguments.Rows[i].Cells["pls_type"].Value.ToString();
+
+								cmdAddTestArgument.ExecuteNonQuery();
+							}
+
+							if (isChangedArgument) {
+								// Changed scenario row - change the existing scenario properties
+								if (grdTestArguments.Rows[i].Cells["argument_name"].Tag == null) {
+									// Argument named didn't change
+									cmdChangeTestArgument.Parameters["p_OldArgumentName"].Value = grdTestArguments.Rows[i].Cells["argument_name"].Value.ToString();
+								} else {
+									// Argument name did change - capture the old value
+									cmdChangeTestArgument.Parameters["p_OldArgumentName"].Value = grdTestArguments.Rows[i].Cells["argument_name"].Tag.ToString();
+								}
+
+								cmdChangeTestArgument.Parameters["p_NewArgumentName"].Value = grdTestArguments.Rows[i].Cells["argument_name"].Value.ToString();
+
+								cmdChangeTestArgument.Parameters["p_InOut"].Value = grdTestArguments.Rows[i].Cells["in_out"].Value.ToString();
+								cmdChangeTestArgument.Parameters["p_Position"].Value = grdTestArguments.Rows[i].Cells["position"].Value.ToString();
+								cmdChangeTestArgument.Parameters["p_PlsType"].Value = grdTestArguments.Rows[i].Cells["pls_type"].Value.ToString();
+
+								cmdChangeTestArgument.ExecuteNonQuery();
+
+								grdTestArguments.Rows[i].Cells["argument_name"].Tag = grdTestArguments.Rows[i].Cells["argument_name"].Value.ToString();
+							}
+
+							if (isDeletedArgument) {
+								cmdDeleteTestArgument.Parameters["p_ArgumentName"].Value = grdTestArguments.Rows[i].Cells["argument_name"].Value.ToString();
+
+								grdTestArguments.Rows.RemoveAt(i);
+
+								cmdDeleteTestArgument.ExecuteNonQuery();
+							}
+						}
+					}
+
+					if (argumentsChanged && currScenarioGroup != null) {
+						loadScenarioGroup(false);
+					}
+				}
+
+				findNode("Test", currTest.testKey.ToString()).Text = currTest.name;
+			}
+			
+			testInfoTracker.enabled = true;
+			testInfoTracker.needsSaving = false;
+		}
+
+		private void saveUDC() {
+			if (currUDC != null) {
+				bool isNewUDC = currUDC.checkKey == -1;
+
+				// Error checking
+				if (cmbUDCType.SelectedValue == null) {
+					MessageBox.Show("You need to choose the type of UDC.", "Error", MessageBoxButtons.OK);
+					tabGroup.SelectedTab = tabUserDefinedChecks;
+					cmbUDCType.Focus();
+					return;
+				}
+
+				if ((udc.enumCheckTypes)Int32.Parse(cmbUDCType.SelectedValue.ToString()) == udc.enumCheckTypes.ROW_VALIDATION &&
+					rtfUDCPLSQLBlock.Text.Trim() == String.Empty) {
+					MessageBox.Show("You must have an SQL statement for row validators.");
+					tabGroup.SelectedTab = tabUserDefinedChecks;
+					rtfUDCPLSQLBlock.Focus();
+					return;
+				}
+
+				// Copy what's in the form fields to the current UDC object, so that it can
+				// be saved.
+				currUDC.checkType = (udc.enumCheckTypes)Int32.Parse(cmbUDCType.SelectedValue.ToString());
+				currUDC.description = txtUDCDescription.Text;
+				currUDC.name = txtUDCName.Text;
+
+				if (currUDC.plsqlBlock != rtfUDCPLSQLBlock.Text)
+					highlightPLSQL(rtfUDCPLSQLBlock);
+				currUDC.plsqlBlock = rtfUDCPLSQLBlock.Text;
+
+				if (currUDC.plsqlCondition != rtfUDCPLSQLCondition.Text)
+					highlightPLSQL(rtfUDCPLSQLCondition);
+				currUDC.plsqlCondition = rtfUDCPLSQLCondition.Text;
+
+				currUDC.scenarioGroupKey = currScenarioGroup.scenarioGroupKey;
+				currUDC.sortOrder = Int32.Parse(txtUDCSortOrder.Text);
+
+				if (currUDC.checkType == udc.enumCheckTypes.ROW_VALIDATION) {
+					// We also need to save the contents of the field validation gridview
+					DataTable dtFieldValidations = new DataTable();
+					dtFieldValidations.Columns.Add("row_validator_key");
+					dtFieldValidations.Columns.Add("field_name");
+					dtFieldValidations.Columns.Add("comparison_type");
+					dtFieldValidations.Columns.Add("field_value");
+
+					DataGridViewRow currRow;
+					for (int i = 0; i < grdRowValidation.Rows.Count; i++) {
+						currRow = grdRowValidation.Rows[i];
+
+						if (currRow.IsNewRow == false) {
+							// Populate an array with the scenario values
+							object[] arrParams = new object[dtFieldValidations.Columns.Count];
+							arrParams[dtFieldValidations.Columns["row_validator_key"].Ordinal] = currRow.Cells["row_validator_key"].Value;
+							arrParams[dtFieldValidations.Columns["field_name"].Ordinal] = currRow.Cells["field_name"].Value;
+							arrParams[dtFieldValidations.Columns["comparison_type"].Ordinal] = currRow.Cells["comparison_type"].Value;
+							arrParams[dtFieldValidations.Columns["field_value"].Ordinal] = currRow.Cells["field_value"].Value;
+
+							dtFieldValidations.Rows.Add(arrParams);
+
+							if (currRow.Cells["row_validator_key"].Value != null) {
+								// Changed row
+								dtFieldValidations.Rows[i].ItemArray[0] = currRow.Cells["row_validator_key"].Value;
+							}
+
+							//MessageBox.Show(dtFieldValidations.Rows[dtFieldValidations.Rows.Count - 1].RowState.ToString());
+						}
+					}
+
+					currUDC.fieldValidations = dtFieldValidations;
+
+					currUDC.deletedFieldValidatorKeys = udcKeysDeleted;
+				}
+
+				try {
+					currUDC.save(Program.conTargetDB);
+
+					if (isNewUDC) {
+						// Replace the node key placeholder with the new key, now that we have a real one.
+						findNode("UDC", NEW_UDC_NODE_KEY).Name = currUDC.checkKey.ToString();
+
+						loadUDC(false);
+					}
+
+					findNode("UDC", currUDC.checkKey.ToString()).Text = currUDC.name;
+					
+					UDCInfoTracker.needsSaving = false;
+				} catch (Exception err) {
+					MessageBox.Show(err.Message, "Error Occurred While Trying to Save UDC", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
+		}
+
+		private void saveEverything() {
+			saveTest();
+			saveScenarioGroup();
+			saveUDC();
+		}
+		#endregion
+
+		protected void sortScenarioColumns() {
+			// If the parameters type columns are all supposed to be immediately after
+			// their corresponding parameter column (i.e. inline), then make sure they are.
+			if (chkDisplayParamTypesInline.Checked) {
+				int paramIndex = 0;
+
+				for (int i = 0; i < grdScenarios.Columns.Count; i++) {
+					if (grdScenarios.Columns[i].Tag != null && grdScenarios.Columns[i].Tag.ToString() == "Parameter Type") {
+						grdScenarios.Columns[i].DisplayIndex = 1 + (2 * paramIndex) + 1;
+
+						grdScenarios.Columns[i].HeaderText = String.Empty;
+
+						// Change the color of parameters (not return values)
+						if (grdScenarios.Columns[i].DefaultCellStyle.BackColor == System.Drawing.Color.FromArgb(255, 255, 224))
+							grdScenarios.Columns[i].DefaultCellStyle.BackColor = PARAMETER_COLOR;
+
+						paramIndex++;
+					}
+				}
+			} else {
+				DataTable dtTestArgs = currTest.getArguments();
+
+				for (int i = 0; i < grdScenarios.Columns.Count; i++) {
+					if (grdScenarios.Columns[i].Tag != null && grdScenarios.Columns[i].Tag.ToString() == "Parameter Type") {
+						grdScenarios.Columns[i].DisplayIndex = (dtTestArgs.Rows.Count * 2);
+
+						grdScenarios.Columns[i].HeaderText = grdScenarios.Columns[i].DataPropertyName; //dtTestArgs.Rows[Int32.Parse(grdScenarios.Columns[i].DataPropertyName.Replace("pt", String.Empty))]["argument_name"].ToString();
+
+						// Change the color of parameters (not return values)
+						if (grdScenarios.Columns[i].DefaultCellStyle.BackColor == PARAMETER_COLOR)
+							grdScenarios.Columns[i].DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(255, 255, 224);
+					}
+				}
+			}
+		}
+
+		protected void addRequiredScenarioToGroup(DataTable dtTestArgs) {
+			grdScenarios.Rows.Add();
+
+			setScenarioRowDefaults(dtTestArgs, grdScenarios.Rows[0]);
+		}
+
+		// Takes the given scenario gridviewrow and sets its default values
+		private void setScenarioRowDefaults(DataTable dtTestArgs, DataGridViewRow gvrScenario) {
+			int paramIndex = 0;
+
+			gvrScenario.Tag = null;
+
+			// Default the new row's cell to their default values....
+			gvrScenario.Cells["Key"].Value = String.Empty;
+
+			for (int i = 0; i < gvrScenario.Cells.Count; i++) {
+				if (gvrScenario.Cells[i].Value == null)
+					gvrScenario.Cells[i].Value = String.Empty;
+
+				// Default the parameter type (expression, value, etc.) based on the datatype of the parameter
+				if (gvrScenario.Cells[i].OwningColumn.Tag != null && gvrScenario.Cells[i].OwningColumn.Tag.ToString() == "Parameter Type") {
+					if (dtTestArgs.Rows[paramIndex]["pls_type"].ToString() == "BOOLEAN" ||
+						dtTestArgs.Rows[paramIndex]["pls_type"].ToString() == "DATE" ||
+						dtTestArgs.Rows[paramIndex]["pls_type"].ToString() == "TIMESTAMP") {
+						gvrScenario.Cells[i].Value = "exp";
+					} else {
+						gvrScenario.Cells[i].Value = "value";
+					}
+
+					paramIndex++;
+				}
+
+				if (paramIndex >= dtTestArgs.Rows.Count)
+					break;
+			}
+
+			gvrScenario.Cells["Expected Exception"].Value = String.Empty;
+			gvrScenario.Cells["Comments"].Value = String.Empty;
+		}
+		
+		private void debugWrite(string msg) {
+			rtfDebug.Text += msg + Environment.NewLine;
+
+			//highlightPLSQL(rtfDebug);
+
+			//rtfDebug.ScrollToCaret();
+			//rtfDebug.Refresh();
+		}
+
+		private void highlightPLSQL(RichTextBox rtfDestination) {
+			Regex expLines = new Regex("\n");
+			string trimmedLine;
+			String[] tokens;
+			bool inString = false;
+			bool inMultiLineComment = false;
+			bool inSingleLineComment = false;
+
+			// Check whether the token is a keyword.
+			String[] keywords = {
+				// Keywords
+				"DECLARE", "BEGIN", "END", "EXCEPTION", "WHEN", "OTHERS", "THEN", "IF", "ELSE", "RAISE", 
+				"CASE", "NULL", "CURSOR", "IS", "PROCEDURE", "SAVEPOINT", "ROLLBACK", "TRUE", "FALSE", "TO", "OPEN", "FETCH",
+				"INTO", "CLOSE", "FOUND", "NOTFOUND", "ISOPEN", "FOR", "LOOP", "CONSTANT", "TABLE", "EXIT", "RETURN",
+				"TYPE", "SUBTYPE", "RECORD", "FUNCTION",
+				
+				// Functions
+				"REPLACE", "TRIM", "LTRIM", "RTRIM", "RAISE_APPLICATION_ERROR",
+
+				// Symbols
+				":=", "(", ")", ";", "=>", "'", "-", ",", ":", "'", "+", "|", "=", "!", "<", ">",
+
+				// Types
+				"VARCHAR2", "VARCHAR", "CHAR", "CLOB", "BOOLEAN", "FUNCTION", "RETURN", "PLS_INTEGER", "DATE", "TIMESTAMP", "NUMBER",
+				
+				// SQL
+				"UPDATE", "SET", "WHERE", "INSERT", "AND", "NOT", "IN", "DELETE", "FROM", 
+				"SELECT", "GROUP", "BY", "ORDER", "UNION", "ALL", "AS", "JOIN", "LEFT", "RIGHT", "OUTER", "NO_DATA_FOUND" };
+
+			Regex r = new Regex("(/\\*)|(\\*/)|( )|(:=)|(--)|([,=;\\|\\(\\):'])", RegexOptions.Compiled);
+						
+			if (rtfDestination.Text.Trim() == string.Empty)
+				return;
+
+			rtfDestination.Visible = false; // For speed
+	
+			rtfDestination.Text = rtfDestination.Text.Replace("\r\n", "\n").Replace("\r", "\n");
+
+			String[] lines = expLines.Split(rtfDestination.Text);
+
+			rtfDestination.Text = string.Empty;
+
+			foreach (string line in lines) {
+				trimmedLine = line.Trim();
+
+				if (trimmedLine == String.Empty) {
+					// Blank lines don't need to be syntax colored
+					rtfDestination.SelectedText = line + Environment.NewLine;
+
+					inSingleLineComment = false;
+				} else {
+					if (trimmedLine.Length >= 2 && trimmedLine.Substring(0, 2) == "--") {
+						// In whole-line comments, the whole line gets highlighted the same way
+						rtfDestination.SelectionFont = new Font("Courier New", 9, FontStyle.Regular);
+						rtfDestination.SelectionColor = Color.DarkGreen;
+
+						rtfDestination.SelectedText = line + Environment.NewLine;
+					} else {
+						// We have to go through extra work to tokenize this line, and search
+						// for individual tokens to highlight....
+						tokens = r.Split(line);
+
+						foreach (string token in tokens) {
+							// Set the tokens default color and font.
+							if (rtfDestination.SelectionFont.Bold == true
+								 || rtfDestination.SelectionColor != Color.FromArgb(96, 96, 96)) {
+								rtfDestination.SelectionFont = new Font("Courier New", 9, FontStyle.Regular);
+								rtfDestination.SelectionColor = Color.FromArgb(96, 96, 96);
+							}
+
+							// See if we're entering a multi-line comment
+							if (token == "/*") {
+								inMultiLineComment = true;
+							}
+
+							// Highlight the words in a multi-line comment as being in a comment
+							if (inMultiLineComment) {
+								rtfDestination.SelectionColor = Color.DarkGreen;
+								//rtfDestination.SelectionFont = new Font("Courier New", 9, FontStyle.Regular);
+							}
+
+							// See if we're exiting a multi-line comment
+							if (token == "*/") {
+								inMultiLineComment = false;
+							}
+
+							if (inMultiLineComment == false) {
+								// See if we're entering/exiting a string literal
+								if (inSingleLineComment == false && token == "'") {
+									if (inString) {
+										// We're already in a string - he's the end of the string, if he's not doubled up @@@
+										inString = false;
+									} else {
+										inString = true;
+									}
+
+									// Highlight the single quote as a reserved word
+									rtfDestination.SelectionColor = Color.DarkBlue;
+									rtfDestination.SelectionFont = new Font("Courier New", 9, FontStyle.Bold);
+								} else {
+									// Highlight reserved words, operators, etc., if we're not in a string
+									if (inString == false) {
+										if (token == "--") {
+											inSingleLineComment = true;
+										}
+
+										if (inSingleLineComment) {
+											rtfDestination.SelectionColor = Color.DarkGreen;
+											//rtfDestination.SelectionFont = new Font("Courier New", 9, FontStyle.Regular);
+										} else {
+											if (token != " " && token != String.Empty) { // We're not going to be highlighting a space
+												for (int i = 0; i < keywords.Length; i++) {
+													if (keywords[i] == token.ToUpper().Trim()) {
+														// Apply alternative color and font to highlight keyword.
+														rtfDestination.SelectionColor = Color.DarkBlue;
+														rtfDestination.SelectionFont = new Font("Courier New", 9, FontStyle.Bold);
+
+														break;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+
+							rtfDestination.SelectedText = token;
+						}
+
+						rtfDestination.SelectedText = Environment.NewLine;
+						inSingleLineComment = false;
+					}
+				}
+			}
+
+			//rtfDestination.Text = rtfDestination.Text.TrimEnd((char []) Environment.NewLine.ToCharArray());
+
+			rtfDestination.Visible = true; // For speed
+		}
+
+		private void grdRowValidation_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e) {
+			if (e.Row.Cells["row_validator_key"].Value != null) {
+				udcKeysDeleted += e.Row.Cells["row_validator_key"].Value.ToString() + ",";
+			}
+		}
+
+		#region Running
+		private void runToolStripMenuItem_Click(object sender, EventArgs e) {
+			runCurrentTest();
+		}
+
+		private void runScenarioToolStripMenuItem_Click(object sender, EventArgs e) {
+			runCurrentScenario(Program.conTargetDB);
+		}
+
+		private void runAllTestsForObject(string objectName, RT.runType testRunType, string type = "") {
+			rtfDebug.Text = string.Empty;
+
+			pbRunProgress.Value = 0;
+			pbRunProgress.Style = ProgressBarStyle.Marquee;
+			pbRunProgress.Maximum = api.countChildScenarios(conRepos: Program.conRepos, objectName: objectName, type: type);
+			
+			lblRunProgress.Text = "Running...";
+			lblRunProgress.Refresh();
+
+			// Set focus to the output tab, if we're not on the parameters (scenarios) tab,
+			// so the user can see the run results.
+			if (tabGroup.SelectedTab != tabParameters) {
+				tabGroup.SelectedTab = tabDebug;
+				this.Refresh();
+			}
+
+			updateRunStatus("Running all tests for object '" + objectName + "'" + (type == "" ? "" : " of type " + type) + "...\n", isError: false);
+			
+			RT.api.runAllTestsInObject(
+				conRepos: Program.conRepos,
+				conTarget: Program.conTargetDB,
+				objectName: objectName,
+				objectType: type,
+				testRunType: testRunType,
+				runStatusChanged: new RT.runStatusChangedHandler(updateRunStatus),
+				scenarioRunCompleted: new RT.scenarioRunCompletedHandler(scenarioRunCompleted));
+
+			updateRunStatus("Done running all tests for object '" + objectName + "'" + (type == "" ? "" : " of type " + type) + "...\n", isError: false);
+
+			pbRunProgress.Value = pbRunProgress.Maximum;
+
+			pbRunProgress.Style = ProgressBarStyle.Continuous;
+		}
+
+		private void runFolder() {
+			rtfDebug.Text = string.Empty;
+
+			int folderKey = Int32.Parse(tvTests.SelectedNode.Name.ToString());
+
+			pbRunProgress.Value = 0;
+			pbRunProgress.Style = ProgressBarStyle.Marquee;
+			pbRunProgress.Maximum = api.countChildScenarios(Program.conRepos, String.Empty, String.Empty, folderKey, -1, -1);
+			
+			// Set focus to the output tab, if we're not on the parameters (scenarios) tab,
+			// so the user can see the run results.
+			if (tabGroup.SelectedTab != tabParameters) {
+				tabGroup.SelectedTab = tabDebug;
+				this.Refresh();
+			}
+
+			lblRunProgress.Text = "Running...";
+			lblRunProgress.Refresh();
+			
+			folder currFolder = new folder();
+			currFolder.runStatusChanged += new RT.runStatusChangedHandler(updateRunStatus);
+			currFolder.scenarioRunCompleted += new RT.scenarioRunCompletedHandler(scenarioRunCompleted);
+			currFolder.runAllChildren(Program.conRepos, Program.conTargetDB, folderKey);
+			currFolder.runStatusChanged -= new RT.runStatusChangedHandler(updateRunStatus);
+			currFolder.scenarioRunCompleted -= new RT.scenarioRunCompletedHandler(scenarioRunCompleted);
+
+			pbRunProgress.Style = ProgressBarStyle.Continuous;
+		}
+
+		public void runCurrentTest() {
+			rtfDebug.Text = string.Empty;
+
+			pbRunProgress.Value = 0;
+			pbRunProgress.Style = ProgressBarStyle.Marquee;
+			pbRunProgress.Maximum = api.countChildScenarios(Program.conRepos, String.Empty, String.Empty, -1, currTest.testKey, -1);
+			
+			// Set focus to the output tab, if we're not on the parameters (scenarios) tab,
+			// so the user can see the run results.
+			if (tabGroup.SelectedTab != tabParameters) {
+				tabGroup.SelectedTab = tabDebug;
+				this.Refresh();
+			}
+
+			lblRunProgress.Text = "Running...";
+			lblRunProgress.Refresh();
+
+			currTest.runStatusChanged += new RT.runStatusChangedHandler(updateRunStatus);
+			currTest.scenarioRunCompleted += new RT.scenarioRunCompletedHandler(scenarioRunCompleted);
+			currTest.runTest(Program.conTargetDB, api.getNextRunKey(Program.conRepos));
+			currTest.runStatusChanged -= new RT.runStatusChangedHandler(updateRunStatus);
+			currTest.scenarioRunCompleted -= new RT.scenarioRunCompletedHandler(scenarioRunCompleted);
+
+			pbRunProgress.Style = ProgressBarStyle.Continuous;
+		}
+
+		private void runCurrentScenario(OracleConnection conTarget) {
+			rtfDebug.Text = string.Empty;
+
+			if (currScenarioGroup == null) {
+				MessageBox.Show("Please choose a scenario group to run.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			} else {
+				pbRunProgress.Value = 0;
+				pbRunProgress.Style = ProgressBarStyle.Marquee;
+				pbRunProgress.Maximum = api.countChildScenarios(Program.conRepos, String.Empty, String.Empty, -1, -1, currScenarioGroup.scenarioGroupKey);
+
+				// Set focus to the output tab, if we're not on the parameters (scenarios) tab,
+				// so the user can see the run results.
+				if (tabGroup.SelectedTab != tabParameters) {
+					tabGroup.SelectedTab = tabDebug;
+					this.Refresh();
+				}
+
+				lblRunProgress.Text = "Running...";
+				lblRunProgress.Refresh();
+
+				currScenarioGroup.runStatusChanged += new RT.runStatusChangedHandler(updateRunStatus);
+				currScenarioGroup.scenarioRunCompleted += new RT.scenarioRunCompletedHandler(scenarioRunCompleted);
+				currScenarioGroup.run(conTarget, api.getNextRunKey(Program.conRepos));
+				currScenarioGroup.runStatusChanged -= new RT.runStatusChangedHandler(updateRunStatus);
+				currScenarioGroup.scenarioRunCompleted -= new RT.scenarioRunCompletedHandler(scenarioRunCompleted);
+
+				pbRunProgress.Style = ProgressBarStyle.Continuous;
+			}
+		}
+
+		// This will be called whenever the running status of tests/scenarios changes.
+		private void updateRunStatus(string message, bool isError) {
+			if (chkOnlyShowFailingScenarios.Checked == false || isError) {
+				debugWrite(message);
+				this.Refresh();
+			}
+
+			if (lblRunProgress.Text == "Running...")
+				lblRunProgress.Text = String.Empty;
+		}
+
+		// This is called when a scenario within a scenario group has finished running
+		private void scenarioRunCompleted(int folderKey, int testKey, string testName, int scenarioGroupKey, string scenarioGroupName, int scenarioKey, string status, int errorNumber, string errorMessage) {
+			pbRunProgress.Style = ProgressBarStyle.Blocks;
+			
+			if (pbRunProgress.Value + 1 <= pbRunProgress.Maximum)
+				pbRunProgress.Value = pbRunProgress.Value + 1;
+
+			if (pbRunProgress.Value == pbRunProgress.Maximum) {
+				pbRunProgress.Style = ProgressBarStyle.Continuous;
+			}
+
+			lblRunProgress.Text =
+				pbRunProgress.Value.ToString() + "/" + pbRunProgress.Maximum.ToString() + " = " +
+				(pbRunProgress.Value / (pbRunProgress.Maximum*1.00)).ToString("0.00%");
+			lblRunProgress.Refresh();
+
+			if (status != "OK") {
+				debugWrite(
+					testName + " - " + scenarioGroupName + " has failed:\n" +
+					"   Scenario #" + scenarioKey.ToString() + "    Result: " + status + "    Error #: " + errorNumber + "\n" +
+					"   Error msg: " + errorMessage + "\n"
+				);
+			}
+
+			// Update the scenario group's parameter grid, if applicable
+			if (currScenarioGroup != null && scenarioGroupKey == currScenarioGroup.scenarioGroupKey) {
+				grdScenarios.CurrentCell = null;
+
+				for (int i = 0; i < grdScenarios.Rows.Count; i++) {
+					if (grdScenarios.Rows[i].IsNewRow == false && grdScenarios.Rows[i].Cells["key"].Value.ToString() == scenarioKey.ToString()) {
+						grdScenarios.Rows[i].Cells["Last Run Results"].Value = status;
+						grdScenarios.Rows[i].Cells["Last Run Error #"].Value = errorNumber == 0 ? String.Empty : errorNumber.ToString();
+						
+						grdScenarios.Rows[i].Cells["Last Run Error Message"].Value = errorMessage.TrimEnd('\r', '\n');
+						if (errorMessage.IndexOf("\n") < 0)
+							grdScenarios.Rows[i].Cells["Last Run Error Message"].Style.WrapMode = DataGridViewTriState.False;
+
+						if (status == "OK") {
+							grdScenarios.Rows[i].Cells["Last Run Results"].Style.BackColor =
+							grdScenarios.Rows[i].Cells["Last Run Error #"].Style.BackColor =
+							grdScenarios.Rows[i].Cells["Last Run Error Message"].Style.BackColor = Color.PaleGreen;
+						} else {
+							grdScenarios.Rows[i].Cells["Last Run Results"].Style.BackColor =
+							grdScenarios.Rows[i].Cells["Last Run Error #"].Style.BackColor =
+							grdScenarios.Rows[i].Cells["Last Run Error Message"].Style.BackColor = Color.Pink;
+						}
+
+						if (chkOnlyShowFailuresOnRun.Checked) {
+							grdScenarios.Rows[i].Visible = status != "OK";
+						}
+
+						break;
+					}
+				}
+			}
+		}
+		#endregion
+
+		#region Menu Items
+		private void testToolStripMenuItem_Click(object sender, EventArgs e) {
+			createTest();
+
+			if (tabNavigation.SelectedTab == tabPLSQLMethods) {
+				txtUnitName.Text = tvSchemaObjects.SelectedNode.Parent.Name.Split('/')[0];
+
+				if (tvSchemaObjects.SelectedNode.Parent.Name.Split('/').Length > 1) {
+					txtOverload.Text = tvSchemaObjects.SelectedNode.Parent.Name.Split('/')[1];
+				} else {
+					txtOverload.Text = "0";
+				}
+
+				txtTestName.Text = txtUnitName.Text.ToLower();
+			}
+		}
+
+		private void deleteToolStripMenuItem_Click(object sender, EventArgs e) {
+			TreeNode selectedNode;
+
+			if (tabNavigation.SelectedTab == tabPLSQLMethods) {
+				selectedNode = tvSchemaObjects.SelectedNode;
+			} else {
+				selectedNode = tvTests.SelectedNode;
+			}
+
+			switch (selectedNode.Tag.ToString()) {
+				case "Folder":
+					if (MessageBox.Show("Are you sure you want to delete this folder?", "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.Yes) {
+						folders.delete(Program.conRepos, Int32.Parse(selectedNode.Name));
+						selectedNode.Remove();
+					}
+					break;
+
+				case "Test":
+					if (MessageBox.Show("Are you sure you want to delete this test?", "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.Yes) {
+						currTest.delete();
+						selectedNode.Remove();
+
+						currTest = null;
+					}
+					break;
+				case "Scenario Group":
+					if (MessageBox.Show("Are you sure you want to delete this scenario group?", "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.Yes) {
+						currScenarioGroup.delete();
+						selectedNode.Remove();
+
+						currScenarioGroup = null;
+					}
+
+					break;
+				case "UDC":
+					if (MessageBox.Show("Are you sure you want to delete this user-defined check?", "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.Yes) {
+						currUDC.delete();
+						selectedNode.Remove();
+
+						currUDC = null;
+					}
+
+					break;
+			}
+		}
+
+		private void scenarioToolStripMenuItem_Click(object sender, EventArgs e) {
+			createScenarioGroup();
+		}
+	
+		private void testToolStripMenuItem1_Click(object sender, EventArgs e) {
+			runCurrentTest();
+		}
+
+		private void scenarioGroupToolStripMenuItem_Click(object sender, EventArgs e) {
+			runCurrentScenario(Program.conTargetDB);
+		}
+
+		private void testToolStripMenuItem3_Click(object sender, EventArgs e) {
+			createTest();
+		}
+
+		private void scenarioGroupToolStripMenuItem2_Click(object sender, EventArgs e) {
+			createScenarioGroup();
+		}
+
+		private void testToolStripMenuItem2_Click(object sender, EventArgs e) {
+			createTest();
+		}
+
+		private void scenarioGroupToolStripMenuItem1_Click(object sender, EventArgs e) {
+			createScenarioGroup();
+		}
+
+		private void userDefinedCheckToolStripMenuItem_Click(object sender, EventArgs e) {
+			MessageBox.Show("@@@ Not implemented!");
+		}
+
+		private void userDefinedCheckToolStripMenuItem1_Click(object sender, EventArgs e) {
+			createUDC();
+		}
+
+		private void preferencesToolStripMenuItem_Click(object sender, EventArgs e) {
+			frmPreferences myForm = new frmPreferences();
+
+			myForm.ShowDialog();
+		}
+
+		private void saveToolStripButton_Click(object sender, EventArgs e) {
+			saveEverything();
+		}
+
+		private void saveToolStripMenuItem1_Click(object sender, EventArgs e) {
+			saveEverything();
+		}
+		
+		private void folderToolStripMenuItem_Click(object sender, EventArgs e) {
+			createFolder();
+		}
+
+		private void folderToolStripMenuItem2_Click(object sender, EventArgs e) {
+			createFolder();
+		}
+
+		private void folderToolStripMenuItem1_Click(object sender, EventArgs e) {
+			createFolder();
+		}
+
+		private void renameToolStripMenuItem_Click(object sender, EventArgs e) {
+			if (tabNavigation.SelectedTab == tabTests) {
+				tvTests.LabelEdit = true;
+				tvTests.SelectedNode.BeginEdit();
+			} else {
+				tvSchemaObjects.LabelEdit = true;
+				tvSchemaObjects.SelectedNode.BeginEdit();
+			}
+		}
+
+		private void runFolderToolStripMenuItem_Click(object sender, EventArgs e) {
+			runFolder();
+		}
+
+		private void folderToolStripMenuItem3_Click(object sender, EventArgs e) {
+			runFolder();
+		}
+
+		private void checkToolStripMenuItem_Click(object sender, EventArgs e) {
+			createUDC();
+		}
+
+		private void currentObjectToolStripMenuItem_Click(object sender, EventArgs e) {
+			if (tabNavigation.SelectedTab == tabPLSQLMethods) {
+				if (tvSchemaObjects.SelectedNode != null) {
+					switch (tvSchemaObjects.SelectedNode.Tag.ToString()) {
+						case "DBLevelTestsFolder":
+							runAllTestsForObject(objectName: String.Empty, testRunType: runType.allTestsInDB);
+							break;
+
+						case "Schema":
+							runAllTestsForObject(objectName: tvSchemaObjects.SelectedNode.Name, testRunType: runType.testsInGivenSchema);
+							break;
+							
+						case "SchemaLevelTestsFolder":
+							runAllTestsForObject(objectName: tvSchemaObjects.SelectedNode.Name, testRunType: runType.schemaLevelTests, type: "SCHEMA");
+							break;
+
+						case "FunctionsFolder":
+							goto case "TypesFolder";
+						case "PackagesFolder":
+							goto case "TypesFolder";
+						case "ProceduresFolder":
+							goto case "TypesFolder";
+						case "TriggersFolder":
+							goto case "TypesFolder";
+						case "TypesFolder":
+							runAllTestsForObject(objectName: tvSchemaObjects.SelectedNode.Parent.Name, testRunType: runType.testsOfGivenType, type: tvSchemaObjects.SelectedNode.Name);
+							break;
+
+						case "SchemaLevelObject":
+							runAllTestsForObject(objectName: tvSchemaObjects.SelectedNode.Name.Split('/')[0], testRunType: runType.testsForGivenObject, type: tvSchemaObjects.SelectedNode.Parent.Name);
+							break;
+
+						case "PackageLevelTestsFolder":
+							runAllTestsForObject(objectName: tvSchemaObjects.SelectedNode.Name, testRunType: runType.packageLevelTests, type: "PACKAGE");
+							break;
+
+						case "TypeLevelTestsFolder":
+							runAllTestsForObject(objectName: tvSchemaObjects.SelectedNode.Name, testRunType: runType.typeLevelTests, type: "TYPE");
+							break;
+
+						case "PACKAGE": // Methods within a package are of this type
+							runAllTestsForObject(objectName: tvSchemaObjects.SelectedNode.Name.Split('/')[0], testRunType: runType.testsForGivenMethod, type: tvSchemaObjects.SelectedNode.Tag.ToString());
+							break;
+
+						case "TYPE": // Methods within a type are of this type
+							runAllTestsForObject(objectName: tvSchemaObjects.SelectedNode.Name.Split('/')[0], testRunType: runType.testsForGivenMethod, type: tvSchemaObjects.SelectedNode.Tag.ToString());
+							break;
+
+						case "Test":
+							runCurrentTest();
+							break;
+
+						case "Scenario Group":
+							runCurrentScenario(Program.conTargetDB);
+							break;
+
+						case "UDC":
+							runCurrentScenario(Program.conTargetDB);
+							break;
+					}
+				}
+			} else {
+				if (tvTests.SelectedNode != null) {
+					switch (tvTests.SelectedNode.Tag.ToString()) {
+						case "Folder":
+							runFolder();
+							break;
+
+						case "Test":
+							runCurrentTest();
+							break;
+
+						case "Scenario Group":
+							runCurrentScenario(Program.conTargetDB);
+							break;
+
+						case "UDC":
+							runCurrentScenario(Program.conTargetDB);
+							break;
+					}
+				}
+			}
+		}
+
+		private void mnuClone_Click(object sender, EventArgs e) {
+			// Clone the selected node in whichever tab is visible
+			TreeNode tnSelectedNode;
+
+			if (tabNavigation.SelectedTab == tabTests) {
+				tnSelectedNode = tvTests.SelectedNode;
+			} else {
+				tnSelectedNode = tvSchemaObjects.SelectedNode;
+			}
+
+			if (tnSelectedNode != null) {
+				switch (tnSelectedNode.Tag.ToString()) {
+					case "Scenario Group":
+						cloneScenarioGroup();
+						break;
+
+					case "UDC":
+						cloneUDC();
+						break;
+				}
+			}
+		}
+
+		private void createToolStripMenuItem_Click(object sender, EventArgs e) {
+			frmCreate myForm = new frmCreate();
+
+			myForm.ShowDialog();
+		}
+
+		private void deleteToolStripMenuItem1_Click(object sender, EventArgs e) {
+			frmDelete myForm = new frmDelete();
+
+			myForm.ShowDialog();
+		}
+		#endregion
+
+		private void grdScenarios_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+			if (e.RowIndex >= 0 &&
+			    
+			    // Ignore run result columns....
+			    e.ColumnIndex != grdScenarios.Columns["Last Run Results"].Index &&
+			    e.ColumnIndex != grdScenarios.Columns["Last Run Error #"].Index &&
+			    e.ColumnIndex != grdScenarios.Columns["Last Run Error Message"].Index &&
+
+				 grdScenarios.Rows[e.RowIndex].IsNewRow == false &&
+				 e.ColumnIndex != grdScenarios.Columns["Key"].Index && // Don't mark the row as changed when we added a new scenario, and its key cell gets populated
+				 grdScenarios.Rows[e.RowIndex].Cells["Key"].Value.ToString() != String.Empty) { // Only mark existing scenario records as being changed				
+				grdScenarios.Rows[e.RowIndex].Tag = "Changed";
+				scenarioGroupInfoTracker.needsSaving = true;
+			}
+		}
+
+		private void grdScenarios_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e) {
+			e.Row.Tag = "Deleted";
+			e.Row.DefaultCellStyle.BackColor = Color.DarkGray;
+			e.Cancel = true;
+		}
+
+		private void grdTestArguments_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+			if (e.RowIndex != -1 && grdTestArguments.Rows[e.RowIndex].Tag == null) {
+				grdTestArguments.Rows[e.RowIndex].Tag = "Changed";
+			}
+		}
+
+		private void grdTestArguments_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e) {
+			e.Row.Tag = "Deleted";
+			e.Row.DefaultCellStyle.BackColor = Color.DarkGray;
+			e.Cancel = true;
+		}
+
+		private void grdTestArguments_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e) {
+			if (grdTestArguments.Rows[e.RowIndex].Cells[e.ColumnIndex].Tag == null)
+				grdTestArguments.Rows[e.RowIndex].Cells[e.ColumnIndex].Tag = grdTestArguments.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+		}
+
+		private void grdTestArguments_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e) {
+			grdTestArguments.Rows[grdTestArguments.Rows.Count - 1].Tag = "Added";
+
+			for (int i = 0; i < grdTestArguments.Rows.Count; i++) {
+				if (!grdTestArguments.Rows[i].IsNewRow) {
+					if (grdTestArguments.Rows[i].Cells["in_out"].Value.ToString() == "RETURN") {
+						grdTestArguments.Rows[i].DefaultCellStyle.BackColor = RETURN_VALUE_COLOR;
+					} else {
+						grdTestArguments.Rows[i].DefaultCellStyle.BackColor = PARAMETER_COLOR;
+					}
+				}
+			}
+		}
+
+		private void txtUnitName_Validating(object sender, CancelEventArgs e) {
+			if (cmbUDCType.SelectedValue.ToString() != "PL/SQL BLOCK" && txtUnitName.Text.Trim() == String.Empty) {
+				erpMain.SetError((Control)sender, "The unit name is required.");
+				e.Cancel = true;
+			} else {
+				erpMain.Clear();
+			}
+		}
+				
+		private void tvPLSQLMethods_AfterSelect(object sender, TreeViewEventArgs e) {
+			nodeSelected(e.Node);
+		}
+
+		private void tvPLSQLMethods_MouseDown(object sender, MouseEventArgs e) {
+			if (e.Button == MouseButtons.Right) {
+				tvSchemaObjects.SelectedNode = null;
+				cmsNavigator.Show((Control)sender, e.X, e.Y);
+			}
+		}
+
+		private void tvPLSQLMethods_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e) {
+			if (e.Button == MouseButtons.Right) {
+				tvSchemaObjects.SelectedNode = e.Node;
+			}
+		}
+
+		private void tvTestUnits_DragDrop(object sender, DragEventArgs e) {
+			Point pt = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
+			TreeNode destNode = ((TreeView)sender).GetNodeAt(pt);
+			TreeNode sourceNode = (TreeNode) e.Data.GetData("System.Windows.Forms.TreeNode");
+			int destFolderKey;
+			bool actuallyMoved = false;
+
+			if (destNode == null) {
+				destFolderKey = -1;
+			} else {
+				destFolderKey = Int32.Parse(destNode.Name);
+			}
+
+			if (sourceNode.Tag.ToString() == "Folder") {
+				if (destFolderKey != Int32.Parse(sourceNode.Name)) {
+					folders.moveIntoFolder(Program.conRepos, destFolderKey, -1, Int32.Parse(sourceNode.Name));
+					actuallyMoved = true;
+				}				
+			} else {
+				folders.moveIntoFolder(Program.conRepos, destFolderKey, Int32.Parse(sourceNode.Name), -1);
+				actuallyMoved = true;
+			}
+
+			if (actuallyMoved) {
+				sourceNode.Remove();
+				if (destNode == null) {
+					tvTests.Nodes.Add(sourceNode);
+				} else {
+					destNode.Nodes.Add(sourceNode);
+				}
+			}
+		}
+
+		private void tvTestUnits_ItemDrag(object sender, ItemDragEventArgs e) {
+			TreeNode node = (TreeNode)e.Item;
+
+			if (node.Tag != null && (node.Tag.ToString() == "Test" || node.Tag.ToString() == "Folder")) {
+				this.DoDragDrop(node, DragDropEffects.Move);
+			}
+		}
+
+		private void tvTestUnits_DragOver(object sender, DragEventArgs e) {
+			e.Effect = DragDropEffects.Move;
+		}
+
+		private void btnRefreshTreeviews_Click(object sender, EventArgs e) {
+			reloadSchemaList();
+			reloadFolderList();
+		}
+
+		private void btnHighlightDebug_Click(object sender, EventArgs e) {
+			highlightPLSQL(rtfDebug);
+		}
+
+		private void btnGetRunBlock_Click(object sender, EventArgs e) {
+			if (currScenarioGroup == null) {
+				MessageBox.Show("You need to choose a scenario group first!", "Error", MessageBoxButtons.OK);
+			} else {
+				rtfDebug.Text = String.Empty;
+				debugWrite(currScenarioGroup.getPLSQLRunBlock());
+				highlightPLSQL(rtfDebug);
+			}
+		}
+
+		private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
+			Application.Exit();
+		}
+
+		private void frmMain_FormClosed(object sender, FormClosedEventArgs e) {
+			// Close our persistent connections, if they're open
+			if (Program.conRepos.State == ConnectionState.Open)
+				Program.conRepos.Close();
+
+			if (Program.conTargetDB.State == ConnectionState.Open)
+				Program.conTargetDB.Close();
+		}
+
+		private void tvTestUnits_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e) {
+			if (e.Button == MouseButtons.Right) {
+				tvTests.SelectedNode = e.Node;
+			}
+		}
+		
+		private void grdScenarios_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e) {
+			setScenarioRowDefaults(currTest.getArguments(), e.Row);
+		}
+
+		private void grdScenarios_CellEnter(object sender, DataGridViewCellEventArgs e) {
+			// We're working around a behavior of the gridview, in that, if it's edit mode
+			// is EditOnEnter, clicking on the row header to select it for deletion, edits
+			// the first column - see the rowheadermouseclick event.
+			grdScenarios.EditMode = DataGridViewEditMode.EditOnEnter;
+		}
+
+		private void grdScenarios_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e) {
+			// We're working around a behavior of the gridview, in that, if it's edit mode
+			// is EditOnEnter, clicking on the row header to select it for deletion, edits
+			// the first column - see the CellEnter event for where we reset the edit mode.
+			grdScenarios.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+
+			grdScenarios.EndEdit();
+		}
+
+		private void chkDisplayParamTypesAfterParams_CheckedChanged(object sender, EventArgs e) {
+			sortScenarioColumns();
+		}
+
+		private void btnCloneScenario_Click(object sender, EventArgs e) {
+			DataGridViewSelectedRowCollection arrSelectedRows;
+
+			// If no rows (scenarios) are selected, select the row the cursor is in...
+			if (grdScenarios.SelectedRows.Count == 0) {
+				grdScenarios.CurrentRow.Selected = true;
+			}
+
+			arrSelectedRows = grdScenarios.SelectedRows;
+
+			// Loop through every selected row and clone it...
+			DataTable dtScenarios = (DataTable)grdScenarios.DataSource;
+			for (int rowIndex = arrSelectedRows.Count-1; rowIndex >= 0; rowIndex--) {
+				if (arrSelectedRows[rowIndex].IsNewRow == false) {
+					// Add a new row...
+					dtScenarios.Rows.Add();
+
+					// Copy the values from the source row to the cloned row
+					DataGridViewRow newRow = grdScenarios.Rows[grdScenarios.Rows.Count - 2];
+
+					for (int i = 0; i < grdScenarios.Columns.Count; i++) {
+						newRow.Cells[i].Value = arrSelectedRows[rowIndex].Cells[i].Value;
+					}
+
+					// Clear any row-specific information from the source row
+					newRow.Cells["Key"].Value = String.Empty;
+					newRow.Tag = String.Empty;
+
+					// After we clone the row, set focus to the cell that corresponds
+					// with the column we were originally in.
+					grdScenarios.CurrentCell = newRow.Cells[grdScenarios.Columns[grdScenarios.CurrentCell.ColumnIndex].Name];
+				} else {
+					MessageBox.Show("You cannot clone the 'new' scenario row.");
+				}
+			}
+		}
+
+		private void tvPLSQLMethods_AfterLabelEdit(object sender, NodeLabelEditEventArgs e) {
+			renameNode(e.Node, e.Label);
+
+			tvTests.LabelEdit = false;
+		}
+
+		private void tabScenarioGroupPLSQL_SelectedIndexChanged(object sender, EventArgs e) {
+			// When the user changes tab, set the cursor focus appropriately
+			if (tabScenarioGroupPLSQL.SelectedTab == tabScenarioGroupStartup)
+				rtfScenarioGroupStartupBlock.Focus();
+			else if (tabScenarioGroupPLSQL.SelectedTab == tabScenarioStartup)
+				rtfScenarioStartupBlock.Focus();
+			else if (tabScenarioGroupPLSQL.SelectedTab == tabPostParamAssignment)
+				rtfPostParamAssignment.Focus();
+			else if (tabScenarioGroupPLSQL.SelectedTab == tabPreUDC)
+				rtfPreUDCPLSQL.Focus();
+			else if (tabScenarioGroupPLSQL.SelectedTab == tabScenarioTeardown)
+				rtfScenarioTeardownBlock.Focus();
+			else
+				rtfScenarioGroupTeardownBlock.Focus();
+		}
+
+		private void grdRowValidation_CellEnter(object sender, DataGridViewCellEventArgs e) {
+			// We're working around a behavior of the gridview, in that, if it's edit mode
+			// is EditOnEnter, clicking on the row header to select it for deletion, edits
+			// the first column - see the rowheadermouseclick event.
+			grdRowValidation.EditMode = DataGridViewEditMode.EditOnEnter;
+		}
+
+		private void grdRowValidation_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e) {
+			// We're working around a behavior of the gridview, in that, if it's edit mode
+			// is EditOnEnter, clicking on the row header to select it for deletion, edits
+			// the first column - see the CellEnter event for where we reset the edit mode.
+			grdRowValidation.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+
+			grdRowValidation.EndEdit();
+		}
+
+		private void btnShrinkColumns_Click(object sender, EventArgs e) {
+			for (int i = 0; i < grdScenarios.Columns.Count; i++) {
+				if (grdScenarios.Columns[i].Tag != null &&
+					(grdScenarios.Columns[i].Tag.ToString() == "In Parameter"
+					|| grdScenarios.Columns[i].Tag.ToString() == "In/Out Parameter"
+					|| grdScenarios.Columns[i].Tag.ToString() == "Out Parameter"
+					|| grdScenarios.Columns[i].Tag.ToString() == "Return")) {
+					grdScenarios.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
+					grdScenarios.Columns[i].HeaderCell.Style.Alignment = DataGridViewContentAlignment.BottomLeft;
+				}
+			}
+		}
+
+		private void chkHideParameterTypes_CheckedChanged(object sender, EventArgs e) {
+			hideParameterTypeColumns();
+		}
+
+		private void hideParameterTypeColumns() {
+			for (int i = 0; i < grdScenarios.Columns.Count; i++) {
+				if (grdScenarios.Columns[i].Tag != null && grdScenarios.Columns[i].Tag.ToString() == "Parameter Type") {
+					grdScenarios.Columns[i].Visible = !chkHideParameterTypes.Checked;
+				}
+			}
+		}
+
+		private void cloneUDC() {
+			if (currUDC == null) {
+				MessageBox.Show("You must choose a UDC to clone!");
+			} else {
+				// Clone the current UDC into the same scenario group as I'm in, and then load the clone in the interface
+				currUDC = new udc(Program.conRepos, currUDC.clone(-1));
+
+				TreeNode tnUDC;
+
+				if (tabNavigation.SelectedTab == tabTests) {
+					tnUDC = tvTests.SelectedNode.Parent.Nodes.Add(currUDC.checkKey.ToString(), currUDC.name, "UDC - Not Run", "UDC - Not Run");
+					tvTests.SelectedNode.Expand();
+
+					tvTests.SelectedNode = tnUDC;
+				} else {
+					tnUDC = tvSchemaObjects.SelectedNode.Parent.Nodes.Add(currUDC.checkKey.ToString(), currUDC.name, "UDC - Not Run", "UDC - Not Run");
+					tvSchemaObjects.SelectedNode.Expand();
+
+					tvSchemaObjects.SelectedNode = tnUDC;
+				}
+
+				currUDC.name = tnUDC.Text;
+
+				tnUDC.Tag = "UDC";
+				tnUDC.EnsureVisible();
+
+				nodeSelected(tnUDC);
+			}
+		}
+
+		private void cmsNavigator_Opening(object sender, CancelEventArgs e) {
+			TreeNode tnSelectedNode;
+
+			if (tabNavigation.SelectedTab == tabTests) {
+				tnSelectedNode = tvTests.SelectedNode;
+			} else {
+				tnSelectedNode = tvSchemaObjects.SelectedNode;
+			}
+
+			if (tnSelectedNode == null) {
+				mnuClone.Enabled = false;
+			} else {
+				if (tnSelectedNode.Tag != null) {
+					if (tnSelectedNode.Tag.ToString() == "UDC" || tnSelectedNode.Tag.ToString() == "Scenario Group") {
+						mnuClone.Enabled = true;
+					} else {
+						mnuClone.Enabled = false;
+					}
+				}
+			}
+		}
+
+		private void cloneScenarioGroup() {
+			if (currScenarioGroup == null) {
+				MessageBox.Show("You must choose a scenario group to clone!");
+			} else {
+				// Clone the current scenario group into the same test as I'm in, and then load the clone in the interface
+				currScenarioGroup = new scenarioGroup(Program.conRepos, currScenarioGroup.clone(-1));
+
+				TreeNode tnScenarioGroup;
+
+				if (tabNavigation.SelectedTab == tabTests) {
+					tnScenarioGroup = tvTests.SelectedNode.Parent.Nodes.Add(currScenarioGroup.scenarioGroupKey.ToString(), currScenarioGroup.name, "Scenario Group - Not Run", "Scenario Group - Not Run");
+					tvTests.SelectedNode.Expand();
+
+					tvTests.SelectedNode = tnScenarioGroup;
+				} else {
+					tnScenarioGroup = tvSchemaObjects.SelectedNode.Parent.Nodes.Add(currScenarioGroup.scenarioGroupKey.ToString(), currScenarioGroup.name, "Scenario Group - Not Run", "Scenario Group - Not Run");
+					tvSchemaObjects.SelectedNode.Expand();
+
+					tvSchemaObjects.SelectedNode = tnScenarioGroup;
+				}
+
+				currScenarioGroup.name = tnScenarioGroup.Text;
+
+				tnScenarioGroup.Tag = "Scenario Group";
+				tnScenarioGroup.EnsureVisible();
+
+				nodeSelected(tnScenarioGroup);
+			}
+		}
+
+		private void tvSchemaObjects_BeforeExpand(object sender, TreeViewCancelEventArgs e) {
+			if (e.Node.FirstNode.Text == "Loading...")
+				e.Node.Nodes.Clear();
+
+			nodeSelected(e.Node);
+
+			e.Node.Checked = true; // Indicate that we have loaded the child node's contents
+		}
+
+		private void frmMain_FormClosing(object sender, FormClosingEventArgs e) {
+			promptToSaveAnyChanges();
+		}
+
+		private void chkOnlyShowFailingScenarios_CheckedChanged(object sender, EventArgs e) {
+			Properties.Settings.Default.run_onlyShowFailedScenarios = chkOnlyShowFailingScenarios.Checked;
+
+			Properties.Settings.Default.Save();
+		}
+
+		private void rtfDebug_LinkClicked(object sender, LinkClickedEventArgs e) {
+			if (e.LinkText.StartsWith("www.diffme.com")) {
+				// Parse out the expected and actual values
+				string filename = e.LinkText.Replace("www.diffme.com?key=", String.Empty);
+				
+				// Diff the files
+				String parameters = Properties.Settings.Default.fileDiffer_parameters;
+
+				parameters = parameters.Replace("%expectedFilename%", Path.GetTempPath() + "\\rt_" + filename + "_Expected.txt");
+				parameters = parameters.Replace("%actualFilename%", Path.GetTempPath() + "\\rt_" + filename + "_Actual.txt");
+
+				Process p = new Process();
+				p = Process.Start(Properties.Settings.Default.fileDiffer_executable, parameters);
+			}
+		}
+
+		private void clearRunResultsToolStripMenuItem_Click(object sender, EventArgs e) {
+			if (MessageBox.Show("Are you sure you want to delete all test run results?", "Delete Run Results?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes) {
+				RT.api.deleteRunResults(Program.conRepos);
+			}
+		}
+	}
+}

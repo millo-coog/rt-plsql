@@ -1,0 +1,3 @@
+<?xml version="1.0" ?>
+<!--This is a RT PL/SQL project.-->
+<rt_plsql_project version="2.0" name="RT-PL/SQL Tests" description="Tests to test the RT PL/SQL app" guid="44ec3754-1234-4146-bcba-bad57e4680c1" />

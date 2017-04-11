@@ -1,0 +1,2065 @@
+﻿namespace RT
+{
+    partial class frmMain
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+			  this.components = new System.ComponentModel.Container();
+			  System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
+			  System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
+			  System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
+			  System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
+			  System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle31 = new System.Windows.Forms.DataGridViewCellStyle();
+			  System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle32 = new System.Windows.Forms.DataGridViewCellStyle();
+			  System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle33 = new System.Windows.Forms.DataGridViewCellStyle();
+			  System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
+			  System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
+			  System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
+			  this.cmsNavigator = new System.Windows.Forms.ContextMenuStrip(this.components);
+			  this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.folderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.scenarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.checkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			  this.runFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.runScenarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			  this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+			  this.mnuClone = new System.Windows.Forms.ToolStripMenuItem();
+			  this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+			  this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+			  this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+			  this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+			  this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+			  this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
+			  this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+			  this.mnuMain = new System.Windows.Forms.MenuStrip();
+			  this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.saveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			  this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.newToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			  this.folderToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			  this.testToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			  this.scenarioGroupToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			  this.userDefinedCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.runToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			  this.folderToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+			  this.testToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			  this.scenarioGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.currentObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.repositoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			  this.clearRunResultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			  this.tlsToolbar = new System.Windows.Forms.ToolStrip();
+			  this.newToolStripButton = new System.Windows.Forms.ToolStripDropDownButton();
+			  this.folderToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			  this.testToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+			  this.scenarioGroupToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			  this.userDefinedCheckToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			  this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
+			  this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+			  this.pbRunProgress = new System.Windows.Forms.ToolStripProgressBar();
+			  this.erpMain = new System.Windows.Forms.ErrorProvider(this.components);
+			  this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			  this.btnRefreshTreeviews = new System.Windows.Forms.Button();
+			  this.tabNavigation = new System.Windows.Forms.TabControl();
+			  this.tabPLSQLMethods = new System.Windows.Forms.TabPage();
+			  this.tvSchemaObjects = new System.Windows.Forms.TreeView();
+			  this.tabTests = new System.Windows.Forms.TabPage();
+			  this.tvTests = new System.Windows.Forms.TreeView();
+			  this.lblRunProgress = new System.Windows.Forms.Label();
+			  this.tabGroup = new System.Windows.Forms.TabControl();
+			  this.tabTestInfo = new System.Windows.Forms.TabPage();
+			  this.chkIsPipelinedFunction = new System.Windows.Forms.CheckBox();
+			  this.label22 = new System.Windows.Forms.Label();
+			  this.txtOverload = new System.Windows.Forms.TextBox();
+			  this.label19 = new System.Windows.Forms.Label();
+			  this.grdTestArguments = new System.Windows.Forms.DataGridView();
+			  this.position = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			  this.argument_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			  this.in_out = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			  this.pls_type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			  this.cmbUnitType = new System.Windows.Forms.ComboBox();
+			  this.label8 = new System.Windows.Forms.Label();
+			  this.lblCreationDate = new System.Windows.Forms.Label();
+			  this.label7 = new System.Windows.Forms.Label();
+			  this.lblTestKey = new System.Windows.Forms.Label();
+			  this.txtUnitName = new System.Windows.Forms.TextBox();
+			  this.label3 = new System.Windows.Forms.Label();
+			  this.txtTestDescription = new System.Windows.Forms.TextBox();
+			  this.label2 = new System.Windows.Forms.Label();
+			  this.txtTestName = new System.Windows.Forms.TextBox();
+			  this.label1 = new System.Windows.Forms.Label();
+			  this.label5 = new System.Windows.Forms.Label();
+			  this.tabTestDeclare = new System.Windows.Forms.TabPage();
+			  this.rtfTestDeclares = new System.Windows.Forms.RichTextBox();
+			  this.label20 = new System.Windows.Forms.Label();
+			  this.tabScenarioInfo = new System.Windows.Forms.TabPage();
+			  this.tabScenarioGroupPLSQL = new System.Windows.Forms.TabControl();
+			  this.tabScenarioGroupStartup = new System.Windows.Forms.TabPage();
+			  this.label10 = new System.Windows.Forms.Label();
+			  this.rtfScenarioGroupStartupBlock = new System.Windows.Forms.RichTextBox();
+			  this.tabScenarioStartup = new System.Windows.Forms.TabPage();
+			  this.label11 = new System.Windows.Forms.Label();
+			  this.rtfScenarioStartupBlock = new System.Windows.Forms.RichTextBox();
+			  this.tabPostParamAssignment = new System.Windows.Forms.TabPage();
+			  this.rtfPostParamAssignment = new System.Windows.Forms.RichTextBox();
+			  this.label26 = new System.Windows.Forms.Label();
+			  this.tabPreUDC = new System.Windows.Forms.TabPage();
+			  this.rtfPreUDCPLSQL = new System.Windows.Forms.RichTextBox();
+			  this.label27 = new System.Windows.Forms.Label();
+			  this.tabScenarioTeardown = new System.Windows.Forms.TabPage();
+			  this.label23 = new System.Windows.Forms.Label();
+			  this.rtfScenarioTeardownBlock = new System.Windows.Forms.RichTextBox();
+			  this.label21 = new System.Windows.Forms.Label();
+			  this.chkRollbackAfterEachScenario = new System.Windows.Forms.CheckBox();
+			  this.tabScenarioGroupTeardown = new System.Windows.Forms.TabPage();
+			  this.label24 = new System.Windows.Forms.Label();
+			  this.rtfScenarioGroupTeardownBlock = new System.Windows.Forms.RichTextBox();
+			  this.label17 = new System.Windows.Forms.Label();
+			  this.label9 = new System.Windows.Forms.Label();
+			  this.txtScenarioDescription = new System.Windows.Forms.TextBox();
+			  this.lblScenarioGroupKey = new System.Windows.Forms.Label();
+			  this.txtScenarioName = new System.Windows.Forms.TextBox();
+			  this.label6 = new System.Windows.Forms.Label();
+			  this.tabParameters = new System.Windows.Forms.TabPage();
+			  this.chkHideParameterTypes = new System.Windows.Forms.CheckBox();
+			  this.btnShrinkColumns = new System.Windows.Forms.Button();
+			  this.btnCloneScenario = new System.Windows.Forms.Button();
+			  this.chkDisplayParamTypesInline = new System.Windows.Forms.CheckBox();
+			  this.chkOnlyShowFailuresOnRun = new System.Windows.Forms.CheckBox();
+			  this.grdScenarios = new System.Windows.Forms.DataGridView();
+			  this.tabPLSQLBlock = new System.Windows.Forms.TabPage();
+			  this.rtfPLSQLBLock = new System.Windows.Forms.RichTextBox();
+			  this.label4 = new System.Windows.Forms.Label();
+			  this.tabUserDefinedChecks = new System.Windows.Forms.TabPage();
+			  this.label25 = new System.Windows.Forms.Label();
+			  this.rtfUDCPLSQLCondition = new System.Windows.Forms.RichTextBox();
+			  this.label16 = new System.Windows.Forms.Label();
+			  this.tabUDCOptions = new System.Windows.Forms.TabControl();
+			  this.tabPage1 = new System.Windows.Forms.TabPage();
+			  this.rtfUDCPLSQLBlock = new System.Windows.Forms.RichTextBox();
+			  this.tabPage2 = new System.Windows.Forms.TabPage();
+			  this.grdRowValidation = new System.Windows.Forms.DataGridView();
+			  this.lblUDCCheckKey = new System.Windows.Forms.Label();
+			  this.label15 = new System.Windows.Forms.Label();
+			  this.txtUDCSortOrder = new System.Windows.Forms.TextBox();
+			  this.label14 = new System.Windows.Forms.Label();
+			  this.cmbUDCType = new System.Windows.Forms.ComboBox();
+			  this.txtUDCDescription = new System.Windows.Forms.TextBox();
+			  this.label13 = new System.Windows.Forms.Label();
+			  this.label12 = new System.Windows.Forms.Label();
+			  this.txtUDCName = new System.Windows.Forms.TextBox();
+			  this.tabDebug = new System.Windows.Forms.TabPage();
+			  this.chkOnlyShowFailingScenarios = new System.Windows.Forms.CheckBox();
+			  this.btnGetRunBlock = new System.Windows.Forms.Button();
+			  this.btnHighlightDebug = new System.Windows.Forms.Button();
+			  this.rtfDebug = new System.Windows.Forms.RichTextBox();
+			  this.cmsNavigator.SuspendLayout();
+			  this.mnuMain.SuspendLayout();
+			  this.tlsToolbar.SuspendLayout();
+			  ((System.ComponentModel.ISupportInitialize)(this.erpMain)).BeginInit();
+			  ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+			  this.splitContainer1.Panel1.SuspendLayout();
+			  this.splitContainer1.Panel2.SuspendLayout();
+			  this.splitContainer1.SuspendLayout();
+			  this.tabNavigation.SuspendLayout();
+			  this.tabPLSQLMethods.SuspendLayout();
+			  this.tabTests.SuspendLayout();
+			  this.tabGroup.SuspendLayout();
+			  this.tabTestInfo.SuspendLayout();
+			  ((System.ComponentModel.ISupportInitialize)(this.grdTestArguments)).BeginInit();
+			  this.tabTestDeclare.SuspendLayout();
+			  this.tabScenarioInfo.SuspendLayout();
+			  this.tabScenarioGroupPLSQL.SuspendLayout();
+			  this.tabScenarioGroupStartup.SuspendLayout();
+			  this.tabScenarioStartup.SuspendLayout();
+			  this.tabPostParamAssignment.SuspendLayout();
+			  this.tabPreUDC.SuspendLayout();
+			  this.tabScenarioTeardown.SuspendLayout();
+			  this.tabScenarioGroupTeardown.SuspendLayout();
+			  this.tabParameters.SuspendLayout();
+			  ((System.ComponentModel.ISupportInitialize)(this.grdScenarios)).BeginInit();
+			  this.tabPLSQLBlock.SuspendLayout();
+			  this.tabUserDefinedChecks.SuspendLayout();
+			  this.tabUDCOptions.SuspendLayout();
+			  this.tabPage1.SuspendLayout();
+			  this.tabPage2.SuspendLayout();
+			  ((System.ComponentModel.ISupportInitialize)(this.grdRowValidation)).BeginInit();
+			  this.tabDebug.SuspendLayout();
+			  this.SuspendLayout();
+			  // 
+			  // cmsNavigator
+			  // 
+			  this.cmsNavigator.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.runFolderToolStripMenuItem,
+            this.runToolStripMenuItem,
+            this.runScenarioToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.renameToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.mnuClone,
+            this.toolStripSeparator3,
+            this.deleteToolStripMenuItem});
+			  this.cmsNavigator.Name = "cmsNavigator";
+			  this.cmsNavigator.Size = new System.Drawing.Size(181, 182);
+			  this.cmsNavigator.Opening += new System.ComponentModel.CancelEventHandler(this.cmsNavigator_Opening);
+			  // 
+			  // newToolStripMenuItem
+			  // 
+			  this.newToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.folderToolStripMenuItem,
+            this.testToolStripMenuItem,
+            this.scenarioToolStripMenuItem,
+            this.checkToolStripMenuItem});
+			  this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+			  this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			  this.newToolStripMenuItem.Text = "New";
+			  // 
+			  // folderToolStripMenuItem
+			  // 
+			  this.folderToolStripMenuItem.Name = "folderToolStripMenuItem";
+			  this.folderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			  this.folderToolStripMenuItem.Text = "Folder";
+			  this.folderToolStripMenuItem.Click += new System.EventHandler(this.folderToolStripMenuItem_Click);
+			  // 
+			  // testToolStripMenuItem
+			  // 
+			  this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+			  this.testToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			  this.testToolStripMenuItem.Text = "Test";
+			  this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
+			  // 
+			  // scenarioToolStripMenuItem
+			  // 
+			  this.scenarioToolStripMenuItem.Name = "scenarioToolStripMenuItem";
+			  this.scenarioToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			  this.scenarioToolStripMenuItem.Text = "Scenario Group";
+			  this.scenarioToolStripMenuItem.Click += new System.EventHandler(this.scenarioToolStripMenuItem_Click);
+			  // 
+			  // checkToolStripMenuItem
+			  // 
+			  this.checkToolStripMenuItem.Name = "checkToolStripMenuItem";
+			  this.checkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			  this.checkToolStripMenuItem.Text = "User-Defined Check";
+			  this.checkToolStripMenuItem.Click += new System.EventHandler(this.checkToolStripMenuItem_Click);
+			  // 
+			  // toolStripSeparator1
+			  // 
+			  this.toolStripSeparator1.Name = "toolStripSeparator1";
+			  this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+			  // 
+			  // runFolderToolStripMenuItem
+			  // 
+			  this.runFolderToolStripMenuItem.Name = "runFolderToolStripMenuItem";
+			  this.runFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			  this.runFolderToolStripMenuItem.Text = "Run Folder";
+			  this.runFolderToolStripMenuItem.Click += new System.EventHandler(this.runFolderToolStripMenuItem_Click);
+			  // 
+			  // runToolStripMenuItem
+			  // 
+			  this.runToolStripMenuItem.Name = "runToolStripMenuItem";
+			  this.runToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			  this.runToolStripMenuItem.Text = "Run Test";
+			  this.runToolStripMenuItem.Click += new System.EventHandler(this.runToolStripMenuItem_Click);
+			  // 
+			  // runScenarioToolStripMenuItem
+			  // 
+			  this.runScenarioToolStripMenuItem.Name = "runScenarioToolStripMenuItem";
+			  this.runScenarioToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			  this.runScenarioToolStripMenuItem.Text = "Run Scenario Group";
+			  this.runScenarioToolStripMenuItem.Click += new System.EventHandler(this.runScenarioToolStripMenuItem_Click);
+			  // 
+			  // toolStripSeparator2
+			  // 
+			  this.toolStripSeparator2.Name = "toolStripSeparator2";
+			  this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+			  // 
+			  // renameToolStripMenuItem
+			  // 
+			  this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
+			  this.renameToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
+			  this.renameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			  this.renameToolStripMenuItem.Text = "Rename";
+			  this.renameToolStripMenuItem.Click += new System.EventHandler(this.renameToolStripMenuItem_Click);
+			  // 
+			  // toolStripSeparator4
+			  // 
+			  this.toolStripSeparator4.Name = "toolStripSeparator4";
+			  this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
+			  // 
+			  // mnuClone
+			  // 
+			  this.mnuClone.Name = "mnuClone";
+			  this.mnuClone.Size = new System.Drawing.Size(180, 22);
+			  this.mnuClone.Text = "Clone";
+			  this.mnuClone.Click += new System.EventHandler(this.mnuClone_Click);
+			  // 
+			  // toolStripSeparator3
+			  // 
+			  this.toolStripSeparator3.Name = "toolStripSeparator3";
+			  this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+			  // 
+			  // deleteToolStripMenuItem
+			  // 
+			  this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+			  this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+			  this.deleteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			  this.deleteToolStripMenuItem.Text = "Delete";
+			  this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+			  // 
+			  // BottomToolStripPanel
+			  // 
+			  this.BottomToolStripPanel.Location = new System.Drawing.Point(0, 0);
+			  this.BottomToolStripPanel.Name = "BottomToolStripPanel";
+			  this.BottomToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			  this.BottomToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+			  this.BottomToolStripPanel.Size = new System.Drawing.Size(0, 0);
+			  // 
+			  // TopToolStripPanel
+			  // 
+			  this.TopToolStripPanel.Location = new System.Drawing.Point(0, 0);
+			  this.TopToolStripPanel.Name = "TopToolStripPanel";
+			  this.TopToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			  this.TopToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+			  this.TopToolStripPanel.Size = new System.Drawing.Size(0, 0);
+			  // 
+			  // RightToolStripPanel
+			  // 
+			  this.RightToolStripPanel.Location = new System.Drawing.Point(0, 0);
+			  this.RightToolStripPanel.Name = "RightToolStripPanel";
+			  this.RightToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			  this.RightToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+			  this.RightToolStripPanel.Size = new System.Drawing.Size(0, 0);
+			  // 
+			  // LeftToolStripPanel
+			  // 
+			  this.LeftToolStripPanel.Location = new System.Drawing.Point(0, 0);
+			  this.LeftToolStripPanel.Name = "LeftToolStripPanel";
+			  this.LeftToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			  this.LeftToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+			  this.LeftToolStripPanel.Size = new System.Drawing.Size(0, 0);
+			  // 
+			  // ContentPanel
+			  // 
+			  this.ContentPanel.AutoScroll = true;
+			  this.ContentPanel.Size = new System.Drawing.Size(1096, 564);
+			  // 
+			  // imageList1
+			  // 
+			  this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+			  this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+			  this.imageList1.Images.SetKeyName(0, "beaker.png");
+			  this.imageList1.Images.SetKeyName(1, "UDC - Not Run");
+			  this.imageList1.Images.SetKeyName(2, "Folder");
+			  this.imageList1.Images.SetKeyName(3, "folder-new.png");
+			  this.imageList1.Images.SetKeyName(4, "system-users.png");
+			  this.imageList1.Images.SetKeyName(5, "Package");
+			  this.imageList1.Images.SetKeyName(6, "functionWithTest.gif");
+			  this.imageList1.Images.SetKeyName(7, "Function");
+			  this.imageList1.Images.SetKeyName(8, "FolderOpen");
+			  this.imageList1.Images.SetKeyName(9, "Scenario Group - Not Run");
+			  this.imageList1.Images.SetKeyName(10, "UDC - Run Without Errors");
+			  this.imageList1.Images.SetKeyName(11, "UDC - Run With Errors");
+			  this.imageList1.Images.SetKeyName(12, "Test - Not Run");
+			  this.imageList1.Images.SetKeyName(13, "Procedure");
+			  this.imageList1.Images.SetKeyName(14, "Trigger");
+			  this.imageList1.Images.SetKeyName(15, "Object");
+			  this.imageList1.Images.SetKeyName(16, "Database");
+			  this.imageList1.Images.SetKeyName(17, "function-Status0");
+			  this.imageList1.Images.SetKeyName(18, "function-Status1");
+			  this.imageList1.Images.SetKeyName(19, "function-Status2");
+			  this.imageList1.Images.SetKeyName(20, "function-Status3");
+			  this.imageList1.Images.SetKeyName(21, "function-Status4");
+			  this.imageList1.Images.SetKeyName(22, "function-Status5");
+			  this.imageList1.Images.SetKeyName(23, "function-Status6");
+			  this.imageList1.Images.SetKeyName(24, "function-Status7");
+			  this.imageList1.Images.SetKeyName(25, "Schema");
+			  // 
+			  // mnuMain
+			  // 
+			  this.mnuMain.Location = new System.Drawing.Point(0, 0);
+			  this.mnuMain.Name = "mnuMain";
+			  this.mnuMain.Size = new System.Drawing.Size(1090, 24);
+			  this.mnuMain.TabIndex = 29;
+			  this.mnuMain.Text = "menuStrip1";
+			  // 
+			  // fileToolStripMenuItem
+			  // 
+			  this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveToolStripMenuItem1,
+            this.exitToolStripMenuItem});
+			  this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+			  this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+			  this.fileToolStripMenuItem.Text = "File";
+			  // 
+			  // saveToolStripMenuItem1
+			  // 
+			  this.saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
+			  this.saveToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+			  this.saveToolStripMenuItem1.Size = new System.Drawing.Size(147, 22);
+			  this.saveToolStripMenuItem1.Text = "&Save";
+			  this.saveToolStripMenuItem1.Click += new System.EventHandler(this.saveToolStripMenuItem1_Click);
+			  // 
+			  // exitToolStripMenuItem
+			  // 
+			  this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+			  this.exitToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+			  this.exitToolStripMenuItem.Text = "Exit";
+			  this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+			  // 
+			  // newToolStripMenuItem1
+			  // 
+			  this.newToolStripMenuItem1.Name = "newToolStripMenuItem1";
+			  this.newToolStripMenuItem1.Size = new System.Drawing.Size(40, 20);
+			  this.newToolStripMenuItem1.Text = "New";
+			  // 
+			  // folderToolStripMenuItem2
+			  // 
+			  this.folderToolStripMenuItem2.Image = global::RT.Properties.Resources.folder_new;
+			  this.folderToolStripMenuItem2.Name = "folderToolStripMenuItem2";
+			  this.folderToolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+			  this.folderToolStripMenuItem2.Text = "Folder";
+			  this.folderToolStripMenuItem2.Click += new System.EventHandler(this.folderToolStripMenuItem2_Click);
+			  // 
+			  // testToolStripMenuItem2
+			  // 
+			  this.testToolStripMenuItem2.Name = "testToolStripMenuItem2";
+			  this.testToolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+			  this.testToolStripMenuItem2.Text = "Test";
+			  this.testToolStripMenuItem2.Click += new System.EventHandler(this.testToolStripMenuItem2_Click);
+			  // 
+			  // scenarioGroupToolStripMenuItem1
+			  // 
+			  this.scenarioGroupToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("scenarioGroupToolStripMenuItem1.Image")));
+			  this.scenarioGroupToolStripMenuItem1.Name = "scenarioGroupToolStripMenuItem1";
+			  this.scenarioGroupToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+			  this.scenarioGroupToolStripMenuItem1.Text = "Scenario Group";
+			  this.scenarioGroupToolStripMenuItem1.Click += new System.EventHandler(this.scenarioGroupToolStripMenuItem1_Click);
+			  // 
+			  // userDefinedCheckToolStripMenuItem
+			  // 
+			  this.userDefinedCheckToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("userDefinedCheckToolStripMenuItem.Image")));
+			  this.userDefinedCheckToolStripMenuItem.Name = "userDefinedCheckToolStripMenuItem";
+			  this.userDefinedCheckToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			  this.userDefinedCheckToolStripMenuItem.Text = "User-Defined Check";
+			  this.userDefinedCheckToolStripMenuItem.Click += new System.EventHandler(this.userDefinedCheckToolStripMenuItem_Click);
+			  // 
+			  // runToolStripMenuItem1
+			  // 
+			  this.runToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.folderToolStripMenuItem3,
+            this.testToolStripMenuItem1,
+            this.scenarioGroupToolStripMenuItem,
+            this.currentObjectToolStripMenuItem});
+			  this.runToolStripMenuItem1.Name = "runToolStripMenuItem1";
+			  this.runToolStripMenuItem1.Size = new System.Drawing.Size(38, 20);
+			  this.runToolStripMenuItem1.Text = "Run";
+			  // 
+			  // folderToolStripMenuItem3
+			  // 
+			  this.folderToolStripMenuItem3.Image = ((System.Drawing.Image)(resources.GetObject("folderToolStripMenuItem3.Image")));
+			  this.folderToolStripMenuItem3.Name = "folderToolStripMenuItem3";
+			  this.folderToolStripMenuItem3.ShortcutKeys = System.Windows.Forms.Keys.F7;
+			  this.folderToolStripMenuItem3.Size = new System.Drawing.Size(176, 22);
+			  this.folderToolStripMenuItem3.Text = "Folder";
+			  this.folderToolStripMenuItem3.Click += new System.EventHandler(this.folderToolStripMenuItem3_Click);
+			  // 
+			  // testToolStripMenuItem1
+			  // 
+			  this.testToolStripMenuItem1.Image = global::RT.Properties.Resources.beaker;
+			  this.testToolStripMenuItem1.Name = "testToolStripMenuItem1";
+			  this.testToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.F6;
+			  this.testToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
+			  this.testToolStripMenuItem1.Text = "Test";
+			  this.testToolStripMenuItem1.Click += new System.EventHandler(this.testToolStripMenuItem1_Click);
+			  // 
+			  // scenarioGroupToolStripMenuItem
+			  // 
+			  this.scenarioGroupToolStripMenuItem.Name = "scenarioGroupToolStripMenuItem";
+			  this.scenarioGroupToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+			  this.scenarioGroupToolStripMenuItem.Text = "Scenario Group";
+			  this.scenarioGroupToolStripMenuItem.Click += new System.EventHandler(this.scenarioGroupToolStripMenuItem_Click);
+			  // 
+			  // currentObjectToolStripMenuItem
+			  // 
+			  this.currentObjectToolStripMenuItem.Name = "currentObjectToolStripMenuItem";
+			  this.currentObjectToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+			  this.currentObjectToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+			  this.currentObjectToolStripMenuItem.Text = "Current Object";
+			  this.currentObjectToolStripMenuItem.Click += new System.EventHandler(this.currentObjectToolStripMenuItem_Click);
+			  // 
+			  // preferencesToolStripMenuItem
+			  // 
+			  this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
+			  this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(89, 20);
+			  this.preferencesToolStripMenuItem.Text = "Preferences...";
+			  this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.preferencesToolStripMenuItem_Click);
+			  // 
+			  // repositoryToolStripMenuItem
+			  // 
+			  this.repositoryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createToolStripMenuItem,
+            this.deleteToolStripMenuItem1,
+            this.clearRunResultsToolStripMenuItem});
+			  this.repositoryToolStripMenuItem.Name = "repositoryToolStripMenuItem";
+			  this.repositoryToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+			  this.repositoryToolStripMenuItem.Text = "Repository";
+			  // 
+			  // createToolStripMenuItem
+			  // 
+			  this.createToolStripMenuItem.Name = "createToolStripMenuItem";
+			  this.createToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+			  this.createToolStripMenuItem.Text = "Create...";
+			  this.createToolStripMenuItem.Click += new System.EventHandler(this.createToolStripMenuItem_Click);
+			  // 
+			  // deleteToolStripMenuItem1
+			  // 
+			  this.deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
+			  this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(182, 22);
+			  this.deleteToolStripMenuItem1.Text = "Delete...";
+			  this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteToolStripMenuItem1_Click);
+			  // 
+			  // clearRunResultsToolStripMenuItem
+			  // 
+			  this.clearRunResultsToolStripMenuItem.Name = "clearRunResultsToolStripMenuItem";
+			  this.clearRunResultsToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+			  this.clearRunResultsToolStripMenuItem.Text = "Clear Run Results...";
+			  this.clearRunResultsToolStripMenuItem.Click += new System.EventHandler(this.clearRunResultsToolStripMenuItem_Click);
+			  // 
+			  // tlsToolbar
+			  // 
+			  this.tlsToolbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newToolStripButton,
+            this.saveToolStripButton,
+            this.toolStripSeparator,
+            this.pbRunProgress});
+			  this.tlsToolbar.Location = new System.Drawing.Point(0, 24);
+			  this.tlsToolbar.Name = "tlsToolbar";
+			  this.tlsToolbar.Size = new System.Drawing.Size(1090, 25);
+			  this.tlsToolbar.TabIndex = 30;
+			  this.tlsToolbar.Text = "toolStrip1";
+			  // 
+			  // newToolStripButton
+			  // 
+			  this.newToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			  this.newToolStripButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.folderToolStripMenuItem1,
+            this.testToolStripMenuItem3,
+            this.scenarioGroupToolStripMenuItem2,
+            this.userDefinedCheckToolStripMenuItem1});
+			  this.newToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripButton.Image")));
+			  this.newToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			  this.newToolStripButton.Name = "newToolStripButton";
+			  this.newToolStripButton.Size = new System.Drawing.Size(29, 22);
+			  this.newToolStripButton.Text = "&New";
+			  // 
+			  // folderToolStripMenuItem1
+			  // 
+			  this.folderToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("folderToolStripMenuItem1.Image")));
+			  this.folderToolStripMenuItem1.Name = "folderToolStripMenuItem1";
+			  this.folderToolStripMenuItem1.Size = new System.Drawing.Size(219, 22);
+			  this.folderToolStripMenuItem1.Text = "Folder";
+			  this.folderToolStripMenuItem1.Click += new System.EventHandler(this.folderToolStripMenuItem1_Click);
+			  // 
+			  // testToolStripMenuItem3
+			  // 
+			  this.testToolStripMenuItem3.Image = global::RT.Properties.Resources.beaker;
+			  this.testToolStripMenuItem3.Name = "testToolStripMenuItem3";
+			  this.testToolStripMenuItem3.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+			  this.testToolStripMenuItem3.Size = new System.Drawing.Size(219, 22);
+			  this.testToolStripMenuItem3.Text = "Test";
+			  this.testToolStripMenuItem3.Click += new System.EventHandler(this.testToolStripMenuItem3_Click);
+			  // 
+			  // scenarioGroupToolStripMenuItem2
+			  // 
+			  this.scenarioGroupToolStripMenuItem2.Image = global::RT.Properties.Resources.tic_tac_toe;
+			  this.scenarioGroupToolStripMenuItem2.Name = "scenarioGroupToolStripMenuItem2";
+			  this.scenarioGroupToolStripMenuItem2.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+			  this.scenarioGroupToolStripMenuItem2.Size = new System.Drawing.Size(219, 22);
+			  this.scenarioGroupToolStripMenuItem2.Text = "Scenario Group";
+			  this.scenarioGroupToolStripMenuItem2.Click += new System.EventHandler(this.scenarioGroupToolStripMenuItem2_Click);
+			  // 
+			  // userDefinedCheckToolStripMenuItem1
+			  // 
+			  this.userDefinedCheckToolStripMenuItem1.Image = global::RT.Properties.Resources.checklist;
+			  this.userDefinedCheckToolStripMenuItem1.Name = "userDefinedCheckToolStripMenuItem1";
+			  this.userDefinedCheckToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
+			  this.userDefinedCheckToolStripMenuItem1.Size = new System.Drawing.Size(219, 22);
+			  this.userDefinedCheckToolStripMenuItem1.Text = "User-Defined Check";
+			  this.userDefinedCheckToolStripMenuItem1.Click += new System.EventHandler(this.userDefinedCheckToolStripMenuItem1_Click);
+			  // 
+			  // saveToolStripButton
+			  // 
+			  this.saveToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			  this.saveToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripButton.Image")));
+			  this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			  this.saveToolStripButton.Name = "saveToolStripButton";
+			  this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
+			  this.saveToolStripButton.Text = "&Save";
+			  this.saveToolStripButton.Click += new System.EventHandler(this.saveToolStripButton_Click);
+			  // 
+			  // toolStripSeparator
+			  // 
+			  this.toolStripSeparator.Name = "toolStripSeparator";
+			  this.toolStripSeparator.Size = new System.Drawing.Size(6, 25);
+			  // 
+			  // pbRunProgress
+			  // 
+			  this.pbRunProgress.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			  this.pbRunProgress.Name = "pbRunProgress";
+			  this.pbRunProgress.Size = new System.Drawing.Size(200, 22);
+			  // 
+			  // erpMain
+			  // 
+			  this.erpMain.ContainerControl = this;
+			  // 
+			  // splitContainer1
+			  // 
+			  this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+			  this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+			  this.splitContainer1.Name = "splitContainer1";
+			  // 
+			  // splitContainer1.Panel1
+			  // 
+			  this.splitContainer1.Panel1.Controls.Add(this.btnRefreshTreeviews);
+			  this.splitContainer1.Panel1.Controls.Add(this.tabNavigation);
+			  this.splitContainer1.Panel1.Controls.Add(this.lblRunProgress);
+			  // 
+			  // splitContainer1.Panel2
+			  // 
+			  this.splitContainer1.Panel2.Controls.Add(this.tabGroup);
+			  this.splitContainer1.Size = new System.Drawing.Size(1090, 622);
+			  this.splitContainer1.SplitterDistance = 311;
+			  this.splitContainer1.TabIndex = 32;
+			  // 
+			  // btnRefreshTreeviews
+			  // 
+			  this.btnRefreshTreeviews.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			  this.btnRefreshTreeviews.Location = new System.Drawing.Point(231, 596);
+			  this.btnRefreshTreeviews.Name = "btnRefreshTreeviews";
+			  this.btnRefreshTreeviews.Size = new System.Drawing.Size(75, 23);
+			  this.btnRefreshTreeviews.TabIndex = 34;
+			  this.btnRefreshTreeviews.Text = "Refresh";
+			  this.btnRefreshTreeviews.UseVisualStyleBackColor = true;
+			  this.btnRefreshTreeviews.Click += new System.EventHandler(this.btnRefreshTreeviews_Click);
+			  // 
+			  // tabNavigation
+			  // 
+			  this.tabNavigation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.tabNavigation.Controls.Add(this.tabPLSQLMethods);
+			  this.tabNavigation.Controls.Add(this.tabTests);
+			  this.tabNavigation.Location = new System.Drawing.Point(3, 52);
+			  this.tabNavigation.Name = "tabNavigation";
+			  this.tabNavigation.SelectedIndex = 0;
+			  this.tabNavigation.Size = new System.Drawing.Size(308, 538);
+			  this.tabNavigation.TabIndex = 33;
+			  // 
+			  // tabPLSQLMethods
+			  // 
+			  this.tabPLSQLMethods.Controls.Add(this.tvSchemaObjects);
+			  this.tabPLSQLMethods.Location = new System.Drawing.Point(4, 22);
+			  this.tabPLSQLMethods.Name = "tabPLSQLMethods";
+			  this.tabPLSQLMethods.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabPLSQLMethods.Size = new System.Drawing.Size(300, 512);
+			  this.tabPLSQLMethods.TabIndex = 1;
+			  this.tabPLSQLMethods.Text = "Schemas";
+			  this.tabPLSQLMethods.UseVisualStyleBackColor = true;
+			  // 
+			  // tvSchemaObjects
+			  // 
+			  this.tvSchemaObjects.ContextMenuStrip = this.cmsNavigator;
+			  this.tvSchemaObjects.Dock = System.Windows.Forms.DockStyle.Fill;
+			  this.tvSchemaObjects.ImageIndex = 0;
+			  this.tvSchemaObjects.ImageList = this.imageList1;
+			  this.tvSchemaObjects.Location = new System.Drawing.Point(3, 3);
+			  this.tvSchemaObjects.Name = "tvSchemaObjects";
+			  this.tvSchemaObjects.SelectedImageIndex = 0;
+			  this.tvSchemaObjects.Size = new System.Drawing.Size(294, 506);
+			  this.tvSchemaObjects.TabIndex = 0;
+			  this.tvSchemaObjects.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.tvPLSQLMethods_AfterLabelEdit);
+			  this.tvSchemaObjects.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.tvSchemaObjects_BeforeExpand);
+			  this.tvSchemaObjects.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.tvSchemaObjects_BeforeSelect);
+			  this.tvSchemaObjects.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvPLSQLMethods_AfterSelect);
+			  this.tvSchemaObjects.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvPLSQLMethods_NodeMouseClick);
+			  this.tvSchemaObjects.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tvPLSQLMethods_MouseDown);
+			  // 
+			  // tabTests
+			  // 
+			  this.tabTests.Controls.Add(this.tvTests);
+			  this.tabTests.Location = new System.Drawing.Point(4, 22);
+			  this.tabTests.Name = "tabTests";
+			  this.tabTests.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabTests.Size = new System.Drawing.Size(300, 512);
+			  this.tabTests.TabIndex = 0;
+			  this.tabTests.Text = "Folders";
+			  this.tabTests.UseVisualStyleBackColor = true;
+			  // 
+			  // tvTests
+			  // 
+			  this.tvTests.AllowDrop = true;
+			  this.tvTests.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.tvTests.ContextMenuStrip = this.cmsNavigator;
+			  this.tvTests.HideSelection = false;
+			  this.tvTests.ImageIndex = 0;
+			  this.tvTests.ImageList = this.imageList1;
+			  this.tvTests.Location = new System.Drawing.Point(-1, 1);
+			  this.tvTests.Name = "tvTests";
+			  this.tvTests.SelectedImageIndex = 0;
+			  this.tvTests.Size = new System.Drawing.Size(301, 511);
+			  this.tvTests.TabIndex = 2;
+			  this.tvTests.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.tvTestUnits_AfterLabelEdit);
+			  this.tvTests.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tvTestUnits_ItemDrag);
+			  this.tvTests.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.tvTests_BeforeSelect);
+			  this.tvTests.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvTestUnits_AfterSelect);
+			  this.tvTests.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvTestUnits_NodeMouseClick);
+			  this.tvTests.DragDrop += new System.Windows.Forms.DragEventHandler(this.tvTestUnits_DragDrop);
+			  this.tvTests.DragOver += new System.Windows.Forms.DragEventHandler(this.tvTestUnits_DragOver);
+			  // 
+			  // lblRunProgress
+			  // 
+			  this.lblRunProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			  this.lblRunProgress.AutoSize = true;
+			  this.lblRunProgress.Location = new System.Drawing.Point(3, 597);
+			  this.lblRunProgress.Name = "lblRunProgress";
+			  this.lblRunProgress.Size = new System.Drawing.Size(71, 13);
+			  this.lblRunProgress.TabIndex = 32;
+			  this.lblRunProgress.Text = "Run Progress";
+			  // 
+			  // tabGroup
+			  // 
+			  this.tabGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.tabGroup.Controls.Add(this.tabTestInfo);
+			  this.tabGroup.Controls.Add(this.tabTestDeclare);
+			  this.tabGroup.Controls.Add(this.tabScenarioInfo);
+			  this.tabGroup.Controls.Add(this.tabParameters);
+			  this.tabGroup.Controls.Add(this.tabPLSQLBlock);
+			  this.tabGroup.Controls.Add(this.tabUserDefinedChecks);
+			  this.tabGroup.Controls.Add(this.tabDebug);
+			  this.tabGroup.ImageList = this.imageList1;
+			  this.tabGroup.Location = new System.Drawing.Point(3, 52);
+			  this.tabGroup.Name = "tabGroup";
+			  this.tabGroup.SelectedIndex = 0;
+			  this.tabGroup.Size = new System.Drawing.Size(769, 567);
+			  this.tabGroup.TabIndex = 0;
+			  // 
+			  // tabTestInfo
+			  // 
+			  this.tabTestInfo.Controls.Add(this.chkIsPipelinedFunction);
+			  this.tabTestInfo.Controls.Add(this.label22);
+			  this.tabTestInfo.Controls.Add(this.txtOverload);
+			  this.tabTestInfo.Controls.Add(this.label19);
+			  this.tabTestInfo.Controls.Add(this.grdTestArguments);
+			  this.tabTestInfo.Controls.Add(this.cmbUnitType);
+			  this.tabTestInfo.Controls.Add(this.label8);
+			  this.tabTestInfo.Controls.Add(this.lblCreationDate);
+			  this.tabTestInfo.Controls.Add(this.label7);
+			  this.tabTestInfo.Controls.Add(this.lblTestKey);
+			  this.tabTestInfo.Controls.Add(this.txtUnitName);
+			  this.tabTestInfo.Controls.Add(this.label3);
+			  this.tabTestInfo.Controls.Add(this.txtTestDescription);
+			  this.tabTestInfo.Controls.Add(this.label2);
+			  this.tabTestInfo.Controls.Add(this.txtTestName);
+			  this.tabTestInfo.Controls.Add(this.label1);
+			  this.tabTestInfo.Controls.Add(this.label5);
+			  this.tabTestInfo.ImageKey = "Test - Not Run";
+			  this.tabTestInfo.Location = new System.Drawing.Point(4, 23);
+			  this.tabTestInfo.Name = "tabTestInfo";
+			  this.tabTestInfo.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabTestInfo.Size = new System.Drawing.Size(761, 540);
+			  this.tabTestInfo.TabIndex = 0;
+			  this.tabTestInfo.Text = "Test Info";
+			  this.tabTestInfo.UseVisualStyleBackColor = true;
+			  // 
+			  // chkIsPipelinedFunction
+			  // 
+			  this.chkIsPipelinedFunction.AutoSize = true;
+			  this.chkIsPipelinedFunction.Location = new System.Drawing.Point(444, 85);
+			  this.chkIsPipelinedFunction.Name = "chkIsPipelinedFunction";
+			  this.chkIsPipelinedFunction.Size = new System.Drawing.Size(113, 17);
+			  this.chkIsPipelinedFunction.TabIndex = 22;
+			  this.chkIsPipelinedFunction.Text = "Pipelined Function";
+			  this.chkIsPipelinedFunction.UseVisualStyleBackColor = true;
+			  // 
+			  // label22
+			  // 
+			  this.label22.AutoSize = true;
+			  this.label22.Location = new System.Drawing.Point(441, 62);
+			  this.label22.Name = "label22";
+			  this.label22.Size = new System.Drawing.Size(63, 13);
+			  this.label22.TabIndex = 21;
+			  this.label22.Text = "Overload #:";
+			  // 
+			  // txtOverload
+			  // 
+			  this.txtOverload.Location = new System.Drawing.Point(505, 59);
+			  this.txtOverload.Name = "txtOverload";
+			  this.txtOverload.Size = new System.Drawing.Size(34, 20);
+			  this.txtOverload.TabIndex = 4;
+			  this.txtOverload.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			  // 
+			  // label19
+			  // 
+			  this.label19.AutoSize = true;
+			  this.label19.Location = new System.Drawing.Point(10, 122);
+			  this.label19.Name = "label19";
+			  this.label19.Size = new System.Drawing.Size(63, 13);
+			  this.label19.TabIndex = 18;
+			  this.label19.Text = "Parameters:";
+			  // 
+			  // grdTestArguments
+			  // 
+			  this.grdTestArguments.AllowUserToOrderColumns = true;
+			  this.grdTestArguments.AllowUserToResizeRows = false;
+			  this.grdTestArguments.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)));
+			  this.grdTestArguments.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+			  dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			  dataGridViewCellStyle28.BackColor = System.Drawing.SystemColors.Control;
+			  dataGridViewCellStyle28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  dataGridViewCellStyle28.ForeColor = System.Drawing.SystemColors.WindowText;
+			  dataGridViewCellStyle28.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			  dataGridViewCellStyle28.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			  dataGridViewCellStyle28.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			  this.grdTestArguments.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle28;
+			  this.grdTestArguments.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			  this.grdTestArguments.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.position,
+            this.argument_name,
+            this.in_out,
+            this.pls_type});
+			  dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			  dataGridViewCellStyle29.BackColor = System.Drawing.SystemColors.Window;
+			  dataGridViewCellStyle29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  dataGridViewCellStyle29.ForeColor = System.Drawing.SystemColors.ControlText;
+			  dataGridViewCellStyle29.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			  dataGridViewCellStyle29.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			  dataGridViewCellStyle29.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			  this.grdTestArguments.DefaultCellStyle = dataGridViewCellStyle29;
+			  this.grdTestArguments.Location = new System.Drawing.Point(10, 138);
+			  this.grdTestArguments.Name = "grdTestArguments";
+			  dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			  dataGridViewCellStyle30.BackColor = System.Drawing.SystemColors.Control;
+			  dataGridViewCellStyle30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  dataGridViewCellStyle30.ForeColor = System.Drawing.SystemColors.WindowText;
+			  dataGridViewCellStyle30.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			  dataGridViewCellStyle30.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			  dataGridViewCellStyle30.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			  this.grdTestArguments.RowHeadersDefaultCellStyle = dataGridViewCellStyle30;
+			  this.grdTestArguments.Size = new System.Drawing.Size(694, 377);
+			  this.grdTestArguments.TabIndex = 5;
+			  this.grdTestArguments.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.grdTestArguments_CellBeginEdit);
+			  this.grdTestArguments.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdTestArguments_CellValueChanged);
+			  this.grdTestArguments.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.grdTestArguments_DataBindingComplete);
+			  this.grdTestArguments.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.grdTestArguments_UserDeletingRow);
+			  // 
+			  // position
+			  // 
+			  this.position.DataPropertyName = "position";
+			  this.position.HeaderText = "#";
+			  this.position.Name = "position";
+			  this.position.Width = 39;
+			  // 
+			  // argument_name
+			  // 
+			  this.argument_name.DataPropertyName = "argument_name";
+			  this.argument_name.HeaderText = "Name";
+			  this.argument_name.Name = "argument_name";
+			  this.argument_name.Width = 60;
+			  // 
+			  // in_out
+			  // 
+			  this.in_out.DataPropertyName = "in_out";
+			  this.in_out.HeaderText = "In/Out";
+			  this.in_out.Name = "in_out";
+			  this.in_out.Width = 63;
+			  // 
+			  // pls_type
+			  // 
+			  this.pls_type.DataPropertyName = "pls_type";
+			  this.pls_type.HeaderText = "Type";
+			  this.pls_type.Name = "pls_type";
+			  this.pls_type.Width = 56;
+			  // 
+			  // cmbUnitType
+			  // 
+			  this.cmbUnitType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			  this.cmbUnitType.FormattingEnabled = true;
+			  this.cmbUnitType.Items.AddRange(new object[] {
+            "FUNCTION",
+            "PACKAGE",
+            "PROCEDURE",
+            "SCHEMA",
+            "TRIGGER",
+            "TYPE"});
+			  this.cmbUnitType.Location = new System.Drawing.Point(494, 7);
+			  this.cmbUnitType.Name = "cmbUnitType";
+			  this.cmbUnitType.Size = new System.Drawing.Size(121, 21);
+			  this.cmbUnitType.TabIndex = 2;
+			  // 
+			  // label8
+			  // 
+			  this.label8.AutoSize = true;
+			  this.label8.Location = new System.Drawing.Point(420, 10);
+			  this.label8.Name = "label8";
+			  this.label8.Size = new System.Drawing.Size(68, 13);
+			  this.label8.TabIndex = 12;
+			  this.label8.Text = "Target Type:";
+			  // 
+			  // lblCreationDate
+			  // 
+			  this.lblCreationDate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			  this.lblCreationDate.AutoSize = true;
+			  this.lblCreationDate.Location = new System.Drawing.Point(539, 522);
+			  this.lblCreationDate.Name = "lblCreationDate";
+			  this.lblCreationDate.Size = new System.Drawing.Size(53, 13);
+			  this.lblCreationDate.TabIndex = 11;
+			  this.lblCreationDate.Text = "1/2/2003";
+			  // 
+			  // label7
+			  // 
+			  this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			  this.label7.AutoSize = true;
+			  this.label7.Location = new System.Drawing.Point(493, 522);
+			  this.label7.Name = "label7";
+			  this.label7.Size = new System.Drawing.Size(47, 13);
+			  this.label7.TabIndex = 10;
+			  this.label7.Text = "Created:";
+			  // 
+			  // lblTestKey
+			  // 
+			  this.lblTestKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			  this.lblTestKey.AutoSize = true;
+			  this.lblTestKey.Location = new System.Drawing.Point(662, 522);
+			  this.lblTestKey.Name = "lblTestKey";
+			  this.lblTestKey.Size = new System.Drawing.Size(42, 13);
+			  this.lblTestKey.TabIndex = 9;
+			  this.lblTestKey.Text = "testKey";
+			  // 
+			  // txtUnitName
+			  // 
+			  this.txtUnitName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.txtUnitName.Location = new System.Drawing.Point(444, 36);
+			  this.txtUnitName.Name = "txtUnitName";
+			  this.txtUnitName.Size = new System.Drawing.Size(261, 20);
+			  this.txtUnitName.TabIndex = 3;
+			  // 
+			  // label3
+			  // 
+			  this.label3.AutoSize = true;
+			  this.label3.Location = new System.Drawing.Point(413, 39);
+			  this.label3.Name = "label3";
+			  this.label3.Size = new System.Drawing.Size(29, 13);
+			  this.label3.TabIndex = 4;
+			  this.label3.Text = "Unit:";
+			  // 
+			  // txtTestDescription
+			  // 
+			  this.txtTestDescription.AcceptsReturn = true;
+			  this.txtTestDescription.Location = new System.Drawing.Point(10, 49);
+			  this.txtTestDescription.Multiline = true;
+			  this.txtTestDescription.Name = "txtTestDescription";
+			  this.txtTestDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			  this.txtTestDescription.Size = new System.Drawing.Size(397, 66);
+			  this.txtTestDescription.TabIndex = 1;
+			  // 
+			  // label2
+			  // 
+			  this.label2.AutoSize = true;
+			  this.label2.Location = new System.Drawing.Point(10, 33);
+			  this.label2.Name = "label2";
+			  this.label2.Size = new System.Drawing.Size(63, 13);
+			  this.label2.TabIndex = 2;
+			  this.label2.Text = "Description:";
+			  // 
+			  // txtTestName
+			  // 
+			  this.txtTestName.Location = new System.Drawing.Point(47, 7);
+			  this.txtTestName.Name = "txtTestName";
+			  this.txtTestName.Size = new System.Drawing.Size(360, 20);
+			  this.txtTestName.TabIndex = 0;
+			  // 
+			  // label1
+			  // 
+			  this.label1.AutoSize = true;
+			  this.label1.Location = new System.Drawing.Point(7, 10);
+			  this.label1.Name = "label1";
+			  this.label1.Size = new System.Drawing.Size(38, 13);
+			  this.label1.TabIndex = 0;
+			  this.label1.Text = "Name:";
+			  // 
+			  // label5
+			  // 
+			  this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			  this.label5.AutoSize = true;
+			  this.label5.Location = new System.Drawing.Point(610, 522);
+			  this.label5.Name = "label5";
+			  this.label5.Size = new System.Drawing.Size(52, 13);
+			  this.label5.TabIndex = 8;
+			  this.label5.Text = "Test Key:";
+			  // 
+			  // tabTestDeclare
+			  // 
+			  this.tabTestDeclare.Controls.Add(this.rtfTestDeclares);
+			  this.tabTestDeclare.Controls.Add(this.label20);
+			  this.tabTestDeclare.Location = new System.Drawing.Point(4, 23);
+			  this.tabTestDeclare.Name = "tabTestDeclare";
+			  this.tabTestDeclare.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabTestDeclare.Size = new System.Drawing.Size(761, 540);
+			  this.tabTestDeclare.TabIndex = 6;
+			  this.tabTestDeclare.Text = "Declarations";
+			  this.tabTestDeclare.UseVisualStyleBackColor = true;
+			  // 
+			  // rtfTestDeclares
+			  // 
+			  this.rtfTestDeclares.AcceptsTab = true;
+			  this.rtfTestDeclares.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.rtfTestDeclares.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  this.rtfTestDeclares.Location = new System.Drawing.Point(7, 22);
+			  this.rtfTestDeclares.Name = "rtfTestDeclares";
+			  this.rtfTestDeclares.Size = new System.Drawing.Size(748, 512);
+			  this.rtfTestDeclares.TabIndex = 19;
+			  this.rtfTestDeclares.Text = "";
+			  this.rtfTestDeclares.WordWrap = false;
+			  // 
+			  // label20
+			  // 
+			  this.label20.AutoSize = true;
+			  this.label20.Location = new System.Drawing.Point(4, 6);
+			  this.label20.Name = "label20";
+			  this.label20.Size = new System.Drawing.Size(57, 13);
+			  this.label20.TabIndex = 17;
+			  this.label20.Text = "DECLARE";
+			  // 
+			  // tabScenarioInfo
+			  // 
+			  this.tabScenarioInfo.Controls.Add(this.tabScenarioGroupPLSQL);
+			  this.tabScenarioInfo.Controls.Add(this.label17);
+			  this.tabScenarioInfo.Controls.Add(this.label9);
+			  this.tabScenarioInfo.Controls.Add(this.txtScenarioDescription);
+			  this.tabScenarioInfo.Controls.Add(this.lblScenarioGroupKey);
+			  this.tabScenarioInfo.Controls.Add(this.txtScenarioName);
+			  this.tabScenarioInfo.Controls.Add(this.label6);
+			  this.tabScenarioInfo.ImageKey = "Scenario Group - Not Run";
+			  this.tabScenarioInfo.Location = new System.Drawing.Point(4, 23);
+			  this.tabScenarioInfo.Name = "tabScenarioInfo";
+			  this.tabScenarioInfo.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabScenarioInfo.Size = new System.Drawing.Size(761, 540);
+			  this.tabScenarioInfo.TabIndex = 1;
+			  this.tabScenarioInfo.Text = "Scenario Group";
+			  this.tabScenarioInfo.UseVisualStyleBackColor = true;
+			  // 
+			  // tabScenarioGroupPLSQL
+			  // 
+			  this.tabScenarioGroupPLSQL.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.tabScenarioGroupPLSQL.Controls.Add(this.tabScenarioGroupStartup);
+			  this.tabScenarioGroupPLSQL.Controls.Add(this.tabScenarioStartup);
+			  this.tabScenarioGroupPLSQL.Controls.Add(this.tabPostParamAssignment);
+			  this.tabScenarioGroupPLSQL.Controls.Add(this.tabPreUDC);
+			  this.tabScenarioGroupPLSQL.Controls.Add(this.tabScenarioTeardown);
+			  this.tabScenarioGroupPLSQL.Controls.Add(this.tabScenarioGroupTeardown);
+			  this.tabScenarioGroupPLSQL.Location = new System.Drawing.Point(10, 75);
+			  this.tabScenarioGroupPLSQL.Name = "tabScenarioGroupPLSQL";
+			  this.tabScenarioGroupPLSQL.SelectedIndex = 0;
+			  this.tabScenarioGroupPLSQL.Size = new System.Drawing.Size(745, 460);
+			  this.tabScenarioGroupPLSQL.TabIndex = 27;
+			  this.tabScenarioGroupPLSQL.SelectedIndexChanged += new System.EventHandler(this.tabScenarioGroupPLSQL_SelectedIndexChanged);
+			  // 
+			  // tabScenarioGroupStartup
+			  // 
+			  this.tabScenarioGroupStartup.Controls.Add(this.label10);
+			  this.tabScenarioGroupStartup.Controls.Add(this.rtfScenarioGroupStartupBlock);
+			  this.tabScenarioGroupStartup.Location = new System.Drawing.Point(4, 22);
+			  this.tabScenarioGroupStartup.Name = "tabScenarioGroupStartup";
+			  this.tabScenarioGroupStartup.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabScenarioGroupStartup.Size = new System.Drawing.Size(737, 434);
+			  this.tabScenarioGroupStartup.TabIndex = 0;
+			  this.tabScenarioGroupStartup.Text = "Group Startup";
+			  this.tabScenarioGroupStartup.UseVisualStyleBackColor = true;
+			  // 
+			  // label10
+			  // 
+			  this.label10.AutoSize = true;
+			  this.label10.Location = new System.Drawing.Point(8, 7);
+			  this.label10.Name = "label10";
+			  this.label10.Size = new System.Drawing.Size(455, 13);
+			  this.label10.TabIndex = 25;
+			  this.label10.Text = "This PL/SQL block runs only once, before we start running the scenarios in the sc" +
+					"enario group.";
+			  // 
+			  // rtfScenarioGroupStartupBlock
+			  // 
+			  this.rtfScenarioGroupStartupBlock.AcceptsTab = true;
+			  this.rtfScenarioGroupStartupBlock.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.rtfScenarioGroupStartupBlock.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  this.rtfScenarioGroupStartupBlock.Location = new System.Drawing.Point(8, 23);
+			  this.rtfScenarioGroupStartupBlock.Name = "rtfScenarioGroupStartupBlock";
+			  this.rtfScenarioGroupStartupBlock.Size = new System.Drawing.Size(723, 405);
+			  this.rtfScenarioGroupStartupBlock.TabIndex = 24;
+			  this.rtfScenarioGroupStartupBlock.Text = "";
+			  this.rtfScenarioGroupStartupBlock.WordWrap = false;
+			  // 
+			  // tabScenarioStartup
+			  // 
+			  this.tabScenarioStartup.Controls.Add(this.label11);
+			  this.tabScenarioStartup.Controls.Add(this.rtfScenarioStartupBlock);
+			  this.tabScenarioStartup.Location = new System.Drawing.Point(4, 22);
+			  this.tabScenarioStartup.Name = "tabScenarioStartup";
+			  this.tabScenarioStartup.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabScenarioStartup.Size = new System.Drawing.Size(737, 434);
+			  this.tabScenarioStartup.TabIndex = 1;
+			  this.tabScenarioStartup.Text = "Scenario Startup";
+			  this.tabScenarioStartup.UseVisualStyleBackColor = true;
+			  // 
+			  // label11
+			  // 
+			  this.label11.AutoSize = true;
+			  this.label11.Location = new System.Drawing.Point(3, 3);
+			  this.label11.Name = "label11";
+			  this.label11.Size = new System.Drawing.Size(672, 13);
+			  this.label11.TabIndex = 26;
+			  this.label11.Text = "This PL/SQL block runs before executing every single scenario in the scenario gro" +
+					"up. Use p_ScenarioKey$ to know what scenario you\'re on.";
+			  // 
+			  // rtfScenarioStartupBlock
+			  // 
+			  this.rtfScenarioStartupBlock.AcceptsTab = true;
+			  this.rtfScenarioStartupBlock.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.rtfScenarioStartupBlock.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  this.rtfScenarioStartupBlock.Location = new System.Drawing.Point(7, 19);
+			  this.rtfScenarioStartupBlock.Name = "rtfScenarioStartupBlock";
+			  this.rtfScenarioStartupBlock.Size = new System.Drawing.Size(723, 409);
+			  this.rtfScenarioStartupBlock.TabIndex = 25;
+			  this.rtfScenarioStartupBlock.Text = "";
+			  this.rtfScenarioStartupBlock.WordWrap = false;
+			  // 
+			  // tabPostParamAssignment
+			  // 
+			  this.tabPostParamAssignment.Controls.Add(this.rtfPostParamAssignment);
+			  this.tabPostParamAssignment.Controls.Add(this.label26);
+			  this.tabPostParamAssignment.Location = new System.Drawing.Point(4, 22);
+			  this.tabPostParamAssignment.Name = "tabPostParamAssignment";
+			  this.tabPostParamAssignment.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabPostParamAssignment.Size = new System.Drawing.Size(737, 434);
+			  this.tabPostParamAssignment.TabIndex = 4;
+			  this.tabPostParamAssignment.Text = "Post-Param Assignment";
+			  this.tabPostParamAssignment.UseVisualStyleBackColor = true;
+			  // 
+			  // rtfPostParamAssignment
+			  // 
+			  this.rtfPostParamAssignment.AcceptsTab = true;
+			  this.rtfPostParamAssignment.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.rtfPostParamAssignment.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  this.rtfPostParamAssignment.Location = new System.Drawing.Point(7, 21);
+			  this.rtfPostParamAssignment.Name = "rtfPostParamAssignment";
+			  this.rtfPostParamAssignment.Size = new System.Drawing.Size(724, 407);
+			  this.rtfPostParamAssignment.TabIndex = 1;
+			  this.rtfPostParamAssignment.Text = "";
+			  this.rtfPostParamAssignment.WordWrap = false;
+			  // 
+			  // label26
+			  // 
+			  this.label26.AutoSize = true;
+			  this.label26.Location = new System.Drawing.Point(4, 4);
+			  this.label26.Name = "label26";
+			  this.label26.Size = new System.Drawing.Size(467, 13);
+			  this.label26.TabIndex = 0;
+			  this.label26.Text = "This PL/SQL block runs after the parameter variables are set, but before the call" +
+					" to the target unit:";
+			  // 
+			  // tabPreUDC
+			  // 
+			  this.tabPreUDC.Controls.Add(this.rtfPreUDCPLSQL);
+			  this.tabPreUDC.Controls.Add(this.label27);
+			  this.tabPreUDC.Location = new System.Drawing.Point(4, 22);
+			  this.tabPreUDC.Name = "tabPreUDC";
+			  this.tabPreUDC.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabPreUDC.Size = new System.Drawing.Size(737, 434);
+			  this.tabPreUDC.TabIndex = 5;
+			  this.tabPreUDC.Text = "Pre-UDC\'s";
+			  this.tabPreUDC.UseVisualStyleBackColor = true;
+			  // 
+			  // rtfPreUDCPLSQL
+			  // 
+			  this.rtfPreUDCPLSQL.AcceptsTab = true;
+			  this.rtfPreUDCPLSQL.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.rtfPreUDCPLSQL.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  this.rtfPreUDCPLSQL.Location = new System.Drawing.Point(8, 22);
+			  this.rtfPreUDCPLSQL.Name = "rtfPreUDCPLSQL";
+			  this.rtfPreUDCPLSQL.Size = new System.Drawing.Size(724, 407);
+			  this.rtfPreUDCPLSQL.TabIndex = 3;
+			  this.rtfPreUDCPLSQL.Text = "";
+			  this.rtfPreUDCPLSQL.WordWrap = false;
+			  // 
+			  // label27
+			  // 
+			  this.label27.AutoSize = true;
+			  this.label27.Location = new System.Drawing.Point(5, 5);
+			  this.label27.Name = "label27";
+			  this.label27.Size = new System.Drawing.Size(398, 13);
+			  this.label27.TabIndex = 2;
+			  this.label27.Text = "This PL/SQL block runs after the target unit is called, but before the UDC\'s are " +
+					"run:";
+			  // 
+			  // tabScenarioTeardown
+			  // 
+			  this.tabScenarioTeardown.Controls.Add(this.label23);
+			  this.tabScenarioTeardown.Controls.Add(this.rtfScenarioTeardownBlock);
+			  this.tabScenarioTeardown.Controls.Add(this.label21);
+			  this.tabScenarioTeardown.Controls.Add(this.chkRollbackAfterEachScenario);
+			  this.tabScenarioTeardown.Location = new System.Drawing.Point(4, 22);
+			  this.tabScenarioTeardown.Name = "tabScenarioTeardown";
+			  this.tabScenarioTeardown.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabScenarioTeardown.Size = new System.Drawing.Size(737, 434);
+			  this.tabScenarioTeardown.TabIndex = 2;
+			  this.tabScenarioTeardown.Text = "Scenario Teardown";
+			  this.tabScenarioTeardown.UseVisualStyleBackColor = true;
+			  // 
+			  // label23
+			  // 
+			  this.label23.AutoSize = true;
+			  this.label23.Location = new System.Drawing.Point(6, 3);
+			  this.label23.Name = "label23";
+			  this.label23.Size = new System.Drawing.Size(250, 13);
+			  this.label23.TabIndex = 37;
+			  this.label23.Text = "This PL/SQL block runs after every single scenario.";
+			  // 
+			  // rtfScenarioTeardownBlock
+			  // 
+			  this.rtfScenarioTeardownBlock.AcceptsTab = true;
+			  this.rtfScenarioTeardownBlock.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.rtfScenarioTeardownBlock.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  this.rtfScenarioTeardownBlock.Location = new System.Drawing.Point(7, 19);
+			  this.rtfScenarioTeardownBlock.Name = "rtfScenarioTeardownBlock";
+			  this.rtfScenarioTeardownBlock.Size = new System.Drawing.Size(723, 386);
+			  this.rtfScenarioTeardownBlock.TabIndex = 36;
+			  this.rtfScenarioTeardownBlock.Text = "";
+			  this.rtfScenarioTeardownBlock.WordWrap = false;
+			  // 
+			  // label21
+			  // 
+			  this.label21.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			  this.label21.AutoSize = true;
+			  this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  this.label21.Location = new System.Drawing.Point(179, 411);
+			  this.label21.Name = "label21";
+			  this.label21.Size = new System.Drawing.Size(125, 13);
+			  this.label21.TabIndex = 34;
+			  this.label21.Text = "After every scenario:";
+			  // 
+			  // chkRollbackAfterEachScenario
+			  // 
+			  this.chkRollbackAfterEachScenario.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			  this.chkRollbackAfterEachScenario.AutoSize = true;
+			  this.chkRollbackAfterEachScenario.Checked = true;
+			  this.chkRollbackAfterEachScenario.CheckState = System.Windows.Forms.CheckState.Checked;
+			  this.chkRollbackAfterEachScenario.Location = new System.Drawing.Point(310, 411);
+			  this.chkRollbackAfterEachScenario.Name = "chkRollbackAfterEachScenario";
+			  this.chkRollbackAfterEachScenario.Size = new System.Drawing.Size(68, 17);
+			  this.chkRollbackAfterEachScenario.TabIndex = 33;
+			  this.chkRollbackAfterEachScenario.Text = "Rollback";
+			  this.chkRollbackAfterEachScenario.UseVisualStyleBackColor = true;
+			  // 
+			  // tabScenarioGroupTeardown
+			  // 
+			  this.tabScenarioGroupTeardown.Controls.Add(this.label24);
+			  this.tabScenarioGroupTeardown.Controls.Add(this.rtfScenarioGroupTeardownBlock);
+			  this.tabScenarioGroupTeardown.Location = new System.Drawing.Point(4, 22);
+			  this.tabScenarioGroupTeardown.Name = "tabScenarioGroupTeardown";
+			  this.tabScenarioGroupTeardown.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabScenarioGroupTeardown.Size = new System.Drawing.Size(737, 434);
+			  this.tabScenarioGroupTeardown.TabIndex = 3;
+			  this.tabScenarioGroupTeardown.Text = "Group Teardown";
+			  this.tabScenarioGroupTeardown.UseVisualStyleBackColor = true;
+			  // 
+			  // label24
+			  // 
+			  this.label24.AutoSize = true;
+			  this.label24.Location = new System.Drawing.Point(6, 7);
+			  this.label24.Name = "label24";
+			  this.label24.Size = new System.Drawing.Size(455, 13);
+			  this.label24.TabIndex = 26;
+			  this.label24.Text = "This PL/SQL block runs only once, after all scenarios in the scenario group are d" +
+					"one being run.";
+			  // 
+			  // rtfScenarioGroupTeardownBlock
+			  // 
+			  this.rtfScenarioGroupTeardownBlock.AcceptsTab = true;
+			  this.rtfScenarioGroupTeardownBlock.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.rtfScenarioGroupTeardownBlock.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  this.rtfScenarioGroupTeardownBlock.Location = new System.Drawing.Point(7, 23);
+			  this.rtfScenarioGroupTeardownBlock.Name = "rtfScenarioGroupTeardownBlock";
+			  this.rtfScenarioGroupTeardownBlock.Size = new System.Drawing.Size(723, 405);
+			  this.rtfScenarioGroupTeardownBlock.TabIndex = 25;
+			  this.rtfScenarioGroupTeardownBlock.Text = "";
+			  this.rtfScenarioGroupTeardownBlock.WordWrap = false;
+			  // 
+			  // label17
+			  // 
+			  this.label17.AutoSize = true;
+			  this.label17.Location = new System.Drawing.Point(218, 30);
+			  this.label17.Name = "label17";
+			  this.label17.Size = new System.Drawing.Size(105, 13);
+			  this.label17.TabIndex = 20;
+			  this.label17.Text = "Scenario Group Key:";
+			  // 
+			  // label9
+			  // 
+			  this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.label9.AutoSize = true;
+			  this.label9.Location = new System.Drawing.Point(350, 10);
+			  this.label9.Name = "label9";
+			  this.label9.Size = new System.Drawing.Size(63, 13);
+			  this.label9.TabIndex = 19;
+			  this.label9.Text = "Description:";
+			  // 
+			  // txtScenarioDescription
+			  // 
+			  this.txtScenarioDescription.AcceptsReturn = true;
+			  this.txtScenarioDescription.AcceptsTab = true;
+			  this.txtScenarioDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.txtScenarioDescription.Location = new System.Drawing.Point(419, 7);
+			  this.txtScenarioDescription.Multiline = true;
+			  this.txtScenarioDescription.Name = "txtScenarioDescription";
+			  this.txtScenarioDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			  this.txtScenarioDescription.Size = new System.Drawing.Size(336, 62);
+			  this.txtScenarioDescription.TabIndex = 1;
+			  // 
+			  // lblScenarioGroupKey
+			  // 
+			  this.lblScenarioGroupKey.AutoSize = true;
+			  this.lblScenarioGroupKey.Location = new System.Drawing.Point(319, 30);
+			  this.lblScenarioGroupKey.Name = "lblScenarioGroupKey";
+			  this.lblScenarioGroupKey.Size = new System.Drawing.Size(25, 13);
+			  this.lblScenarioGroupKey.TabIndex = 14;
+			  this.lblScenarioGroupKey.Text = "Key";
+			  // 
+			  // txtScenarioName
+			  // 
+			  this.txtScenarioName.Location = new System.Drawing.Point(51, 7);
+			  this.txtScenarioName.Name = "txtScenarioName";
+			  this.txtScenarioName.Size = new System.Drawing.Size(293, 20);
+			  this.txtScenarioName.TabIndex = 0;
+			  // 
+			  // label6
+			  // 
+			  this.label6.AutoSize = true;
+			  this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  this.label6.Location = new System.Drawing.Point(7, 10);
+			  this.label6.Name = "label6";
+			  this.label6.Size = new System.Drawing.Size(43, 13);
+			  this.label6.TabIndex = 0;
+			  this.label6.Text = "Name:";
+			  // 
+			  // tabParameters
+			  // 
+			  this.tabParameters.Controls.Add(this.chkHideParameterTypes);
+			  this.tabParameters.Controls.Add(this.btnShrinkColumns);
+			  this.tabParameters.Controls.Add(this.btnCloneScenario);
+			  this.tabParameters.Controls.Add(this.chkDisplayParamTypesInline);
+			  this.tabParameters.Controls.Add(this.chkOnlyShowFailuresOnRun);
+			  this.tabParameters.Controls.Add(this.grdScenarios);
+			  this.tabParameters.Location = new System.Drawing.Point(4, 23);
+			  this.tabParameters.Name = "tabParameters";
+			  this.tabParameters.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabParameters.Size = new System.Drawing.Size(761, 540);
+			  this.tabParameters.TabIndex = 2;
+			  this.tabParameters.Text = "Scenarios";
+			  this.tabParameters.UseVisualStyleBackColor = true;
+			  // 
+			  // chkHideParameterTypes
+			  // 
+			  this.chkHideParameterTypes.AutoSize = true;
+			  this.chkHideParameterTypes.Location = new System.Drawing.Point(424, 13);
+			  this.chkHideParameterTypes.Name = "chkHideParameterTypes";
+			  this.chkHideParameterTypes.Size = new System.Drawing.Size(131, 17);
+			  this.chkHideParameterTypes.TabIndex = 2;
+			  this.chkHideParameterTypes.Text = "Hide Parameter Types";
+			  this.chkHideParameterTypes.UseVisualStyleBackColor = true;
+			  this.chkHideParameterTypes.CheckedChanged += new System.EventHandler(this.chkHideParameterTypes_CheckedChanged);
+			  // 
+			  // btnShrinkColumns
+			  // 
+			  this.btnShrinkColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			  this.btnShrinkColumns.Location = new System.Drawing.Point(570, 6);
+			  this.btnShrinkColumns.Name = "btnShrinkColumns";
+			  this.btnShrinkColumns.Size = new System.Drawing.Size(75, 23);
+			  this.btnShrinkColumns.TabIndex = 3;
+			  this.btnShrinkColumns.Text = "Shrink Cols.";
+			  this.btnShrinkColumns.UseVisualStyleBackColor = true;
+			  this.btnShrinkColumns.Click += new System.EventHandler(this.btnShrinkColumns_Click);
+			  // 
+			  // btnCloneScenario
+			  // 
+			  this.btnCloneScenario.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			  this.btnCloneScenario.Location = new System.Drawing.Point(651, 7);
+			  this.btnCloneScenario.Name = "btnCloneScenario";
+			  this.btnCloneScenario.Size = new System.Drawing.Size(104, 23);
+			  this.btnCloneScenario.TabIndex = 4;
+			  this.btnCloneScenario.Text = "Clone Scenario(s)";
+			  this.btnCloneScenario.UseVisualStyleBackColor = true;
+			  this.btnCloneScenario.Click += new System.EventHandler(this.btnCloneScenario_Click);
+			  // 
+			  // chkDisplayParamTypesInline
+			  // 
+			  this.chkDisplayParamTypesInline.AutoSize = true;
+			  this.chkDisplayParamTypesInline.Location = new System.Drawing.Point(246, 13);
+			  this.chkDisplayParamTypesInline.Name = "chkDisplayParamTypesInline";
+			  this.chkDisplayParamTypesInline.Size = new System.Drawing.Size(171, 17);
+			  this.chkDisplayParamTypesInline.TabIndex = 1;
+			  this.chkDisplayParamTypesInline.Text = "Display Parameter Types Inline";
+			  this.chkDisplayParamTypesInline.UseVisualStyleBackColor = true;
+			  this.chkDisplayParamTypesInline.CheckedChanged += new System.EventHandler(this.chkDisplayParamTypesAfterParams_CheckedChanged);
+			  // 
+			  // chkOnlyShowFailuresOnRun
+			  // 
+			  this.chkOnlyShowFailuresOnRun.AutoSize = true;
+			  this.chkOnlyShowFailuresOnRun.Location = new System.Drawing.Point(7, 13);
+			  this.chkOnlyShowFailuresOnRun.Name = "chkOnlyShowFailuresOnRun";
+			  this.chkOnlyShowFailuresOnRun.Size = new System.Drawing.Size(233, 17);
+			  this.chkOnlyShowFailuresOnRun.TabIndex = 0;
+			  this.chkOnlyShowFailuresOnRun.Text = "Only Show Failed Scenarios When Running";
+			  this.chkOnlyShowFailuresOnRun.UseVisualStyleBackColor = true;
+			  // 
+			  // grdScenarios
+			  // 
+			  this.grdScenarios.AllowUserToOrderColumns = true;
+			  this.grdScenarios.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.grdScenarios.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+			  dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			  dataGridViewCellStyle31.BackColor = System.Drawing.SystemColors.Control;
+			  dataGridViewCellStyle31.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  dataGridViewCellStyle31.ForeColor = System.Drawing.SystemColors.WindowText;
+			  dataGridViewCellStyle31.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			  dataGridViewCellStyle31.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			  dataGridViewCellStyle31.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			  this.grdScenarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle31;
+			  this.grdScenarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			  dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			  dataGridViewCellStyle32.BackColor = System.Drawing.SystemColors.Window;
+			  dataGridViewCellStyle32.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  dataGridViewCellStyle32.ForeColor = System.Drawing.SystemColors.ControlText;
+			  dataGridViewCellStyle32.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			  dataGridViewCellStyle32.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			  dataGridViewCellStyle32.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			  this.grdScenarios.DefaultCellStyle = dataGridViewCellStyle32;
+			  this.grdScenarios.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+			  this.grdScenarios.Location = new System.Drawing.Point(7, 40);
+			  this.grdScenarios.Name = "grdScenarios";
+			  dataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.BottomCenter;
+			  dataGridViewCellStyle33.BackColor = System.Drawing.SystemColors.Control;
+			  dataGridViewCellStyle33.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  dataGridViewCellStyle33.ForeColor = System.Drawing.SystemColors.WindowText;
+			  dataGridViewCellStyle33.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			  dataGridViewCellStyle33.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			  dataGridViewCellStyle33.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			  this.grdScenarios.RowHeadersDefaultCellStyle = dataGridViewCellStyle33;
+			  this.grdScenarios.Size = new System.Drawing.Size(748, 494);
+			  this.grdScenarios.TabIndex = 5;
+			  this.grdScenarios.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdScenarios_CellEnter);
+			  this.grdScenarios.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdScenarios_CellValueChanged);
+			  this.grdScenarios.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.grdScenarios_DefaultValuesNeeded);
+			  this.grdScenarios.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.grdScenarios_RowHeaderMouseClick);
+			  this.grdScenarios.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.grdScenarios_UserDeletingRow);
+			  // 
+			  // tabPLSQLBlock
+			  // 
+			  this.tabPLSQLBlock.Controls.Add(this.rtfPLSQLBLock);
+			  this.tabPLSQLBlock.Controls.Add(this.label4);
+			  this.tabPLSQLBlock.Location = new System.Drawing.Point(4, 23);
+			  this.tabPLSQLBlock.Name = "tabPLSQLBlock";
+			  this.tabPLSQLBlock.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabPLSQLBlock.Size = new System.Drawing.Size(761, 540);
+			  this.tabPLSQLBlock.TabIndex = 7;
+			  this.tabPLSQLBlock.Text = "PL/SQL Block";
+			  this.tabPLSQLBlock.UseVisualStyleBackColor = true;
+			  // 
+			  // rtfPLSQLBLock
+			  // 
+			  this.rtfPLSQLBLock.AcceptsTab = true;
+			  this.rtfPLSQLBLock.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.rtfPLSQLBLock.DetectUrls = false;
+			  this.rtfPLSQLBLock.EnableAutoDragDrop = true;
+			  this.rtfPLSQLBLock.Location = new System.Drawing.Point(6, 25);
+			  this.rtfPLSQLBLock.Name = "rtfPLSQLBLock";
+			  this.rtfPLSQLBLock.Size = new System.Drawing.Size(749, 512);
+			  this.rtfPLSQLBLock.TabIndex = 21;
+			  this.rtfPLSQLBLock.Text = "";
+			  this.rtfPLSQLBLock.WordWrap = false;
+			  // 
+			  // label4
+			  // 
+			  this.label4.AutoSize = true;
+			  this.label4.Location = new System.Drawing.Point(6, 9);
+			  this.label4.Name = "label4";
+			  this.label4.Size = new System.Drawing.Size(317, 13);
+			  this.label4.TabIndex = 20;
+			  this.label4.Text = "Anonymous PL/SQL Block to run instead of calling the target unit:";
+			  // 
+			  // tabUserDefinedChecks
+			  // 
+			  this.tabUserDefinedChecks.Controls.Add(this.label25);
+			  this.tabUserDefinedChecks.Controls.Add(this.rtfUDCPLSQLCondition);
+			  this.tabUserDefinedChecks.Controls.Add(this.label16);
+			  this.tabUserDefinedChecks.Controls.Add(this.tabUDCOptions);
+			  this.tabUserDefinedChecks.Controls.Add(this.lblUDCCheckKey);
+			  this.tabUserDefinedChecks.Controls.Add(this.label15);
+			  this.tabUserDefinedChecks.Controls.Add(this.txtUDCSortOrder);
+			  this.tabUserDefinedChecks.Controls.Add(this.label14);
+			  this.tabUserDefinedChecks.Controls.Add(this.cmbUDCType);
+			  this.tabUserDefinedChecks.Controls.Add(this.txtUDCDescription);
+			  this.tabUserDefinedChecks.Controls.Add(this.label13);
+			  this.tabUserDefinedChecks.Controls.Add(this.label12);
+			  this.tabUserDefinedChecks.Controls.Add(this.txtUDCName);
+			  this.tabUserDefinedChecks.ImageKey = "UDC - Not Run";
+			  this.tabUserDefinedChecks.Location = new System.Drawing.Point(4, 23);
+			  this.tabUserDefinedChecks.Name = "tabUserDefinedChecks";
+			  this.tabUserDefinedChecks.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabUserDefinedChecks.Size = new System.Drawing.Size(761, 540);
+			  this.tabUserDefinedChecks.TabIndex = 4;
+			  this.tabUserDefinedChecks.Text = "User-Defined Checks";
+			  this.tabUserDefinedChecks.UseVisualStyleBackColor = true;
+			  // 
+			  // label25
+			  // 
+			  this.label25.AutoSize = true;
+			  this.label25.Location = new System.Drawing.Point(347, 7);
+			  this.label25.Name = "label25";
+			  this.label25.Size = new System.Drawing.Size(54, 13);
+			  this.label25.TabIndex = 19;
+			  this.label25.Text = "UDC Key:";
+			  // 
+			  // rtfUDCPLSQLCondition
+			  // 
+			  this.rtfUDCPLSQLCondition.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.rtfUDCPLSQLCondition.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  this.rtfUDCPLSQLCondition.Location = new System.Drawing.Point(347, 45);
+			  this.rtfUDCPLSQLCondition.Name = "rtfUDCPLSQLCondition";
+			  this.rtfUDCPLSQLCondition.Size = new System.Drawing.Size(408, 98);
+			  this.rtfUDCPLSQLCondition.TabIndex = 4;
+			  this.rtfUDCPLSQLCondition.Text = "";
+			  this.rtfUDCPLSQLCondition.WordWrap = false;
+			  // 
+			  // label16
+			  // 
+			  this.label16.AutoSize = true;
+			  this.label16.Location = new System.Drawing.Point(347, 29);
+			  this.label16.Name = "label16";
+			  this.label16.Size = new System.Drawing.Size(291, 13);
+			  this.label16.TabIndex = 17;
+			  this.label16.Text = "Conditionally run the UDC based on this boolean expression:";
+			  // 
+			  // tabUDCOptions
+			  // 
+			  this.tabUDCOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.tabUDCOptions.Controls.Add(this.tabPage1);
+			  this.tabUDCOptions.Controls.Add(this.tabPage2);
+			  this.tabUDCOptions.Location = new System.Drawing.Point(10, 149);
+			  this.tabUDCOptions.Name = "tabUDCOptions";
+			  this.tabUDCOptions.SelectedIndex = 0;
+			  this.tabUDCOptions.Size = new System.Drawing.Size(745, 385);
+			  this.tabUDCOptions.TabIndex = 16;
+			  // 
+			  // tabPage1
+			  // 
+			  this.tabPage1.Controls.Add(this.rtfUDCPLSQLBlock);
+			  this.tabPage1.Location = new System.Drawing.Point(4, 22);
+			  this.tabPage1.Name = "tabPage1";
+			  this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabPage1.Size = new System.Drawing.Size(737, 359);
+			  this.tabPage1.TabIndex = 0;
+			  this.tabPage1.Text = "PL/SQL, Cursor";
+			  this.tabPage1.UseVisualStyleBackColor = true;
+			  // 
+			  // rtfUDCPLSQLBlock
+			  // 
+			  this.rtfUDCPLSQLBlock.AcceptsTab = true;
+			  this.rtfUDCPLSQLBlock.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.rtfUDCPLSQLBlock.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  this.rtfUDCPLSQLBlock.Location = new System.Drawing.Point(6, 6);
+			  this.rtfUDCPLSQLBlock.Name = "rtfUDCPLSQLBlock";
+			  this.rtfUDCPLSQLBlock.Size = new System.Drawing.Size(725, 347);
+			  this.rtfUDCPLSQLBlock.TabIndex = 0;
+			  this.rtfUDCPLSQLBlock.Text = "";
+			  this.rtfUDCPLSQLBlock.WordWrap = false;
+			  // 
+			  // tabPage2
+			  // 
+			  this.tabPage2.Controls.Add(this.grdRowValidation);
+			  this.tabPage2.Location = new System.Drawing.Point(4, 22);
+			  this.tabPage2.Name = "tabPage2";
+			  this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabPage2.Size = new System.Drawing.Size(737, 359);
+			  this.tabPage2.TabIndex = 1;
+			  this.tabPage2.Text = "Row Validator";
+			  this.tabPage2.UseVisualStyleBackColor = true;
+			  // 
+			  // grdRowValidation
+			  // 
+			  this.grdRowValidation.AllowUserToOrderColumns = true;
+			  this.grdRowValidation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.grdRowValidation.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+			  dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			  dataGridViewCellStyle34.BackColor = System.Drawing.SystemColors.Control;
+			  dataGridViewCellStyle34.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  dataGridViewCellStyle34.ForeColor = System.Drawing.SystemColors.WindowText;
+			  dataGridViewCellStyle34.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			  dataGridViewCellStyle34.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			  dataGridViewCellStyle34.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			  this.grdRowValidation.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle34;
+			  this.grdRowValidation.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			  dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			  dataGridViewCellStyle35.BackColor = System.Drawing.SystemColors.Window;
+			  dataGridViewCellStyle35.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  dataGridViewCellStyle35.ForeColor = System.Drawing.SystemColors.ControlText;
+			  dataGridViewCellStyle35.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			  dataGridViewCellStyle35.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			  dataGridViewCellStyle35.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			  this.grdRowValidation.DefaultCellStyle = dataGridViewCellStyle35;
+			  this.grdRowValidation.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+			  this.grdRowValidation.Location = new System.Drawing.Point(6, 6);
+			  this.grdRowValidation.Name = "grdRowValidation";
+			  dataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			  dataGridViewCellStyle36.BackColor = System.Drawing.SystemColors.Control;
+			  dataGridViewCellStyle36.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  dataGridViewCellStyle36.ForeColor = System.Drawing.SystemColors.WindowText;
+			  dataGridViewCellStyle36.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			  dataGridViewCellStyle36.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			  dataGridViewCellStyle36.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			  this.grdRowValidation.RowHeadersDefaultCellStyle = dataGridViewCellStyle36;
+			  this.grdRowValidation.Size = new System.Drawing.Size(725, 344);
+			  this.grdRowValidation.TabIndex = 6;
+			  this.grdRowValidation.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdRowValidation_CellEnter);
+			  this.grdRowValidation.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.grdRowValidation_RowHeaderMouseClick);
+			  this.grdRowValidation.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.grdRowValidation_UserDeletingRow);
+			  // 
+			  // lblUDCCheckKey
+			  // 
+			  this.lblUDCCheckKey.AutoSize = true;
+			  this.lblUDCCheckKey.Location = new System.Drawing.Point(397, 7);
+			  this.lblUDCCheckKey.Name = "lblUDCCheckKey";
+			  this.lblUDCCheckKey.Size = new System.Drawing.Size(51, 13);
+			  this.lblUDCCheckKey.TabIndex = 11;
+			  this.lblUDCCheckKey.Text = "UDC Key";
+			  // 
+			  // label15
+			  // 
+			  this.label15.AutoSize = true;
+			  this.label15.Location = new System.Drawing.Point(239, 33);
+			  this.label15.Name = "label15";
+			  this.label15.Size = new System.Drawing.Size(58, 13);
+			  this.label15.TabIndex = 9;
+			  this.label15.Text = "Sort Order:";
+			  // 
+			  // txtUDCSortOrder
+			  // 
+			  this.txtUDCSortOrder.Location = new System.Drawing.Point(303, 30);
+			  this.txtUDCSortOrder.Name = "txtUDCSortOrder";
+			  this.txtUDCSortOrder.Size = new System.Drawing.Size(38, 20);
+			  this.txtUDCSortOrder.TabIndex = 2;
+			  // 
+			  // label14
+			  // 
+			  this.label14.AutoSize = true;
+			  this.label14.Location = new System.Drawing.Point(11, 32);
+			  this.label14.Name = "label14";
+			  this.label14.Size = new System.Drawing.Size(34, 13);
+			  this.label14.TabIndex = 5;
+			  this.label14.Text = "Type:";
+			  // 
+			  // cmbUDCType
+			  // 
+			  this.cmbUDCType.DisplayMember = "name";
+			  this.cmbUDCType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			  this.cmbUDCType.FormattingEnabled = true;
+			  this.cmbUDCType.Location = new System.Drawing.Point(51, 29);
+			  this.cmbUDCType.Name = "cmbUDCType";
+			  this.cmbUDCType.Size = new System.Drawing.Size(181, 21);
+			  this.cmbUDCType.TabIndex = 1;
+			  this.cmbUDCType.ValueMember = "check_type";
+			  // 
+			  // txtUDCDescription
+			  // 
+			  this.txtUDCDescription.AcceptsReturn = true;
+			  this.txtUDCDescription.Location = new System.Drawing.Point(10, 69);
+			  this.txtUDCDescription.Multiline = true;
+			  this.txtUDCDescription.Name = "txtUDCDescription";
+			  this.txtUDCDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			  this.txtUDCDescription.Size = new System.Drawing.Size(331, 74);
+			  this.txtUDCDescription.TabIndex = 3;
+			  // 
+			  // label13
+			  // 
+			  this.label13.AutoSize = true;
+			  this.label13.Location = new System.Drawing.Point(11, 53);
+			  this.label13.Name = "label13";
+			  this.label13.Size = new System.Drawing.Size(63, 13);
+			  this.label13.TabIndex = 2;
+			  this.label13.Text = "Description:";
+			  // 
+			  // label12
+			  // 
+			  this.label12.AutoSize = true;
+			  this.label12.Location = new System.Drawing.Point(7, 7);
+			  this.label12.Name = "label12";
+			  this.label12.Size = new System.Drawing.Size(38, 13);
+			  this.label12.TabIndex = 1;
+			  this.label12.Text = "Name:";
+			  // 
+			  // txtUDCName
+			  // 
+			  this.txtUDCName.Location = new System.Drawing.Point(51, 4);
+			  this.txtUDCName.Name = "txtUDCName";
+			  this.txtUDCName.Size = new System.Drawing.Size(290, 20);
+			  this.txtUDCName.TabIndex = 0;
+			  // 
+			  // tabDebug
+			  // 
+			  this.tabDebug.Controls.Add(this.chkOnlyShowFailingScenarios);
+			  this.tabDebug.Controls.Add(this.btnGetRunBlock);
+			  this.tabDebug.Controls.Add(this.btnHighlightDebug);
+			  this.tabDebug.Controls.Add(this.rtfDebug);
+			  this.tabDebug.Location = new System.Drawing.Point(4, 23);
+			  this.tabDebug.Name = "tabDebug";
+			  this.tabDebug.Padding = new System.Windows.Forms.Padding(3);
+			  this.tabDebug.Size = new System.Drawing.Size(761, 540);
+			  this.tabDebug.TabIndex = 5;
+			  this.tabDebug.Text = "Output";
+			  this.tabDebug.UseVisualStyleBackColor = true;
+			  // 
+			  // chkOnlyShowFailingScenarios
+			  // 
+			  this.chkOnlyShowFailingScenarios.AutoSize = true;
+			  this.chkOnlyShowFailingScenarios.Checked = true;
+			  this.chkOnlyShowFailingScenarios.CheckState = System.Windows.Forms.CheckState.Checked;
+			  this.chkOnlyShowFailingScenarios.Location = new System.Drawing.Point(182, 11);
+			  this.chkOnlyShowFailingScenarios.Name = "chkOnlyShowFailingScenarios";
+			  this.chkOnlyShowFailingScenarios.Size = new System.Drawing.Size(160, 17);
+			  this.chkOnlyShowFailingScenarios.TabIndex = 0;
+			  this.chkOnlyShowFailingScenarios.Text = "Only Show Failing Scenarios";
+			  this.chkOnlyShowFailingScenarios.UseVisualStyleBackColor = true;
+			  this.chkOnlyShowFailingScenarios.CheckedChanged += new System.EventHandler(this.chkOnlyShowFailingScenarios_CheckedChanged);
+			  // 
+			  // btnGetRunBlock
+			  // 
+			  this.btnGetRunBlock.Location = new System.Drawing.Point(89, 6);
+			  this.btnGetRunBlock.Name = "btnGetRunBlock";
+			  this.btnGetRunBlock.Size = new System.Drawing.Size(86, 23);
+			  this.btnGetRunBlock.TabIndex = 3;
+			  this.btnGetRunBlock.Text = "Get Run Block";
+			  this.btnGetRunBlock.UseVisualStyleBackColor = true;
+			  this.btnGetRunBlock.Click += new System.EventHandler(this.btnGetRunBlock_Click);
+			  // 
+			  // btnHighlightDebug
+			  // 
+			  this.btnHighlightDebug.Location = new System.Drawing.Point(7, 7);
+			  this.btnHighlightDebug.Name = "btnHighlightDebug";
+			  this.btnHighlightDebug.Size = new System.Drawing.Size(75, 23);
+			  this.btnHighlightDebug.TabIndex = 2;
+			  this.btnHighlightDebug.Text = "Highlight";
+			  this.btnHighlightDebug.UseVisualStyleBackColor = true;
+			  this.btnHighlightDebug.Click += new System.EventHandler(this.btnHighlightDebug_Click);
+			  // 
+			  // rtfDebug
+			  // 
+			  this.rtfDebug.AcceptsTab = true;
+			  this.rtfDebug.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							  | System.Windows.Forms.AnchorStyles.Left)
+							  | System.Windows.Forms.AnchorStyles.Right)));
+			  this.rtfDebug.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			  this.rtfDebug.Location = new System.Drawing.Point(7, 35);
+			  this.rtfDebug.Name = "rtfDebug";
+			  this.rtfDebug.Size = new System.Drawing.Size(748, 498);
+			  this.rtfDebug.TabIndex = 1;
+			  this.rtfDebug.Text = "";
+			  this.rtfDebug.WordWrap = false;
+			  this.rtfDebug.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtfDebug_LinkClicked);
+			  // 
+			  // frmMain
+			  // 
+			  this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			  this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			  this.ClientSize = new System.Drawing.Size(1090, 622);
+			  this.Controls.Add(this.tlsToolbar);
+			  this.Controls.Add(this.mnuMain);
+			  this.Controls.Add(this.splitContainer1);
+			  this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			  this.MainMenuStrip = this.mnuMain;
+			  this.Name = "frmMain";
+			  this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			  this.Text = "Regression Tester";
+			  this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
+			  this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMain_FormClosed);
+			  this.Load += new System.EventHandler(this.frmMain_Load);
+			  this.cmsNavigator.ResumeLayout(false);
+			  this.mnuMain.ResumeLayout(false);
+			  this.mnuMain.PerformLayout();
+			  this.tlsToolbar.ResumeLayout(false);
+			  this.tlsToolbar.PerformLayout();
+			  ((System.ComponentModel.ISupportInitialize)(this.erpMain)).EndInit();
+			  this.splitContainer1.Panel1.ResumeLayout(false);
+			  this.splitContainer1.Panel1.PerformLayout();
+			  this.splitContainer1.Panel2.ResumeLayout(false);
+			  ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+			  this.splitContainer1.ResumeLayout(false);
+			  this.tabNavigation.ResumeLayout(false);
+			  this.tabPLSQLMethods.ResumeLayout(false);
+			  this.tabTests.ResumeLayout(false);
+			  this.tabGroup.ResumeLayout(false);
+			  this.tabTestInfo.ResumeLayout(false);
+			  this.tabTestInfo.PerformLayout();
+			  ((System.ComponentModel.ISupportInitialize)(this.grdTestArguments)).EndInit();
+			  this.tabTestDeclare.ResumeLayout(false);
+			  this.tabTestDeclare.PerformLayout();
+			  this.tabScenarioInfo.ResumeLayout(false);
+			  this.tabScenarioInfo.PerformLayout();
+			  this.tabScenarioGroupPLSQL.ResumeLayout(false);
+			  this.tabScenarioGroupStartup.ResumeLayout(false);
+			  this.tabScenarioGroupStartup.PerformLayout();
+			  this.tabScenarioStartup.ResumeLayout(false);
+			  this.tabScenarioStartup.PerformLayout();
+			  this.tabPostParamAssignment.ResumeLayout(false);
+			  this.tabPostParamAssignment.PerformLayout();
+			  this.tabPreUDC.ResumeLayout(false);
+			  this.tabPreUDC.PerformLayout();
+			  this.tabScenarioTeardown.ResumeLayout(false);
+			  this.tabScenarioTeardown.PerformLayout();
+			  this.tabScenarioGroupTeardown.ResumeLayout(false);
+			  this.tabScenarioGroupTeardown.PerformLayout();
+			  this.tabParameters.ResumeLayout(false);
+			  this.tabParameters.PerformLayout();
+			  ((System.ComponentModel.ISupportInitialize)(this.grdScenarios)).EndInit();
+			  this.tabPLSQLBlock.ResumeLayout(false);
+			  this.tabPLSQLBlock.PerformLayout();
+			  this.tabUserDefinedChecks.ResumeLayout(false);
+			  this.tabUserDefinedChecks.PerformLayout();
+			  this.tabUDCOptions.ResumeLayout(false);
+			  this.tabPage1.ResumeLayout(false);
+			  this.tabPage2.ResumeLayout(false);
+			  ((System.ComponentModel.ISupportInitialize)(this.grdRowValidation)).EndInit();
+			  this.tabDebug.ResumeLayout(false);
+			  this.tabDebug.PerformLayout();
+			  this.ResumeLayout(false);
+			  this.PerformLayout();
+
+        }
+
+        #endregion
+
+		  private System.Windows.Forms.ContextMenuStrip cmsNavigator;
+		  private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
+		  private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
+		  private System.Windows.Forms.ToolStripMenuItem scenarioToolStripMenuItem;
+		  private System.Windows.Forms.ToolStripMenuItem checkToolStripMenuItem;
+		  private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem;
+		  private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+		  private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		  private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
+		  private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+		  private System.Windows.Forms.ToolStripMenuItem runScenarioToolStripMenuItem;
+		  private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
+		  private System.Windows.Forms.ToolStripPanel TopToolStripPanel;
+		  private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
+		  private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
+		  private System.Windows.Forms.ToolStripContentPanel ContentPanel;
+		  private System.Windows.Forms.MenuStrip mnuMain;
+		  private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem1;
+		  private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem2;
+		  private System.Windows.Forms.ToolStripMenuItem scenarioGroupToolStripMenuItem1;
+		  private System.Windows.Forms.ToolStripMenuItem userDefinedCheckToolStripMenuItem;
+		  private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem1;
+		  private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem1;
+		  private System.Windows.Forms.ToolStripMenuItem scenarioGroupToolStripMenuItem;
+		  private System.Windows.Forms.ToolStrip tlsToolbar;
+		  private System.Windows.Forms.ToolStripDropDownButton newToolStripButton;
+		  private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem3;
+		  private System.Windows.Forms.ToolStripMenuItem scenarioGroupToolStripMenuItem2;
+		  private System.Windows.Forms.ToolStripMenuItem userDefinedCheckToolStripMenuItem1;
+		  private System.Windows.Forms.ToolStripButton saveToolStripButton;
+		  private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
+		  private System.Windows.Forms.ToolStripProgressBar pbRunProgress;
+		  private System.Windows.Forms.ImageList imageList1;
+		  private System.Windows.Forms.ToolStripMenuItem preferencesToolStripMenuItem;
+		  private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+		  private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem1;
+		  private System.Windows.Forms.ErrorProvider erpMain;
+		  private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem1;
+		  private System.Windows.Forms.ToolStripMenuItem runFolderToolStripMenuItem;
+		  private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem2;
+		  private System.Windows.Forms.SplitContainer splitContainer1;
+		  private System.Windows.Forms.Label lblRunProgress;
+		  private System.Windows.Forms.TabControl tabGroup;
+		  private System.Windows.Forms.TabPage tabTestInfo;
+		  private System.Windows.Forms.ComboBox cmbUnitType;
+		  private System.Windows.Forms.Label label8;
+		  public System.Windows.Forms.Label lblCreationDate;
+		  private System.Windows.Forms.Label label7;
+		  public System.Windows.Forms.Label lblTestKey;
+		  public System.Windows.Forms.TextBox txtUnitName;
+		  private System.Windows.Forms.Label label3;
+		  public System.Windows.Forms.TextBox txtTestDescription;
+		  private System.Windows.Forms.Label label2;
+		  public System.Windows.Forms.TextBox txtTestName;
+		  private System.Windows.Forms.Label label1;
+		  private System.Windows.Forms.Label label5;
+		  protected System.Windows.Forms.TabPage tabScenarioInfo;
+		  private System.Windows.Forms.Label label17;
+		  private System.Windows.Forms.Label label9;
+		  private System.Windows.Forms.TextBox txtScenarioDescription;
+		  private System.Windows.Forms.Label lblScenarioGroupKey;
+		  public System.Windows.Forms.TextBox txtScenarioName;
+		  private System.Windows.Forms.Label label6;
+          private System.Windows.Forms.TabPage tabParameters;
+			 private System.Windows.Forms.TabPage tabUserDefinedChecks;
+		  private System.Windows.Forms.Label lblUDCCheckKey;
+		  private System.Windows.Forms.Label label15;
+		  private System.Windows.Forms.TextBox txtUDCSortOrder;
+		  private System.Windows.Forms.Label label14;
+		  private System.Windows.Forms.ComboBox cmbUDCType;
+		  private System.Windows.Forms.TextBox txtUDCDescription;
+		  private System.Windows.Forms.Label label13;
+		  private System.Windows.Forms.Label label12;
+		  private System.Windows.Forms.TextBox txtUDCName;
+		  private System.Windows.Forms.TabPage tabDebug;
+		  private System.Windows.Forms.RichTextBox rtfDebug;
+		  private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
+		  private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem3;
+		  private System.Windows.Forms.DataGridView grdTestArguments;
+		  private System.Windows.Forms.TabPage tabTestDeclare;
+		  private System.Windows.Forms.Label label20;
+		  private System.Windows.Forms.DataGridView grdScenarios;
+          private System.Windows.Forms.ToolStripMenuItem currentObjectToolStripMenuItem;
+			 private System.Windows.Forms.DataGridViewTextBoxColumn position;
+			 private System.Windows.Forms.DataGridViewTextBoxColumn argument_name;
+			 private System.Windows.Forms.DataGridViewTextBoxColumn in_out;
+			 private System.Windows.Forms.DataGridViewTextBoxColumn pls_type;
+			 private System.Windows.Forms.TabControl tabNavigation;
+			 private System.Windows.Forms.TabPage tabTests;
+			 private System.Windows.Forms.TabPage tabPLSQLMethods;
+			 private System.Windows.Forms.TreeView tvSchemaObjects;
+			 private System.Windows.Forms.TreeView tvTests;
+			 private System.Windows.Forms.Label label19;
+			 private System.Windows.Forms.Button btnRefreshTreeviews;
+			 private System.Windows.Forms.Button btnHighlightDebug;
+			 private System.Windows.Forms.CheckBox chkOnlyShowFailuresOnRun;
+			 private System.Windows.Forms.Button btnGetRunBlock;
+			 private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+			 private System.Windows.Forms.Label label22;
+			 private System.Windows.Forms.TextBox txtOverload;
+			 private System.Windows.Forms.TabControl tabScenarioGroupPLSQL;
+			 private System.Windows.Forms.TabPage tabScenarioGroupStartup;
+			 private System.Windows.Forms.TabPage tabScenarioStartup;
+			 private System.Windows.Forms.RichTextBox rtfScenarioGroupStartupBlock;
+			 private System.Windows.Forms.CheckBox chkDisplayParamTypesInline;
+			 private System.Windows.Forms.Button btnCloneScenario;
+			 private System.Windows.Forms.TabPage tabScenarioTeardown;
+			 private System.Windows.Forms.TabPage tabScenarioGroupTeardown;
+			 private System.Windows.Forms.RichTextBox rtfScenarioStartupBlock;
+			 private System.Windows.Forms.RichTextBox rtfScenarioTeardownBlock;
+			 private System.Windows.Forms.Label label21;
+			 private System.Windows.Forms.CheckBox chkRollbackAfterEachScenario;
+			 private System.Windows.Forms.RichTextBox rtfScenarioGroupTeardownBlock;
+			 private System.Windows.Forms.Label label10;
+			 private System.Windows.Forms.Label label11;
+			 private System.Windows.Forms.Label label23;
+			 private System.Windows.Forms.Label label24;
+			 private System.Windows.Forms.RichTextBox rtfTestDeclares;
+			 private System.Windows.Forms.Button btnShrinkColumns;
+			 private System.Windows.Forms.CheckBox chkHideParameterTypes;
+			 private System.Windows.Forms.TabControl tabUDCOptions;
+			 private System.Windows.Forms.TabPage tabPage1;
+			 private System.Windows.Forms.RichTextBox rtfUDCPLSQLBlock;
+			 private System.Windows.Forms.TabPage tabPage2;
+			 private System.Windows.Forms.DataGridView grdRowValidation;
+			 private System.Windows.Forms.RichTextBox rtfUDCPLSQLCondition;
+			 private System.Windows.Forms.Label label16;
+			 private System.Windows.Forms.Label label25;
+			 private System.Windows.Forms.TabPage tabPostParamAssignment;
+			 private System.Windows.Forms.RichTextBox rtfPostParamAssignment;
+			 private System.Windows.Forms.Label label26;
+			 private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+			 private System.Windows.Forms.ToolStripMenuItem mnuClone;
+			 private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+			 private System.Windows.Forms.TabPage tabPreUDC;
+			 private System.Windows.Forms.RichTextBox rtfPreUDCPLSQL;
+			 private System.Windows.Forms.Label label27;
+			 private System.Windows.Forms.ToolStripMenuItem repositoryToolStripMenuItem;
+			 private System.Windows.Forms.ToolStripMenuItem createToolStripMenuItem;
+			 private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem1;
+			 private System.Windows.Forms.CheckBox chkOnlyShowFailingScenarios;
+			 private System.Windows.Forms.TabPage tabPLSQLBlock;
+			 private System.Windows.Forms.RichTextBox rtfPLSQLBLock;
+			 private System.Windows.Forms.Label label4;
+			 private System.Windows.Forms.ToolStripMenuItem clearRunResultsToolStripMenuItem;
+			 private System.Windows.Forms.CheckBox chkIsPipelinedFunction;
+    }
+}
+

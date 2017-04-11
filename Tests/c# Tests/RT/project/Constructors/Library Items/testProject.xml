@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<!--This is a RT PL/SQL project.-->
+<rt_plsql_project version="2.0" name="RT-PL/SQL Tests" description="Tests to test the RT PL/SQL app" guid="abc123">
+	<databases>
+		<db name="XE" />
+	</databases>
+</rt_plsql_project>

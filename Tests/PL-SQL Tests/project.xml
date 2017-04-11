@@ -1,0 +1,3 @@
+<?xml version="1.0"?>
+<!--This is a RT PL/SQL project.-->
+<rt_plsql_project version="2.0" name="RT Tests" description="Unit tests to test the regression tester." guid="1be45dbe-b08f-4c0d-9fb1-7727c5695b7d" />
