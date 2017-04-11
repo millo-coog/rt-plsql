@@ -1,0 +1,357 @@
+<?xml version="1.0" ?>
+<rt_dotnet_test version="1.0">
+	<test name="rt.test.test(xmlFilename)" targetFullName="RT.test.test" targetType="constructor" guid="54q4qb4b44qb43">
+		<usings>
+			using RT;
+		</usings>
+		<startup>
+			project tmpProject = new project("testProject.xml", "SYS, SYSTEM");
+		</startup>
+		<parameters>
+			<parameter name="associatedProject" type="project" />
+			<parameter name="xmlFilename" type="String" />
+		</parameters>
+		<scenario_groups>
+			<scenario_group name="Should Load" guid="qh533h43h4qh34h34qfdsyujhf">
+				<scenarios>
+					<scenario comments="Scenario Expected Exception Attribute Missing">
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Expected Exception Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Expected Exception Message Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group Declare Hook Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group Description Child Node Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group Guid Attribute Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group Guid Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group Max_Allowed_Run_Time_In_Seconds Attribute Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group Max_Allowed_Run_Time_In_Seconds Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group Post_Param_Assignment Hook Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group Pre-UDC Hook Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group Rollback_Afterwards Attribute Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group Rollback_Afterwards Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group Startup Hook Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group Teardown Hook Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group With No Scenarios Child Node.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Group With No UDCs Child Node.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario GUID Attribute Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario GUID Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Parameter With No Value Child Node.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Parameters Node With No Child Nodes.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Startup Hook Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario Teardown Hook Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario With No Comments Child Node.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenario With No Parameters Child Node.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Scenarios Node with no Child Scenarios.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Row Validator Check NOT NULL - Field Value Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test Argument Can_Default Attribute Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test Argument Can_Default Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test Argument IN_Out Attribute Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test Argument IN_Out Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test Arguments Child Node Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test Arguments Child Node Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test Description Child Node Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test GUID Attribute Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test GUID Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test Is_Pipelined_Function Attribute Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test Is_Pipelined_Function Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test Method Attribute Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test Method Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test Overload Attribute Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test Overload Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test PLSQL_Block Child Node Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Test With No Scenario Groups.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="UDC Actual_Cursor Child Node Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="UDC Description Child Node Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="UDC Expected_Cursor Child Node Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="UDC GUID Attribute Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="UDC GUID Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="UDC PLSQL_Block Child Node Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="UDC PLSQL_Condition Child Node Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="UDC Row_Existence Child Node Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="UDC Row_Validation_Cursor Child Node Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="UDC Sort_Order Attribute Empty.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="UDC Sort_Order Attribute Missing.xml" />
+						</parameters>
+					</scenario>
+					<scenario>
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="UDCs Node With No Child Nodes.xml" />
+						</parameters>
+					</scenario>
+					<scenario comments="Invalid XML" guid="1f0d181d-b1b2-4bed-aa4e-83d0f121b707" expected_exception="Exception" expected_exception_message="Could not parse 'Invalid XML.xml'.">
+						<parameters>
+							<parameter name="associatedProject" value="tmpProject" />
+							<parameter name="xmlFilename" value="Invalid XML.xml" />
+						</parameters>
+					</scenario>
+				</scenarios>
+			</scenario_group>
+		</scenario_groups>
+	</test>
+</rt_dotnet_test>

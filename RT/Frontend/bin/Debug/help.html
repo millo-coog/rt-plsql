@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Regression Tester - Help</title>
+
+	<style type="text/css">
+		body { background-color: #DBE5F1; }
+	
+		body, p, a, h1, h2, h3, h4, h5 {
+			font-family: Arial;
+		}
+
+		body, p, a, span, em, .codeSample, pre {
+			font-size: 10pt;
+		}
+
+		.codeSample {
+			font-family: 'Courier New', monospace;
+			font-size: 9pt;
+			margin-left: 16px;
+		}
+
+		.toc  {
+			float: right;
+			border: none;
+		}
+	</style>
+	
+	<link rel="icon" type="image/x-icon" href="logo.ico" />
+</head>
+
+<body>
+	<h1>Regression Tester Help</h1>	
+
+	<h2>Command Line Arguments</h2>
+
+	<ul>
+		<li>/multipleinstances - Allows multiple instances of the Regression Tester to run.</li>
+		<li>/targetdb=mydatabase - Allows you to override the stored database name in the preferences.</li>
+		<li>/rundb - Runs all tests in the working copy against the target db.</li>
+		<li>/scenariogroupguid=someguid = Tells the Regression Tester to jump to the given scenario group's guid.</li>
+		<li>/? - Displays help about the command line arguments.</li>
+	</ul>
+
+	<h2>Exposed RT Variables</h2>
+
+	<ul>
+		<li>
+			p_ScenarioGUID$
+			<p>
+				Holds the guid of the current scenario being run. Available only in the Scenario Startup, Post-Param Assignment, Pre-UDC's, UDC's, and Scenario Teardown hooks.
+			</p>
+		</li>
+		<li>
+			v_arrDefaulted (boolean array)
+			<p>
+				Array of booleans, whose index is the case-sensitive parameter name that you want to know whether or not was passed in this scenario. Available in the Post-Param Assignment, Pre-UDC's, UDC's, and Scenario Teardown hooks.
+			</p>
+		</li>
+		<li>
+			:&lt;<i>library_item_name</i>&gt;
+			<p>
+				Library items are used to store large amounts of text outside of your UDCs and are usually used to store expected result text. These
+				library items are then compared against actual result text. You can create a library item and then reference it by its name as a bind variable with your hooks.
+			</p>
+			
+			<p>
+				For example, to make sure a function getReport() returns your exact report text, you can create a library item named
+				<i>Expected_Report_Text</i> that holds the expected report text, and then test the function's return value against the
+				bind variable ":Expected_Report_Text" using a comparison type of <em>exp</em> (expression).
+			</p>
+		</li>
+	</ul>
+	
+	<h2>Order of Execution</h2>
+	
+	<ol>
+	<li>Test DECLARE section</li>
+	<li>Scenario Group DECLARE section</li>
+	<li>Scenario Group Startup Hook</li>
+	<li>
+		<em>Savepoint PostScenarioGroupStartup</em><br />
+		<br />
+		For every scenario:
+	
+		<ol>
+		<li>Scenario Startup Hook</li>
+		<li><em>Parameter values assigned to variables</em></li>
+		<li>Post-Param Assignment Hook</li>
+		<li><em>Unit Called</em></li>
+		<li>Pre-UDCs Hook</li>
+		<li><em>UDCs Called </em></li>
+		<li>Scenario Teardown Hook</li>
+		<li><em>ROLLBACK to PostScenarioGroupStartup (Optional)</em></li>
+		</ol>
+	</li>
+	<li>Scenario Group Teardown Hook</li>
+	<li><em>ROLLBACK</em></li>
+	</ol>
+	
+
+	<h2>How To...</h2>
+	
+	<h3>Compare Two Sys Ref Cursors Manually</h3>
+	
+	<p>
+		Using a PL/SQL Block UDC, you can call compareCursors$ yourself:<br />
+		<br />
+		<pre class="codeSample">
+PROCEDURE compareCursors$(p_ExpectedResults IN OUT NOCOPY SYS_REFCURSOR, p_ActualResults IN OUT NOCOPY SYS_REFCURSOR, p_CSVExcludedColumns VARCHAR2 := NULL);
+		</pre>
+	</p>
+	
+	<p>
+		Strongly-typed parameter cursors can also be tested using the comparison type of "nested".
+	</p>
+	
+	<p>To compare the results of a SELECT vs. another SELECT, see the <a href="#cursorVsCursorUDC">Cursor vs. Cursor UDC</a>.</p>
+	
+	<h3>Test a Pipelined Result Function</h3>
+	
+	<ol>
+	<li>Right-click on the pipelined result function to test in the schema tree, and choose New -> Test. Your new test and a default scenario group will be added.</li>
+	<li>If the regression tester can't determine the function's return type, it'll prompt you to type in the function's return value type in the test's Parameters field as "schema.package.type".</li>
+	<li>Check the "Pipelined Function" checkbox, which is also on the Test Info tab, to let the tester know the function is pipelined.</li>
+	<li>When putting in the scenarios on the Scenarios tab, if you expect a scenario to raise an exception, set the return value type to "don't test".</li>
+	<li>
+		You have a few options for checking the results:
+		
+		<ul>
+		<li>"some rows" - require the pipelined result set to not be empty.</li>
+		<li>"no rows" - require the pipelined result set be empty.</li>
+		<li>"matrix" - allows you to specify the expected data back in tabular form, by choosing the matrix option, saving the test, and then double clicking in the return value cell to edit the matrix.</li>
+		<li>"nested" - a pipelined result set returns an array (TABLE) of PL/SQL RECORDs</li>
+		<li>"select" - if you're working with a small returned result set, you might build an expected result set that consists of SELECT's FROM DUAL, like below, and put that in the return value column:
+		
+			<pre class="codeSample">
+SELECT 1 AS customerID, 'Jane' AS firstname, 'Doe' AS lastname FROM dual
+UNION ALL
+SELECT 2 AS customerID, 'John' AS firstname, 'Doe' AS lastname FROM dual;</pre>			
+		
+			<p>
+				If you're working with large expected result set, then you might create a table that has your expected results in it:
+			</p>
+
+			<pre class="codeSample">
+SELECT *
+  FROM test1234_expected_result_set
+ ORDER BY customer_id;</pre>
+
+			Hint: Remember that you might create such an expected result set table in the first place by doing a CTAS (CREATE TABLE .. AS SELECT), like the following:
+
+			<pre class="codeSample">
+CREATE TABLE test1234_expected_result_set AS
+  SELECT *
+    FROM TABLE(joeprogrammer.mypkg.myFunction);</pre>
+		</li>
+		<li>
+			You can use the "don't test" option to not test the results at all, and optionally test it yourself with a User-Defined Check (UDC).
+		</li>
+	</li>
+	<li>Save when you're done by hitting Ctrl+S or by hitting the Save button in the menu bar.</li>
+	</ol>
+	
+	<h3>Test a Function Returning a User-Defined Type (UDT)</h3>
+	
+	<p>
+		Choose a comparison type of "nested", and you can double-click in the cell to set your expected values for the out side of IN/OUT parameters, 
+		OUT parameters, and RETURN parameters. For more robust testing, you can use a PL/SQL Block UDC.
+	</p>
+	
+	<h3>Testing TABLE Types</h3>
+	
+	<p>
+		You can test TABLE parameters with the "nested" comparison type, then setting your expected values by clicking in the parameter cell.
+		Note that PL/SQL TABLEs (INDEX BY VARCHAR2, etc.) are not yet supported.
+	</p>
+	
+	<h3>Test a Function</h3>
+	
+	<ol>
+	<li>Right-click on the function to test in the schema tree, and choose New -> Test. Your new test and a default scenario group will be added.</li>
+	<li>You'll be on the Scenarios tab, and you can begin adding various scenarios of input parameters and their expected return values/exceptions.</li>
+	<li>Save when you're done by hitting Ctrl+S or by hitting the Save button in the toolbar.</li>
+	</ol>
+	
+	<h3>Test an IN/OUT or OUT Parameter</h3>
+	
+	<ol>
+	<li>Right-click on the function to test in the schema tree and choose New -> Test. Your new test and a default scenario group will be added.</li>
+	<li>You'll be on the Scenarios tab, and you can begin adding various scenarios of input parameters and their expected return values/exceptions.</li>
+	<li>For IN/OUT parameters there are two value columns, one for the value to pass in, and one for the value expected back.</li>
+	<li>For OUT parameters, your expected OUT value goes in the parameter field.</li>
+	<li>Save when you're done by hitting Ctrl+S or by hitting the Save button in the toolbar.</li>
+	</ol>
+	
+	<h2>User-Defined Checks (UDCs)</h2>
+	
+	<h3>Cursor vs. Matrix</h3>
+	
+	<p>
+		This UDC allows you to compare an OUT, RETURN, or pipelined result set cursor against
+		a hard-coded table (matrix). To compare against an unknown set or a larger set, use a
+		<a href="#cursorVsCursorUDC">Cursor vs. Cursor UDC</a>.
+	</p>
+	
+	<h3 id="cursorVsCursorUDC">Cursor vs. Cursor</h3>
+	
+	<p>
+		This UDC allows you to compare the results of one SELECT statement against the results
+		of another SELECT statement. This is usually used when comparing a large data set of
+		actual results against a large set of expected results stored in a test table. It can 
+		also be used when the expected results are not known till run time.
+	</p>
+	
+	<p>
+		Make sure both SELECT statements have their columns and rows in the same order.
+	</p>
+</body>
+</html>

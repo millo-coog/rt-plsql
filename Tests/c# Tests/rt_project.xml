@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<!--This is a Regression Tester .NET project.-->
+<rt_dotnet_project version="1.0" name="Regression Tester (PL/SQL) API Test">
+	<source_files>
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\libraryItem.cs" />
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\project.cs" />
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\repos.cs" />
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\rowValidatorCheck.cs" />
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\runBlock.cs" />
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\scenario.cs" />
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\scenarioGroup.cs" />
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\scenarioParameter.cs" />
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\scenarioRunResult.cs" />
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\targetDB.cs" />
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\test.cs" />
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\testArgument.cs" />
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\udc.cs" />
+		<file name="C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\xmlHelper.cs" />
+	</source_files>
+	<references>
+		<file name="System.dll" />
+		<file name="System.Core.dll" />
+		<file name="System.Data.dll" />
+		<file name="System.Data.DataSetExtensions.dll" />
+		<file name="System.Deployment.dll" />
+		<file name="System.Drawing.dll" />
+		<file name="System.Security.dll" />
+		<file name="System.Xml.dll" />
+		<file name="System.Xml.Linq.dll" />
+		<file name="Oracle.DataAccess.dll" />
+	</references>
+</rt_dotnet_project>

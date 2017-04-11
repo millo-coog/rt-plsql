@@ -1,0 +1,389 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7C26A984-4F90-4846-85D4-9A84CD9A47A8}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RT</RootNamespace>
+    <AssemblyName>Regression Tester - PLSQL</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>\\zion\it\Home\David Valles\RT\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Unc</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ProductName>Regression Tester</ProductName>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>3.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>0FD86DDA679F696A7F493FDF9844D643CAEB846D</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>RT_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logo 32x32.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>RT.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Oracle.DataAccess, Version=4.112.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Backend\bin\Debug\Oracle.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking">
+      <HintPath>..\files\DockPanel_2_9_0\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Frontend Forms\frmArgumentUpdater.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmArgumentUpdater.Designer.cs">
+      <DependentUpon>frmArgumentUpdater.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmScenarioGroupStartup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmScenarioGroupStartup.Designer.cs">
+      <DependentUpon>frmScenarioGroupStartup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmLibraryItems.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmLibraryItems.Designer.cs">
+      <DependentUpon>frmLibraryItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmPostParamAssignmentHook.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmPostParamAssignmentHook.Designer.cs">
+      <DependentUpon>frmPostParamAssignmentHook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmPreUDCsHook.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmPreUDCsHook.Designer.cs">
+      <DependentUpon>frmPreUDCsHook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmScenarioGroupTeardownHook.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmScenarioGroupTeardownHook.Designer.cs">
+      <DependentUpon>frmScenarioGroupTeardownHook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmScenarios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmScenarios.Designer.cs">
+      <DependentUpon>frmScenarios.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmScenarioStartupHook.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmScenarioStartupHook.Designer.cs">
+      <DependentUpon>frmScenarioStartupHook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmScenarioTeardownHook.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmScenarioTeardownHook.Designer.cs">
+      <DependentUpon>frmScenarioTeardownHook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interface Classes\scenarioGridColumn.cs" />
+    <Compile Include="User Controls\matrix.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User Controls\matrix.Designer.cs">
+      <DependentUpon>matrix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmNavigation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmNavigation.Designer.cs">
+      <DependentUpon>frmNavigation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmOutput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmOutput.Designer.cs">
+      <DependentUpon>frmOutput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmPopupMatrix.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmPopupMatrix.Designer.cs">
+      <DependentUpon>frmPopupMatrix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmPreferences.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmPreferences.Designer.cs">
+      <DependentUpon>frmPreferences.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmSCNGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmSCNGroup.Designer.cs">
+      <DependentUpon>frmSCNGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmTest.Designer.cs">
+      <DependentUpon>frmTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frontend Forms\frmUDC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend Forms\frmUDC.Designer.cs">
+      <DependentUpon>frmUDC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interface Classes\customApplication.cs" />
+    <Compile Include="Interface Classes\extensionMethods.cs" />
+    <Compile Include="Interface Classes\fieldChangeTracker.cs" />
+    <Compile Include="Interface Classes\inputBox.cs" />
+    <Compile Include="Interface Classes\plsql.cs" />
+    <Compile Include="Interface Classes\schemaTreeNode.cs" />
+    <Compile Include="Interface Classes\security.cs" />
+    <Compile Include="Interface Classes\Settings.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="User Controls\ctlProjectTreeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User Controls\ctlProjectTreeView.Designer.cs">
+      <DependentUpon>ctlProjectTreeView.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Frontend Forms\frmArgumentUpdater.resx">
+      <DependentUpon>frmArgumentUpdater.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmScenarioGroupStartup.resx">
+      <DependentUpon>frmScenarioGroupStartup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmLibraryItems.resx">
+      <DependentUpon>frmLibraryItems.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmPostParamAssignmentHook.resx">
+      <DependentUpon>frmPostParamAssignmentHook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmPreUDCsHook.resx">
+      <DependentUpon>frmPreUDCsHook.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmScenarioGroupTeardownHook.resx">
+      <DependentUpon>frmScenarioGroupTeardownHook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmScenarios.resx">
+      <DependentUpon>frmScenarios.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmScenarioStartupHook.resx">
+      <DependentUpon>frmScenarioStartupHook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmScenarioTeardownHook.resx">
+      <DependentUpon>frmScenarioTeardownHook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User Controls\matrix.resx">
+      <DependentUpon>matrix.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmNavigation.resx">
+      <DependentUpon>frmNavigation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmOutput.resx">
+      <DependentUpon>frmOutput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmPopupMatrix.resx">
+      <DependentUpon>frmPopupMatrix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmPreferences.resx">
+      <DependentUpon>frmPreferences.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmSCNGroup.resx">
+      <DependentUpon>frmSCNGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmTest.resx">
+      <DependentUpon>frmTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend Forms\frmUDC.resx">
+      <DependentUpon>frmUDC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="User Controls\ctlProjectTreeView.resx">
+      <DependentUpon>ctlProjectTreeView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\beaker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder-new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="logo 32x32.ico" />
+    <Content Include="Resources\checklist.png" />
+    <None Include="Resources\database.png" />
+    <None Include="Resources\folder.gif" />
+    <Content Include="Resources\Scenario Group - Not Run.gif" />
+    <Content Include="Resources\Test - Not Run.ico" />
+    <Content Include="Resources\UDC - Not Run.gif" />
+    <Content Include="Resources\UDC - Run With Errors.gif" />
+    <Content Include="Resources\UDC - Run Without Errors.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Backend\Backend.csproj">
+      <Project>{9B0F3FAA-0993-4722-8F43-0A60D6BF7132}</Project>
+      <Name>Backend</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

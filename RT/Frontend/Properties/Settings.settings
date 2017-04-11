@@ -1,0 +1,36 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RT.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="run_onlyShowFailedScenarios" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="target_dbUsername" Type="System.String" Scope="User">
+      <Value Profile="(Default)">jdoe</Value>
+    </Setting>
+    <Setting Name="target_dbPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="fileDiffer_executable" Type="System.String" Scope="User">
+      <Value Profile="(Default)">tortoisemerge</Value>
+    </Setting>
+    <Setting Name="fileDiffer_parameters" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/base:"%expectedFilename%" /mine:"%actualFilename%"</Value>
+    </Setting>
+    <Setting Name="app_version" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="schemas_excludedSchemas" Type="System.String" Scope="User">
+      <Value Profile="(Default)">dbsnmp, oracle_ocm, outln, sys, sysman, system, tsmsys</Value>
+    </Setting>
+    <Setting Name="repos_exportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="repos_xmlEditor" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="plsql_editor" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>
