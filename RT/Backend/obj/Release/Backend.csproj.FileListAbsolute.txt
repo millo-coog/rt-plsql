@@ -3,3 +3,9 @@ C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\bin\Release\RT PL-SQL B
 C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\bin\Release\Oracle.DataAccess.dll
 C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\obj\Release\RT PL-SQL Backend.dll
 C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Backend\obj\Release\RT PL-SQL Backend.pdb
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Backend\bin\Release\RT PL-SQL Backend.dll
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Backend\bin\Release\RT PL-SQL Backend.pdb
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Backend\bin\Release\Oracle.DataAccess.dll
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Backend\obj\Release\Backend.csprojResolveAssemblyReference.cache
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Backend\obj\Release\RT PL-SQL Backend.dll
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Backend\obj\Release\RT PL-SQL Backend.pdb

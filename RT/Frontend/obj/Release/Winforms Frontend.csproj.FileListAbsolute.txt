@@ -28,3 +28,33 @@ C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Frontend\obj\Release\RT.User_Co
 C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Frontend\obj\Release\Winforms Frontend.csproj.GenerateResource.Cache
 C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Frontend\obj\Release\Regression Tester - PLSQL.exe
 C:\Dropbox\Work\Regression Tester\PLSQL\trunk\RT\Frontend\obj\Release\Regression Tester - PLSQL.pdb
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\bin\Release\Regression Tester - PLSQL.exe.config
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\bin\Release\Regression Tester - PLSQL.exe
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\bin\Release\Regression Tester - PLSQL.pdb
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\bin\Release\Oracle.DataAccess.dll
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\bin\Release\RT PL-SQL Backend.dll
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\bin\Release\RT PL-SQL Backend.pdb
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\Winforms Frontend.csprojResolveAssemblyReference.cache
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmArgumentUpdater.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmScenarioGroupStartupHook.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmLibraryItems.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmPostParamAssignmentHook.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmPreUDCsHook.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmScenarioGroupTeardownHook.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmScenarios.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmScenarioStartupHook.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmScenarioTeardownHook.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.Controls.matrix.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmMain.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmNavigation.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmOutput.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmPopupMatrix.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmPreferences.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmSCNGroup.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmTest.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.frmUDC.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.Properties.Resources.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\RT.User_Controls.ctlProjectTreeView.resources
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\Winforms Frontend.csproj.GenerateResource.Cache
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\Regression Tester - PLSQL.exe
+C:\Dropbox\Work\Regression Tester\PLSQL\github\rt-plsql\RT\Frontend\obj\Release\Regression Tester - PLSQL.pdb
