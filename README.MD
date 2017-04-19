@@ -1,7 +1,7 @@
 # Regression Tester - PL/SQL
 Copyright 2017 David Valles
 
-This project is a regression tester for Oracle PL/SQL and is open source under the MIT License.
+This project is a GUI-based regression tester for Oracle PL/SQL code and is open source under the MIT License.
 
 ![Screenshot](https://github.com/millo-coog/rt-plsql/blob/master/files/Screenshot.png)
 
