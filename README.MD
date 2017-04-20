@@ -11,10 +11,11 @@ This project is a GUI-based regression tester for Oracle PL/SQL code and is open
 
 # Get Started
 1. Download the [latest version](https://github.com/millo-coog/rt-plsql/releases/latest).
+1. Run the application.
 1. Under the Preferences menu:
-	- Set the Username
-	- Set the Password
-	- Set the Diff Executable "C:\Program Files\TortoiseSVN\bin\TortoiseMerge.exe" (optional)
+	- Set the Oracle Username for the target database.
+	- Set the Oracle Password for the target database.
+	- Set the Diff Executable to your favorite diff utility "C:\Program Files\TortoiseSVN\bin\TortoiseMerge.exe" (optional)
 	- Set the XML Editor to your favorite text editor "C:\Program Files (x86)\Notepad++\notepad++.exe" (optional)
 	- Set the PL/SQL Editor to your favorite text editor "C:\Program Files (x86)\Notepad++\notepad++.exe" (optional)
 1. Hit Save.
