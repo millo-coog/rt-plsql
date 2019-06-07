@@ -47,7 +47,7 @@ namespace RT {
 			if (runResults.ContainsKey(this.prvGuid)) {
 				return runResults[this.prvGuid].result == "OK" ? targetStatus.testsOk : targetStatus.testsFailed;
 			} else {
-				return targetStatus.noTests;
+				return targetStatus.testsNotRun;
 			}
 		}
 
@@ -87,6 +87,24 @@ namespace RT {
 			}
 
 			base.Add(newScenario);
+		}
+
+		public void Remove(scenarioRunResults scnRunResults, string guid) {
+			// Find and remove the scenarios from memory...
+			for (int j = 0; j < this.Count; j++) {
+				if (this[j].guid == guid) {
+					// Remove any run results for this scenario...
+					if (scnRunResults.ContainsKey(guid))
+						scnRunResults.Remove(guid);
+
+					// Remove the scenario...
+					this.RemoveAt(j);
+
+					break;
+				}
+			}
+
+			scnRunResults.saveResults();
 		}
 
 		// Clones the current collection

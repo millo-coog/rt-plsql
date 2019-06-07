@@ -147,7 +147,17 @@ namespace RT {
 				while (drTestableUnits.Read()) {
 					targetableUnits++;
 
-					List<test> lstTests = repository.getTestList(databaseName: db.name, objectType: drTestableUnits["object_type"].ToString(), schema: drTestableUnits["owner"].ToString(), name: drTestableUnits["object_name"].ToString(), method: drTestableUnits["procedure_name"].ToString(), overload: Int32.Parse(drTestableUnits["overload"].ToString()));
+					List<test> lstTests = new List<test>();
+
+					repository.getTestList(
+						lstTests: ref lstTests,
+						databaseName: db.name,
+						objectType: drTestableUnits["object_type"].ToString(),
+						schema: drTestableUnits["owner"].ToString(),
+						name: drTestableUnits["object_name"].ToString(),
+						method: drTestableUnits["procedure_name"].ToString(),
+						overload: Int32.Parse(drTestableUnits["overload"].ToString())
+					);
 
 					if (lstTests.Count > 0) {
 						numTestedUnits++;
@@ -189,6 +199,8 @@ namespace RT {
 				drTestableUnits.Dispose();
 
 				cmdGetTestableUnits.Dispose();
+
+				GC.Collect();
 
 				report +=
 					"Targetable Units: " + targetableUnits.ToString() + "\n" +

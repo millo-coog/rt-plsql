@@ -187,6 +187,10 @@ namespace RT {
 			rdrArgs.Close();
 			rdrArgs.Dispose();
 
+			// Procedures with no parameters seem to have an entry in all_arguments - toast it
+			if (testArgs.Count == 1 && testArgs[0].argumentName == "$$")
+				testArgs.Clear();
+
 			return testArgs;
 		}
 

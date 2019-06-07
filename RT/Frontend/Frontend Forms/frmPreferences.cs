@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Microsoft.Win32;
 using System.IO;
 
 namespace RT {
@@ -73,46 +72,7 @@ namespace RT {
 			
 			this.Hide();
 		}
-
-		private void btnRegisterProtocol_Click(object sender, EventArgs e) {
-			/* Registers the rt protocol in the registry, so the user can use
-				hyperlinks, etc., to use rt command-line functionality.
-				Registry layout: http://msdn.microsoft.com/en-us/library/aa767914%28v=vs.85%29.aspx
-			 
-				It looks like this:
-
-				HKEY_CLASSES_ROOT
-					regressiontester
-						(Default) = "URL:myprotocolname Protocol"
-						URL Protocol = ""
-						DefaultIcon
-							(Default) = "executable.exe,1"
-						shell
-							open
-								command
-									(Default) = "fullyqualifiedexecutable.exe" "%1"
-			*/
-
-			Microsoft.Win32.RegistryKey mainKey = Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("RegressionTester");
-			mainKey.SetValue(String.Empty, "URL:" + Program.RT_PROTOCOL + " Protocol");
-			mainKey.SetValue("URL Protocol", String.Empty);
-
-			RegistryKey defaultIconKey = mainKey.CreateSubKey("DefaultIcon");
-			defaultIconKey.SetValue("", Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName) + ",1");
-			defaultIconKey.Close();
-
-			RegistryKey shellKey = mainKey.CreateSubKey("shell");
-			RegistryKey openKey = shellKey.CreateSubKey("open");
-			RegistryKey commandKey = openKey.CreateSubKey("command");
-			commandKey.SetValue("", "\"" + System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName + "\" \"%1\"");
-
-			commandKey.Close();
-			openKey.Close();
-			shellKey.Close();			
-
-			mainKey.Close();
-		}
-
+		
 		private void btnBrowseForXMLEditorPath_Click(object sender, EventArgs e) {
 			ofdXMLEditorPath.ShowDialog();
 		}

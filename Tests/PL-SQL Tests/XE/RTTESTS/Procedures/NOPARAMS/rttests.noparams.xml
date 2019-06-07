@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--This is a Regression Tester export.-->
+<export version="3.1">
+	<test name="rttests.noparams" creation_date="06/23/2018 19:53:06" guid="ce3ab5ed-ed7d-4d58-b78a-4934818f814e" unit_schema="RTTESTS" unit_name="NOPARAMS" unit_method="" unit_type="PROCEDURE" overload="0" is_pipelined_function="">
+		<description />
+		<plsql_declare />
+		<plsql_block />
+		<arguments />
+		<scenario_groups>
+			<scenario_group name="General Tests" reopen_connection_before_every_scenario="N" rollback_afterwards="Y" max_allowed_run_time_in_seconds="300" guid="74dd6296-4b1e-46ca-aab5-1e456c50ad70">
+				<description />
+				<scenario_group_declare />
+				<scenario_group_startup />
+				<scenario_startup />
+				<post_param_assignment />
+				<pre_user_defined_checks />
+				<scenario_teardown />
+				<scenario_group_teardown />
+				<scenarios>
+					<scenario expected_exception="" expected_exception_message="" guid="3e15b2ff-e142-4514-8662-501f32e640dc">
+						<comments>abc</comments>
+						<parameters />
+					</scenario>
+				</scenarios>
+				<user_defined_checks />
+				<library_items />
+			</scenario_group>
+		</scenario_groups>
+	</test>
+</export>

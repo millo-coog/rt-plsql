@@ -128,14 +128,9 @@ namespace RT {
 				for (int i = grdScenarios.Rows.Count - 1; i >= 0; i--) {
 					if (grdScenarios.Rows[i].IsNewRow == false) {
 						if (grdScenarios.Rows[i].Tag != null && grdScenarios.Rows[i].Tag.ToString() == "Deleted" && grdScenarios.Rows[i].Cells["GUID"].Value != null && grdScenarios.Rows[i].Cells["GUID"].Value.ToString() != string.Empty) {
-							// Find and remove the scenarios from memory...
-							for (int j = 0; j < objSCNGroup.scenarios.Count; j++) {
-								if (objSCNGroup.scenarios[j].guid == grdScenarios.Rows[i].Cells["GUID"].Value.ToString()) {
-									objSCNGroup.scenarios.RemoveAt(j);
-									break;
-								}
-							}
-
+							// Remove the scenarios from memory...
+							objSCNGroup.scenarios.Remove(scnRunResults: Program.currProject.repository.runResults, guid: grdScenarios.Rows[i].Cells["GUID"].Value.ToString());
+							
 							// Remove the scenario row from the gridview.
 							grdScenarios.Rows.RemoveAt(i);
 

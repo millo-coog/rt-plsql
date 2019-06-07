@@ -226,13 +226,21 @@ namespace RT {
 		}
 
 		public targetStatus getStatus(scenarioRunResults runResults) {
-			targetStatus scnGroupStatus = targetStatus.noTests;
+			targetStatus scnGroupStatus = targetStatus.unknown;
 
 			for (int i = 0; i < prvLstScenarios.Count; i++) {
-				scnGroupStatus |= prvLstScenarios[i].getRunStatus(runResults: runResults);
+				targetStatus runStatus = prvLstScenarios[i].getRunStatus(runResults: runResults);
+
+				if (scnGroupStatus == targetStatus.unknown)
+					scnGroupStatus = runStatus;
+				else
+					scnGroupStatus |= runStatus;
 			}
 
-			return scnGroupStatus == targetStatus.noTests ? targetStatus.testsNotRun : scnGroupStatus;
+			if (scnGroupStatus == targetStatus.unknown)
+				scnGroupStatus = targetStatus.testsNotRun;
+
+			return scnGroupStatus;
 		}
 
 		public scenarioGroup clone(test newTest) {
@@ -353,7 +361,11 @@ namespace RT {
 			}
 		}
 
-		public void delete() {
+		public void delete(scenarioRunResults runResults) {
+			for (int i = 0; i < this.scenarios.Count; i++) {
+				this.scenarios.Remove(runResults, this.scenarios[i].guid);
+			}
+
 			prvTest.scenarioGroups.Remove(this);
 		}
 
@@ -530,6 +542,11 @@ namespace RT {
 						
 						runResults.mergeResult(
 							databaseName: conTarget.DatabaseName,
+							unitSchema: prvTest.unitSchema,
+							unitName: prvTest.unitName,
+							unitMethod: prvTest.unitMethod,
+							unitOverload: prvTest.overload.ToString(),
+							unitType: prvTest.unitType,
 							scenarioIndex: i,
 							guid: prvLstScenarios[i].guid,
 							testName: this.test.name,
@@ -636,6 +653,11 @@ namespace RT {
 						// Store that we were unable to run this scenario group...
 						runResults.mergeResult(
 							databaseName: conTarget.DatabaseName,
+							unitSchema: prvTest.unitSchema,
+							unitName: prvTest.unitName,
+							unitMethod: prvTest.unitMethod,
+							unitOverload: prvTest.overload.ToString(),
+							unitType: prvTest.unitType,
 							scenarioIndex: i,
 							guid: prvLstScenarios[i].guid,
 							testName: this.test.name,

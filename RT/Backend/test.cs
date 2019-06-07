@@ -476,7 +476,7 @@ namespace RT {
 		}
 
 		public void writeXMLFile() {
-			using (XmlTextWriter writer = new XmlTextWriter(prvXMLFilename, Encoding.Unicode)) {
+			using (XmlTextWriter writer = new XmlTextWriter(prvXMLFilename, Encoding.UTF8)) {
 				writer.IndentChar = '\t';
 				writer.Indentation = 1;
 				writer.Formatting = Formatting.Indented;
@@ -739,13 +739,21 @@ namespace RT {
 		}		
 
 		public targetStatus getStatus(scenarioRunResults runResults) {
-			targetStatus testStatus = targetStatus.noTests;
+			targetStatus testStatus = targetStatus.unknown;
 
 			for (int i = 0; i < prvLstScenarioGroups.Count; i++) {
-				testStatus |= prvLstScenarioGroups[i].getStatus(runResults: runResults);
+				targetStatus runResult = prvLstScenarioGroups[i].getStatus(runResults: runResults);
+
+				if (testStatus == targetStatus.unknown)
+					testStatus = runResult;
+				else
+					testStatus |= runResult;
 			}
 
-			return testStatus == targetStatus.noTests ? targetStatus.testsNotRun : testStatus;
+			if (testStatus == targetStatus.unknown)
+				testStatus = targetStatus.testsNotRun;
+
+			return testStatus;
 		}
 
 		public void runTest(OracleConnection conTarget, scenarioRunResults runResults) {

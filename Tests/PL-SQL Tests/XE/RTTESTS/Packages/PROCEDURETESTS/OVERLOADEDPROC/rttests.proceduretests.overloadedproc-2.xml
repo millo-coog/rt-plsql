@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--This is a Regression Tester export.-->
+<export version="3.1">
+	<test name="rttests.proceduretests.overloadedproc-2" creation_date="06/23/2018 12:42:33" guid="76de551a-13d1-415a-badf-7079637b05f0" unit_schema="RTTESTS" unit_name="PROCEDURETESTS" unit_method="OVERLOADEDPROC" unit_type="PACKAGE" overload="2" is_pipelined_function="">
+		<description />
+		<plsql_declare>-- This is the second overloaded proc
+</plsql_declare>
+		<plsql_block />
+		<arguments>
+			<argument argument_name="p_number" in_out="IN" sequence="1" data_level="0" position="1" data_type="NUMBER" pls_type="NUMBER" can_default="N" />
+		</arguments>
+		<scenario_groups>
+			<scenario_group name="General Tests" reopen_connection_before_every_scenario="N" rollback_afterwards="Y" max_allowed_run_time_in_seconds="300" guid="035cab2d-83c0-468c-897f-8e16b41e3411">
+				<description />
+				<scenario_group_declare />
+				<scenario_group_startup />
+				<scenario_startup />
+				<post_param_assignment />
+				<pre_user_defined_checks />
+				<scenario_teardown />
+				<scenario_group_teardown />
+				<scenarios>
+					<scenario expected_exception="" expected_exception_message="" guid="8bb0b97f-2c2a-48b1-b214-3007d1c89b0f">
+						<comments>def</comments>
+						<parameters>
+							<parameter argument_name="p_number">
+								<value parameter_type="value"><![CDATA[]]></value>
+							</parameter>
+						</parameters>
+					</scenario>
+				</scenarios>
+				<user_defined_checks />
+				<library_items />
+			</scenario_group>
+		</scenario_groups>
+	</test>
+</export>

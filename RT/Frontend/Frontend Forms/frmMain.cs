@@ -56,11 +56,6 @@ namespace RT {
 			Program.fieldTracker.onNeedsSavingFlagChanged += indicateWeNeedToSave;
 
 			ResumeLayout();
-
-			// In the schema treeview, jump to any scenario group we were directed to go to on startup...
-			if (Program.cmdLineScenarioGroupGUID != string.Empty) {
-				setFocusToScenarioGroup(Program.cmdLineScenarioGroupGUID);
-			}
 		}
 
 		void ctlProjectTreeView_afterSelect(genericTreeNode selectedNode) {
@@ -297,17 +292,19 @@ namespace RT {
 			pbRunProgress.Style = ProgressBarStyle.Marquee;
 
 			// Find out how many scenarios this object has associated with it...
-			List<test> associatedTests =
-				Program.currProject.repository.getTestList(
-					databaseName: tnNode.targetDatabase.name,
-					objectType: tnNode.getObjectType(),
-					schema: tnNode.schema,
-					name: tnNode.name,
-					method: tnNode.method,
-					overload: tnNode.overload);
+			List<test> lstAssociatedTests = new List<test>();
+
+			Program.currProject.repository.getTestList(
+				lstTests: ref lstAssociatedTests,
+				databaseName: tnNode.targetDatabase.name,
+				objectType: tnNode.getObjectType(),
+				schema: tnNode.schema,
+				name: tnNode.name,
+				method: tnNode.method,
+				overload: tnNode.overload);
 
 			int numScenarios = 0;
-			foreach (test currTest in associatedTests) {
+			foreach (test currTest in lstAssociatedTests) {
 				for (int i = 0; i < currTest.scenarioGroups.Count; i++) {
 					numScenarios += currTest.scenarioGroups[i].scenarios.Count;
 				}
@@ -332,11 +329,9 @@ namespace RT {
 
 			Program.currProject.repository.runAllTestsInObject(
 				conTarget: Program.getCurrentTargetDBConnection(),
-				schema: tnNode.schema,
-				objectType: tnNode.getObjectType(),
-				name: tnNode.name,
-				method: tnNode.method,
-				overload: tnNode.overload,
+
+				lstTests: lstAssociatedTests,
+				
 				runStatusChanged: new RT.runStatusChangedHandler(updateRunStatus),
 				scenarioRunCompleted: new RT.scenarioRunCompletedHandler(scenarioRunCompleted)
 			);
@@ -348,6 +343,9 @@ namespace RT {
 			pbRunProgress.Style = ProgressBarStyle.Continuous;
 
 			updateTreeViewNodeStatuses();
+
+			lstAssociatedTests.Clear();
+			GC.Collect();
 
 			Cursor.Current = Cursors.Default;
 		}
@@ -478,7 +476,7 @@ namespace RT {
 		private void runAllTestsToolStripMenuItem_Click(object sender, EventArgs e) {
 			Program.openDBConnections();
 
-			Program.currProject.repository.runAllTests(currProject: Program.currProject, rtProtocolPrefix: Program.RT_PROTOCOL);
+			Program.currProject.repository.runAllTests(currProject: Program.currProject);
 
 			Program.closeDBConnections();
 
@@ -519,11 +517,15 @@ namespace RT {
 
 				ApplicationDoEvents();
 
-				List<test> lstTest = Program.currProject.repository.getTestList(databaseName: db.name);
+				List<test> lstTests = new List<test>();
+					
+				Program.currProject.repository.getTestList(
+					lstTests: ref lstTests,
+					databaseName: db.name);
 
-				pbRunProgress.Maximum = lstTest.Count+1;
+				pbRunProgress.Maximum = lstTests.Count+1;
 
-				foreach (test possibleTest in lstTest) {
+				foreach (test possibleTest in lstTests) {
 					if (possibleTest.hasArgumentMismatch(conTargetDB: db.conTargetDB)) {
 						Program.outputForm.debugWrite(
 							"   " +
@@ -648,7 +650,7 @@ namespace RT {
 					break;
 				case schemaNodeType.scenarioGroup:
 					if (MessageBox.Show("Are you sure you want to delete this scenario group?", "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.Yes) {
-						currScenarioGroup.delete();
+						currScenarioGroup.delete(Program.currProject.repository.runResults);
 						currScenarioGroup = null;
 						currUDC = null;
 
@@ -1362,19 +1364,7 @@ namespace RT {
 			Application.DoEvents();
 			Cursor.Current = oldCursor;
 		}
-				
-		// Sets the treeview's focus on the given scenario group.
-		public void setFocusToScenarioGroup(string guid) {
-			genericTreeNode scnGroupNode = Program.navigationForm.projectTreeView.findNodeByGUID(nodeType: schemaNodeType.scenarioGroup, guid: guid, loadChildren: true);
-
-			if (scnGroupNode == null) {
-				MessageBox.Show("Requested scenario group guid '" + guid + "' was not found!");
-			} else {
-				Program.navigationForm.projectTreeView.selectedNode = scnGroupNode;
-				Program.navigationForm.projectTreeView.selectedNode.EnsureVisible();
-			}
-		}
-				
+						
 		public void loadAppTitle() {
 			this.Text =
 				Application.ProductName +

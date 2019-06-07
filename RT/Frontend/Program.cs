@@ -15,13 +15,9 @@ namespace RT {
 		public static Color PARAMETER_COLOR = Color.FromArgb(192, 224, 255);
 		public static Color RETURN_VALUE_COLOR = Color.FromArgb(224, 255, 224);
 		
-		// Protocol used when using hyperlinks.
-		public const string RT_PROTOCOL = "regressiontester";
-
 		// Command-line argument names
 		public const string MULTIPLE_INSTANCES = "multipleinstances";
 		public const string RUN_DB_ARG = "rundb";
-		public const string SCN_GROUP_GUID_ARG = "scenariogroupguid";
 		public const string HELP_ARG = "?";
 
 		// Cell value indicators
@@ -52,10 +48,7 @@ namespace RT {
 
 		// Project
 		public static project currProject;
-
-		// Command-line parameters
-		public static string cmdLineScenarioGroupGUID = String.Empty;
-
+		
 		// Global field change tracker
 		public static RT.fieldChangeTracker fieldTracker = new RT.fieldChangeTracker();
 
@@ -81,29 +74,16 @@ namespace RT {
 				string unrecognizedArgs = String.Empty;
 				bool showArgHelp = false;
 				string argHelp = String.Empty;
-
-				// Validate all command-line parameters before executing any of them.
-				//for (int i = 0; i < args.Length; i++) {
-				//   string argumentValue = args[i].Replace(RT_PROTOCOL + ":", String.Empty).ToLower();
-
-				//   if (argumentValue != "/rundb" &&
-				//       argumentValue != "/?") {
-				//      // Build a list of unrecognized arguments
-				//      unrecognizedArgs += args[i] + " ";
-				//      showArgHelp = true;
-				//   }
-				//}
-
+				
 				// Give the user any unrecognized arguments and show him the valid arguments...
 				if (unrecognizedArgs != String.Empty) {
 					argHelp = "Unrecognized Arguments: " + unrecognizedArgs.TrimEnd(' ') + "\n\n";
 
 					returnCode = 1;
 				} else {
-					// All arguments were valid - execute them.
 					try {
 						for (int i = 0; i < args.Length; i++) {
-							string argumentKeyValue = args[i].Replace(RT_PROTOCOL + ":", String.Empty);
+							string argumentKeyValue = args[i];
 
 							string argumentKey = argumentKeyValue.Trim('/').Split('=')[0].ToLower();
 							string argumentValue = string.Empty;
@@ -120,17 +100,12 @@ namespace RT {
 								case RUN_DB_ARG:
 									Program.openDBConnections();
 
-									Program.currProject.repository.runAllTests(currProject: Program.currProject, rtProtocolPrefix: Program.RT_PROTOCOL);
+									Program.currProject.repository.runAllTests(currProject: Program.currProject);
 
 									Program.closeDBConnections();
 
 									launchGUI = false;
 
-									break;
-
-								case SCN_GROUP_GUID_ARG:
-									// Caller wants to jump to a particular scenario group...
-									cmdLineScenarioGroupGUID = argumentValue;
 									break;
 
 								case HELP_ARG:
@@ -159,7 +134,6 @@ namespace RT {
 					argHelp +=
 						"Arguments:\n" +
 						"/" + MULTIPLE_INSTANCES + " - Allows multiple instances of the program\n" +
-						"/" + SCN_GROUP_GUID_ARG + "=<scenario group guid>\n" +
 						"/" + RUN_DB_ARG + " - Runs all tests against the target DB\n" +
 						"/" + HELP_ARG + " - This help list\n\n" +
 						"Actually Passed: " + argsString;

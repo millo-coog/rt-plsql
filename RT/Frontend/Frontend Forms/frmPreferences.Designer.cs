@@ -43,7 +43,6 @@
 			this.txtNumThreads = new System.Windows.Forms.TextBox();
 			this.label14 = new System.Windows.Forms.Label();
 			this.txtExportPath = new System.Windows.Forms.TextBox();
-			this.btnRegisterProtocol = new System.Windows.Forms.Button();
 			this.txtXMLEditorPath = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
@@ -226,16 +225,6 @@
 			this.txtExportPath.Size = new System.Drawing.Size(290, 20);
 			this.txtExportPath.TabIndex = 26;
 			// 
-			// btnRegisterProtocol
-			// 
-			this.btnRegisterProtocol.Location = new System.Drawing.Point(8, 459);
-			this.btnRegisterProtocol.Name = "btnRegisterProtocol";
-			this.btnRegisterProtocol.Size = new System.Drawing.Size(120, 23);
-			this.btnRegisterProtocol.TabIndex = 27;
-			this.btnRegisterProtocol.Text = "Register RT Protocol";
-			this.btnRegisterProtocol.UseVisualStyleBackColor = true;
-			this.btnRegisterProtocol.Click += new System.EventHandler(this.btnRegisterProtocol_Click);
-			// 
 			// txtXMLEditorPath
 			// 
 			this.txtXMLEditorPath.Location = new System.Drawing.Point(108, 377);
@@ -350,7 +339,6 @@
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.txtXMLEditorPath);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.btnRegisterProtocol);
 			this.Controls.Add(this.txtExportPath);
 			this.Controls.Add(this.label14);
 			this.Controls.Add(this.txtNumThreads);
@@ -402,7 +390,6 @@
 		private System.Windows.Forms.TextBox txtNumThreads;
 		private System.Windows.Forms.Label label14;
 		private System.Windows.Forms.TextBox txtExportPath;
-		private System.Windows.Forms.Button btnRegisterProtocol;
 		private System.Windows.Forms.TextBox txtXMLEditorPath;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;

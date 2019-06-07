@@ -18,10 +18,17 @@ namespace RT {
 
 		public string databaseName { get; set; }
 
+		public string unitSchema;
+		public string unitName;
+		public string unitMethod;
+		public string unitOverload;
+		public string unitType;
+
 		public string testName {
 			get { return prvTestName; }
 			set { prvTestName = value; }
 		}
+
 		public string scenarioGroupName {
 			get { return prvScenarioGroupName; }
 			set { prvScenarioGroupName = value; }
@@ -51,8 +58,14 @@ namespace RT {
 			set { prvErrorNumber = value; }
 		}
 
-		public scenarioRunResult(string databaseName, int scenarioIndex, string guid, string testName, string scenarioGroupName, string scenarioGroupGuid, string result, string errorMessage, int errorNumber) {
+		public scenarioRunResult(string databaseName, string unitSchema, string unitName, string unitMethod, string unitOverload, string unitType, int scenarioIndex, string guid, string testName, string scenarioGroupName, string scenarioGroupGuid, string result, string errorMessage, int errorNumber) {
 			this.databaseName = databaseName;
+			this.unitSchema = unitSchema;
+			this.unitName = unitName;
+			this.unitMethod = unitMethod;
+			this.unitOverload = unitOverload;
+			this.unitType = unitType;
+
 			this.prvTestName = testName;
 			this.prvScenarioGroupName = scenarioGroupName;
 			this.prvScenarioGroupGuid = scenarioGroupGuid;
@@ -65,7 +78,7 @@ namespace RT {
 	}
 
 	public class scenarioRunResults : Dictionary<string, scenarioRunResult> {
-		public const double RUN_RESULTS_VERSION = 1.3;
+		public const double RUN_RESULTS_VERSION = 1.4;
 
 		#region Properties
 		public project myProject { get; set; }
@@ -82,10 +95,15 @@ namespace RT {
 		}
 
 		// Saves the given run result...
-		public void mergeResult(string databaseName, int scenarioIndex, string guid, string testName, string scenarioGroupName, string scenarioGroupGuid, string result, string errorMessage, int errorNumber) {
+		public void mergeResult(string databaseName, string unitSchema, string unitName, string unitMethod, string unitOverload, string unitType, int scenarioIndex, string guid, string testName, string scenarioGroupName, string scenarioGroupGuid, string result, string errorMessage, int errorNumber) {
 			if (this.ContainsKey(guid)) {
 				// Update
-				this[guid].databaseName = databaseName;
+				this[guid].databaseName = databaseName.ToUpper();
+				this[guid].unitSchema = unitSchema;
+				this[guid].unitName = unitName;
+				this[guid].unitMethod = unitMethod;
+				this[guid].unitOverload = unitOverload;
+				this[guid].unitType = unitType;
 				this[guid].testName = testName;
 				this[guid].scenarioGroupName = scenarioGroupName;
 				this[guid].scenarioGroupGuid = scenarioGroupGuid;
@@ -97,7 +115,12 @@ namespace RT {
 				// Add
 				this[guid] = 
 					new scenarioRunResult(
-						databaseName: databaseName,
+						databaseName: databaseName.ToUpper(),
+						unitSchema: unitSchema,
+						unitName: unitName,
+						unitMethod: unitMethod,
+						unitOverload: unitOverload,
+						unitType: unitType,
 						scenarioIndex: scenarioIndex, 
 						guid: guid, 
 						testName: testName, 
@@ -128,7 +151,13 @@ namespace RT {
 				XmlElement exportTag = doc.DocumentElement;
 				Double version = Double.Parse(exportTag.Attributes["version"].Value);
 				int scenarioIndex = 0;
+
 				string databaseName;
+				string unitSchema;
+				string unitName;
+				string unitMethod;
+				string unitOverload;
+				string unitType;
 
 				XmlNodeList resultTags = doc.SelectNodes("//export//result");
 
@@ -154,10 +183,29 @@ namespace RT {
 						databaseName = "";
 					}
 
+					if (version >= 1.4) {
+						unitSchema = resultTag.Attributes["unitSchema"].Value;
+						unitName = resultTag.Attributes["unitName"].Value;
+						unitMethod = resultTag.Attributes["unitMethod"].Value;
+						unitOverload = resultTag.Attributes["unitOverload"].Value;
+						unitType = resultTag.Attributes["unitType"].Value;
+					} else {
+						unitSchema = string.Empty;
+						unitName = string.Empty;
+						unitMethod = string.Empty;
+						unitOverload = string.Empty;
+						unitType = string.Empty;
+					}
+
 					// Load the run result's attributes...
 					mergeResult(
 						guid: resultTag.Attributes["guid"].Value,
 						databaseName: databaseName,
+						unitSchema: unitSchema,
+						unitName: unitName,
+						unitMethod: unitMethod,
+						unitOverload: unitOverload,
+						unitType: unitType,
 						testName: resultTag.Attributes["testName"].Value,
 						scenarioGroupName: resultTag.Attributes["scenarioGroupName"].Value,
 						scenarioGroupGuid: foundScenarioGroupGuid,
@@ -171,7 +219,7 @@ namespace RT {
 
 		// Saves the run results to disk...
 		public void saveResults() {
-			using (XmlTextWriter writer = new XmlTextWriter(getRunResultsFilename(), Encoding.Unicode)) {
+			using (XmlTextWriter writer = new XmlTextWriter(getRunResultsFilename(), Encoding.UTF8)) {
 				writer.IndentChar = '\t';
 				writer.Indentation = 1;
 				writer.Formatting = Formatting.Indented;
@@ -186,7 +234,14 @@ namespace RT {
 				foreach (string guid in this.Keys) {
 					writer.WriteStartElement("result");
 					writer.WriteAttributeString("guid", guid);
+
 					writer.WriteAttributeString("databaseName", this[guid].databaseName);
+					writer.WriteAttributeString("unitSchema", this[guid].unitSchema);
+					writer.WriteAttributeString("unitName", this[guid].unitName);
+					writer.WriteAttributeString("unitMethod", this[guid].unitMethod);
+					writer.WriteAttributeString("unitOverload", this[guid].unitOverload);
+					writer.WriteAttributeString("unitType", this[guid].unitType);
+
 					writer.WriteAttributeString("scenarioIndex", this[guid].scenarioIndex.ToString());
 					writer.WriteAttributeString("testName", this[guid].testName);
 					writer.WriteAttributeString("scenarioGroupGuid", this[guid].scenarioGroupGuid);

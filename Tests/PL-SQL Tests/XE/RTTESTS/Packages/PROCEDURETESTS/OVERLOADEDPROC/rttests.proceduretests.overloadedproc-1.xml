@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--This is a Regression Tester export.-->
+<export version="3.1">
+	<test name="rttests.proceduretests.overloadedproc-1" creation_date="06/23/2018 12:42:03" guid="2c868450-53eb-4bca-bdc3-379c07060ad3" unit_schema="RTTESTS" unit_name="PROCEDURETESTS" unit_method="OVERLOADEDPROC" unit_type="PACKAGE" overload="1" is_pipelined_function="">
+		<description />
+		<plsql_declare>-- This is the first overloaded proc
+</plsql_declare>
+		<plsql_block />
+		<arguments>
+			<argument argument_name="p_date" in_out="IN" sequence="1" data_level="0" position="1" data_type="DATE" pls_type="DATE" can_default="N" />
+		</arguments>
+		<scenario_groups>
+			<scenario_group name="General Tests" reopen_connection_before_every_scenario="N" rollback_afterwards="Y" max_allowed_run_time_in_seconds="300" guid="d6f9c2a9-37c5-415e-b8c7-918804dffa77">
+				<description />
+				<scenario_group_declare />
+				<scenario_group_startup />
+				<scenario_startup />
+				<post_param_assignment />
+				<pre_user_defined_checks />
+				<scenario_teardown />
+				<scenario_group_teardown />
+				<scenarios>
+					<scenario expected_exception="" expected_exception_message="" guid="78683537-178b-4f06-8f58-01e0ecdf69e3">
+						<comments>abc</comments>
+						<parameters>
+							<parameter argument_name="p_date">
+								<value parameter_type="exp"><![CDATA[]]></value>
+							</parameter>
+						</parameters>
+					</scenario>
+				</scenarios>
+				<user_defined_checks />
+				<library_items />
+			</scenario_group>
+		</scenario_groups>
+	</test>
+</export>

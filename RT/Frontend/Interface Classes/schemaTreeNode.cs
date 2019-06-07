@@ -65,15 +65,23 @@ namespace RT {
 		#endregion
 
 		#region Private Variables
+		private schemaNodeType prvNodeType;
 		#endregion
 
 		#region Public Variables
-		public schemaNodeType nodeType;
 
 		public string name = String.Empty;
 		#endregion		
 
 		#region Get/Set methods
+		public schemaNodeType nodeType {
+			get { return prvNodeType; }
+			set {
+				prvNodeType = value;
+				this.ImageKey = this.SelectedImageKey = System.Enum.GetName(typeof(schemaNodeType), prvNodeType);
+			}
+		}
+
 		public test test {
 			get {
 				testTreeNode tnTest = (testTreeNode) getParentNode(schemaNodeType.test);
@@ -253,15 +261,6 @@ namespace RT {
 			targetStatus nodeStatus = targetStatus.noTests;
 
 			switch (this.nodeType) {
-				case schemaNodeType.database:
-					nodeStatus = Program.currProject.repository.getTargetStatusCode(databaseName: targetDatabase.name);
-
-					break;
-
-				case schemaNodeType.schema:
-					nodeStatus = Program.currProject.repository.getTargetStatusCode(databaseName: targetDatabase.name, schema: ((schemaTreeNode)this).schemaName);
-					break;
-
 				case schemaNodeType.test:
 					nodeStatus = this.test.getStatus(runResults: Program.currProject.repository.runResults);
 					break;
@@ -330,13 +329,13 @@ namespace RT {
 					this.ImageKey = System.Enum.GetName(typeof(schemaNodeType), this.nodeType) + "-Status" + ((int)nodeStatus).ToString();
 					this.SelectedImageKey = System.Enum.GetName(typeof(schemaNodeType), this.nodeType) + "-Status" + ((int)nodeStatus).ToString();
 				}
-			}
 
-			// Set the node's text color, based on the status...
-			if (nodeStatus == targetStatus.noTests || nodeStatus == targetStatus.testsOk) {
-				this.ForeColor = Color.Black;
-			} else {
-				this.ForeColor = Color.Red;
+				// Set the node's text color, based on the status...
+				if (nodeStatus == targetStatus.noTests || nodeStatus == targetStatus.testsOk) {
+					this.ForeColor = Color.Black;
+				} else {
+					this.ForeColor = Color.Red;
+				}
 			}
 
 			//this.TreeView.ResumeLayout();
@@ -349,7 +348,9 @@ namespace RT {
 
 		// Updates the node's icon and color to indicate status.
 		public void updateStatus() {
-			if (this.nodeType == schemaNodeType.argumentsFolder
+			if (this.nodeType == schemaNodeType.database
+				|| this.nodeType == schemaNodeType.schema
+				|| this.nodeType == schemaNodeType.argumentsFolder
 				|| this.nodeType == schemaNodeType.methodArgument
 				|| this.nodeType == schemaNodeType.libraryItems
 				|| this.nodeType == schemaNodeType.scenarioGroupStartup
@@ -366,7 +367,12 @@ namespace RT {
 				// the background worker can give it its correctly status icon.
 				this.ImageKey = this.SelectedImageKey = System.Enum.GetName(typeof(schemaNodeType), this.nodeType);
 
+				// "Touch" the repository's run results cache, so it'll load outside of a child process.
+				if (Program.currProject.repository.runResults.Count > 0)
+					;
+
 				// Calculate the node's status, based on the node's type.
+
 				BackgroundWorker bwUpdateStatus = new BackgroundWorker();
 
 				bwUpdateStatus.DoWork += new DoWorkEventHandler(bwUpdateStatusDoWork);
@@ -446,12 +452,6 @@ namespace RT {
 								tncObject.Nodes.Add(new dummyTreeNode());
 								
 								this.Nodes.Add(tncObject);
-
-								// Loading the children is needed for the error report's RT hyperlink to be able to find
-								// SCN group's guids in the treeview.
-								tncObject.loadChildren();
-
-								tncObject.updateStatus();
 							}
 
 							break;
@@ -463,43 +463,37 @@ namespace RT {
 							functionTypeFolder.Text = "Functions";
 							functionTypeFolder.Nodes.Add(new dummyTreeNode());
 							this.Nodes.Add(functionTypeFolder);
-							functionTypeFolder.updateStatus();
-			
+										
 							genericTreeNode packageTypeFolder = new genericTreeNode();
 							packageTypeFolder.nodeType = schemaNodeType.packagesFolder;
 							packageTypeFolder.Text = "Packages";
 							packageTypeFolder.Nodes.Add(new dummyTreeNode());
 							this.Nodes.Add(packageTypeFolder);
-							packageTypeFolder.updateStatus();
-
+							
 							genericTreeNode procedureTypeFolder = new genericTreeNode();
 							procedureTypeFolder.nodeType = schemaNodeType.proceduresFolder;
 							procedureTypeFolder.Text = "Procedures";
 							procedureTypeFolder.Nodes.Add(new dummyTreeNode());
 							this.Nodes.Add(procedureTypeFolder);
-							procedureTypeFolder.updateStatus();
-
+							
 							genericTreeNode triggerTypeFolder = new genericTreeNode();
 							triggerTypeFolder.nodeType = schemaNodeType.triggersFolder;
 							triggerTypeFolder.Text = "Triggers";
 							triggerTypeFolder.Nodes.Add(new dummyTreeNode());
 							this.Nodes.Add(triggerTypeFolder);
-							triggerTypeFolder.updateStatus();
-
+							
 							genericTreeNode typeTypeFolder = new genericTreeNode();
 							typeTypeFolder.nodeType = schemaNodeType.typesFolder;
 							typeTypeFolder.Text = "Types";
 							typeTypeFolder.Nodes.Add(new dummyTreeNode());
 							this.Nodes.Add(typeTypeFolder);
-							typeTypeFolder.updateStatus();
-
+							
 							genericTreeNode viewTypeFolder = new genericTreeNode();
 							viewTypeFolder.nodeType = schemaNodeType.viewsFolder;
 							viewTypeFolder.Text = "Views";
 							viewTypeFolder.Nodes.Add(new dummyTreeNode());
 							this.Nodes.Add(viewTypeFolder);
-							viewTypeFolder.updateStatus();
-
+							
 							break;
 						case schemaNodeType.schemaLevelFunction:
 						case schemaNodeType.schemaLevelProcedure:
@@ -513,14 +507,16 @@ namespace RT {
 							}
 
 							// Create test nodes for any associated tests...
-							List<test> associatedTests =
-								Program.currProject.repository.getTestList(
-									databaseName: this.targetDatabase.name,
-									schema: this.schema,
-									name: this.name,
-									objectType: this.getObjectType());
+							List<test> lstAssociatedTests = new List<test>();
 
-							foreach (test associatedTest in associatedTests) {
+							Program.currProject.repository.getTestList(
+								lstTests: ref lstAssociatedTests,
+								databaseName: this.targetDatabase.name,
+								schema: this.schema,
+								name: this.name,
+								objectType: this.getObjectType());
+
+							foreach (test associatedTest in lstAssociatedTests) {
 								this.Nodes.Add(new testTreeNode(associatedTest: associatedTest));
 							}
 
@@ -564,6 +560,8 @@ namespace RT {
 			targetDatabase = associatedTargetDB;
 			
 			nodeType = schemaNodeType.database;
+
+			this.ImageKey = this.SelectedImageKey = System.Enum.GetName(typeof(schemaNodeType), this.nodeType); ;
 			
 			//loadChildren();
 			this.Nodes.Add(new dummyTreeNode());
@@ -644,8 +642,6 @@ namespace RT {
 
 				schemaNode.loadChildren();
 			}
-				
-			//updateStatus();
 		}
 	}
 
@@ -664,6 +660,8 @@ namespace RT {
 			this.nodeType = schemaNodeType.schema;
 			this.prvSchema = schemaName;
 			this.Text = this.prvSchema;
+
+			this.ImageKey = this.SelectedImageKey = System.Enum.GetName(typeof(schemaNodeType), this.nodeType); ;
 		}
 
 		public void loadAllChildren() {
@@ -982,38 +980,39 @@ namespace RT {
 			get { return prvMethodName; }
 		}
 
-		public int overload {
+		public int overload { // An overload of 0 means that the method is not overloaded
 			get { return prvOverload; }
 			set { prvOverload = value; }
 		}
 
 		// Constructor
 		public methodTreeNode(string methodName, int methodOverload) {
-			this.prvMethodName = methodName;
+			this.prvMethodName = methodName;			
+			this.prvOverload = methodOverload;
 
 			this.Text = methodName.ToLower() + (prvOverload == 0 ? "" : " (" + this.prvOverload.ToString() + ")");
 			
 			this.nodeType = schemaNodeType.method;
-			
-			this.prvOverload = methodOverload;
 		}
 
 		public void loadChildren() {
 			// Create an arguments subfolder...
 			this.Nodes.Add(new targetArgumentsFolder());
-			
-			// Create child nodes for any tests this method has....
-			List<test> methodsAssociatedTests =
-				Program.currProject.repository.getTestList(
-					databaseName: this.targetDatabase.name,
-					schema: this.schema,
-					objectType: this.getObjectType(),
-					name: this.name,
-					method: this.prvMethodName,
-					overload: this.prvOverload
-				);
 
-			foreach (test associatedTest in methodsAssociatedTests) {
+			// Create child nodes for any tests this method has....
+			List<test> lstMethodsAssociatedTests = new List<test>();
+
+			Program.currProject.repository.getTestList(
+				lstTests: ref lstMethodsAssociatedTests,
+				databaseName: this.targetDatabase.name,
+				schema: this.schema,
+				objectType: this.getObjectType(),
+				name: this.name,
+				method: this.prvMethodName,
+				overload: this.prvOverload
+			);
+
+			foreach (test associatedTest in lstMethodsAssociatedTests) {
 				this.Nodes.Add(new testTreeNode(associatedTest: associatedTest));
 			}
 

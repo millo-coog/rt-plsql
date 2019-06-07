@@ -25,6 +25,7 @@ namespace RT {
 	#region Enumerations
 	// An enumeration of possible target statuses.
 	public enum targetStatus {
+		unknown = -1,
 		noTests = 0,
 		testsNotRun = 1,
 		testsOk = 2,
@@ -34,7 +35,7 @@ namespace RT {
 
 	public class repos {
 		#region Constants
-		public const double WC_FORMAT_VERSION = 3; // The format version the regression tester will save tests in.
+		public const double WC_FORMAT_VERSION = 3.1; // The format version the regression tester will save tests in.
 		#endregion
 
 		#region Private variables
@@ -142,11 +143,7 @@ namespace RT {
 				
 				// Remove this test's scenario's guid's from the run results...
 				for (int i = 0; i < testToDelete.scenarioGroups.Count; i++) {
-					for (int j = 0; j < testToDelete.scenarioGroups[i].scenarios.Count; j++) {
-						if (prvRunResults.ContainsKey(testToDelete.scenarioGroups[i].scenarios[j].guid)) {
-							prvRunResults.Remove(testToDelete.scenarioGroups[i].scenarios[j].guid);
-						}
-					}
+					testToDelete.scenarioGroups[i].delete(prvRunResults);
 				}
 			}
 		}
@@ -165,7 +162,8 @@ namespace RT {
 		}
 		
 		// Returns a list of test objects that correspond with the given database target and run type.
-		public List<test> getTestList(
+		public void getTestList(
+			ref List<test> lstTests,
 			string databaseName = "",
 			string objectType = "",
 			string schema = "",
@@ -174,7 +172,6 @@ namespace RT {
 			int overload = -1,
 			System.IO.DirectoryInfo root = null) // Used to recurse into subfolders
 		{
-			List<test> lstTests = new List<test>();
 			string wcDBLocation = String.Empty;
 			string wcSchemaLocation = String.Empty;
 			string wcObjectTypeLocation = String.Empty;
@@ -189,7 +186,7 @@ namespace RT {
 			} else {
 				// Make sure we were given a valid starting place
 				if (!Directory.Exists(root.FullName))
-					return lstTests;
+					return;
 
 				// Figure out where we are in the directory structure
 				String[] arrFolders = root.FullName.Replace(workingCopyPath, String.Empty).Split('\\');
@@ -201,28 +198,28 @@ namespace RT {
 
 					// See if we can skip this schema folder...
 					if (schema != String.Empty && wcSchemaLocation != schema)
-						return lstTests;
+						return;
 					
 					if (arrFolders.Count() >= 3) {
 						wcObjectTypeLocation = arrFolders[2].ToUpper().TrimEnd('S');
 
 						// See if we can skip this object type folder...
 						if (objectType != String.Empty && wcObjectTypeLocation != objectType)
-							return lstTests;
+							return;
 
 						if (arrFolders.Count() >= 4) {
 							wcNameLocation = arrFolders[3];
 
 							// See if we can skip this name folder...
 							if (name != String.Empty && wcNameLocation != name)
-								return lstTests;
+								return;
 
 							if (arrFolders.Count() >= 5) {
 								wcMethodLocation = arrFolders[4];
 
 								// See if we can skip this method folder...
 								if (method != String.Empty && wcMethodLocation != method)
-									return lstTests;
+									return;
 							}
 						}
 					}
@@ -234,6 +231,7 @@ namespace RT {
 			if (files != null) {
 				foreach (System.IO.FileInfo fileInfo in files) {
 					bool add = false;
+					test newTest = null;
 
 					//Debug.WriteLine("Checking " + fileInfo.FullName);
 
@@ -241,24 +239,24 @@ namespace RT {
 						&& (objectType == "" || wcObjectTypeLocation.ToUpper() == objectType.ToUpper())
 						&& (schema == "" || wcSchemaLocation.ToUpper() == schema.ToUpper())
 						&& (name == "" || wcNameLocation.ToUpper() == name.ToUpper())
-						&& (method == "" || wcMethodLocation.ToUpper() == method.ToUpper()))
+						&& (method == "" || wcMethodLocation.ToUpper() == method.ToUpper())
+						&& fileInfo.Name != Path.GetFileName(myProject.filename)
+						&& fileInfo.Name != Path.GetFileName(runResults.getRunResultsFilename()))
 					{
-						if (overload == -1) {
+						newTest = new test(associatedProject: this.myProject, xmlFilename: fileInfo.FullName);
+
+						if (overload == 0 || overload == -1) {
+							// If we're looking for a method that isn't overloaded (0), or we want all overloads (-1) because
+							// we're probably getting all tests in a package, schema, etc., just add the test
 							add = true;
 						} else {
-							Debug.WriteLine("Constructing test for overloaded target: " + fileInfo.FullName);
-							test tempTest = new test(associatedProject: this.myProject, xmlFilename: fileInfo.FullName);
-
-							if (tempTest.overload == overload)
+							if (newTest.overload == overload)
 								add = true;
-
-							tempTest = null;
 						}
-					}
 
-					if (add && fileInfo.Name != Path.GetFileName(myProject.filename) && fileInfo.Name != Path.GetFileName(runResults.getRunResultsFilename())) {
-						Debug.WriteLine("Constructing test for: ["  + databaseName + ", " + objectType + ", " + schema + ", " + name + ", " + method + "] " + ((char) 9) + fileInfo.FullName);
-						lstTests.Add(new test(associatedProject: this.myProject, xmlFilename: fileInfo.FullName));
+						if (add) {
+							lstTests.Add(newTest);
+						}
 					}
 				}
 
@@ -267,36 +265,34 @@ namespace RT {
 				foreach (System.IO.DirectoryInfo dirInfo in subDirs) {
 					if (dirInfo.Name != ".svn" && dirInfo.Name != ".hg") {
 						// Recursive call for each subdirectory.						
-						List<test> lstChildTests =
-							getTestList(
-								databaseName: databaseName,
-								objectType: objectType,
-								schema: schema,
-								name: name,
-								method: method,
-								overload: overload,
-								root: dirInfo);
-
-						foreach (test currTest in lstChildTests) {
-							lstTests.Add(currTest);
-						}
-
-						lstChildTests = null;
+						getTestList(
+							lstTests: ref lstTests,
+							databaseName: databaseName,
+							objectType: objectType,
+							schema: schema,
+							name: name,
+							method: method,
+							overload: overload,
+							root: dirInfo);
 					}
 				}
 			}
 
-			return lstTests;
+			return;
 		}
 		
 		// Upgrades all tests in the current working copy to the current repository format by
 		// opening each test file and saving it again in the new format.
 		public void upgrade() {
-			List<test> lstAllTests = getTestList();
+			List<test> lstAllTests = new List<test>();
+			
+			getTestList(lstTests: ref lstAllTests);
 
 			for (int i = 0; i < lstAllTests.Count; i++) {
 				lstAllTests[i].save(associatedProject: myProject);
 			}
+
+			GC.Collect();
 		}
 
 		// Returns the status of the given object, based on its run results...
@@ -306,23 +302,54 @@ namespace RT {
 			string schema = "",
 			string name = "",
 			string method = "",
-			int overload = -1)
+			int overload = 0)
 		{
-			targetStatus status = targetStatus.noTests;
+			targetStatus status = targetStatus.unknown;
 
-			// Find all the tests associated with the given object...
-			List<test> lstTests =
+			foreach (String guid in runResults.Keys) {
+				if (runResults[guid].databaseName == databaseName
+					&& (objectType == "" || runResults[guid].unitType == objectType)
+					&& (schema == "" || runResults[guid].unitSchema == schema)
+					&& (name == "" || runResults[guid].unitName == name)
+					&& (method == "" || runResults[guid].unitMethod == method)
+					&& (overload == 0 || overload == -1 || runResults[guid].unitOverload == overload.ToString())) {
+
+					targetStatus runResult = runResults[guid].result == "OK" ? targetStatus.testsOk : targetStatus.testsFailed;
+
+					if (status == targetStatus.unknown)
+						status = runResult;
+					else
+						status |= runResult;
+				}
+			}
+
+			if (status == targetStatus.unknown) {
+				// If there weren't any run results for this target, it's possible we
+				// just haven't run any tests against it (therefore, no results). Thus, we
+				// must actually see if there are any tests in the repository for this target...
+
+				// Assume no tests, until proven otherwise; also cannot logical OR with a negative value ("Unknown" enumerated value)
+				status = targetStatus.noTests;
+
+				// Find all the tests associated with the given object...
+				List<test> lstTests = new List<test>();
+
 				getTestList(
+					lstTests: ref lstTests,
 					databaseName: databaseName,
 					objectType: objectType,
 					schema: schema,
 					name: name,
 					method: method,
 					overload: overload);
+				
+				// Aggregate the scenarios' results into the status to return...
+				foreach (test currTest in lstTests) {
+					status |= currTest.getStatus(runResults: runResults);
+				}
 
-			// Aggregate the scenarios' results into the status to return...
-			foreach (test currTest in lstTests) {
-				status |= currTest.getStatus(runResults: runResults);
+				if (lstTests.Count > 0)
+					GC.Collect();
 			}
 
 			return status;
@@ -331,23 +358,30 @@ namespace RT {
 		// Runs all of the tests associated with the given database target.
 		public void runAllTestsInObject(
 			OracleConnection conTarget,
+
+			List<test> lstTests = null,
+
 			string schema = "",
 			string objectType = "",
 			string name = "",
 			string method = "",
-			int overload = -1,
+			int overload = 0,
 
 			runStatusChangedHandler runStatusChanged = null,
 			scenarioRunCompletedHandler scenarioRunCompleted = null)
-		{			
-			List<test> lstTests =
+		{
+			if (lstTests == null) {
+				lstTests = new List<test>();
+
 				getTestList(
+					lstTests: ref lstTests,
 					databaseName: conTarget.DataSource,
 					objectType: objectType,
 					schema: schema,
 					name: name,
 					method: method,
 					overload: overload);
+			}
 
 			for (int i = 0; i < lstTests.Count; i++) {
 				if (runStatusChanged != null)
@@ -359,11 +393,13 @@ namespace RT {
 				lstTests[i].runTest(conTarget: conTarget, runResults: runResults);
 			}
 
+			GC.Collect();
+
 			runResults.saveResults();
 		}
 
 		// Runs all of the tests in the repository and produces an HTML report.
-		public void runAllTests(project currProject, string rtProtocolPrefix) {
+		public void runAllTests(project currProject) {
 			// Clear out any run results, just so that we don't have run results from old tests
 			// whose targets are no longer actually still in the target database.
 			runResults.clearResults();
@@ -438,7 +474,7 @@ namespace RT {
 								"<tr>\n" +
 									"<td>" + runResults[guid].databaseName + "</td>\n" +
 									"<td>" + runResults[guid].testName + "</td>\n" +
-									"<td><a href=\"" + rtProtocolPrefix + "://scenarioGroupGuid=" + runResults[guid].scenarioGroupGuid + "/\">" + runResults[guid].scenarioGroupName + "</a></td>\n" +
+									"<td>" + runResults[guid].scenarioGroupName + "</td>\n" +
 									"<td class='scenarioNumber'>" + (runResults[guid].scenarioIndex + 1) + "</td>\n" +
 									"<td class='errorRunResult'>" + runResults[guid].result + "</td>\n" +
 									"<td class='errorNumber'>" + runResults[guid].errorNumber + "</td>\n" +
